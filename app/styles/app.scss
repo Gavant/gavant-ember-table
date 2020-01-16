@@ -1,0 +1,280 @@
+// Bootstrap - Core variables and mixins
+@import 'node_modules/bootstrap/scss/functions';
+@import 'node_modules/bootstrap/scss/variables';
+@import 'node_modules/bootstrap/scss/mixins';
+@import 'node_modules/bootstrap/scss/root';
+@import 'node_modules/bootstrap/scss/print';
+
+// Bootstrap - Core CSS
+@import 'node_modules/bootstrap/scss/reboot';
+@import 'node_modules/bootstrap/scss/type';
+@import 'node_modules/bootstrap/scss/images';
+@import 'node_modules/bootstrap/scss/code';
+@import 'node_modules/bootstrap/scss/grid';
+@import 'node_modules/bootstrap/scss/tables';
+@import 'node_modules/bootstrap/scss/forms';
+@import 'node_modules/bootstrap/scss/buttons';
+
+// Bootstrap - Components
+@import 'node_modules/bootstrap/scss/transitions';
+@import 'node_modules/bootstrap/scss/dropdown';
+@import 'node_modules/bootstrap/scss/button-group';
+@import 'node_modules/bootstrap/scss/input-group';
+@import 'node_modules/bootstrap/scss/custom-forms';
+@import 'node_modules/bootstrap/scss/nav';
+@import 'node_modules/bootstrap/scss/navbar';
+@import 'node_modules/bootstrap/scss/card';
+@import 'node_modules/bootstrap/scss/breadcrumb';
+@import 'node_modules/bootstrap/scss/pagination';
+@import 'node_modules/bootstrap/scss/badge';
+@import 'node_modules/bootstrap/scss/jumbotron';
+@import 'node_modules/bootstrap/scss/alert';
+@import 'node_modules/bootstrap/scss/progress';
+@import 'node_modules/bootstrap/scss/media';
+@import 'node_modules/bootstrap/scss/list-group';
+@import 'node_modules/bootstrap/scss/close';
+
+// Bootstrap - Components w/ JavaScript
+@import 'node_modules/bootstrap/scss/modal';
+@import 'node_modules/bootstrap/scss/tooltip';
+@import 'node_modules/bootstrap/scss/popover';
+@import 'node_modules/bootstrap/scss/carousel';
+
+// Bootstrap - Utility classes
+@import 'node_modules/bootstrap/scss/utilities/align';
+@import 'node_modules/bootstrap/scss/utilities/background';
+@import 'node_modules/bootstrap/scss/utilities/borders';
+@import 'node_modules/bootstrap/scss/utilities/clearfix';
+@import 'node_modules/bootstrap/scss/utilities/display';
+@import 'node_modules/bootstrap/scss/utilities/embed';
+@import 'node_modules/bootstrap/scss/utilities/flex';
+@import 'node_modules/bootstrap/scss/utilities/float';
+@import 'node_modules/bootstrap/scss/utilities/position';
+@import 'node_modules/bootstrap/scss/utilities/screenreaders';
+@import 'node_modules/bootstrap/scss/utilities/sizing';
+@import 'node_modules/bootstrap/scss/utilities/spacing';
+@import 'node_modules/bootstrap/scss/utilities/text';
+@import 'node_modules/bootstrap/scss/utilities/visibility';
+@import 'gavant-ember-table/variables';
+
+.data-table {
+    position: relative;
+    padding-bottom: 1rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+
+    @include media-breakpoint-up(lg) {
+        min-height: 30rem;
+    }
+
+    &.static-table {
+        @include media-breakpoint-up(lg) {
+            min-height: initial;
+        }
+    }
+
+    //since we can't detect how many columns to render in fastboot
+    //make sure any overflow columns are hidden until the client re-renders
+    &.is-server-rendered {
+        overflow: hidden;
+    }
+
+    &.has-hidden-columns {
+        .table > thead > tr {
+            > th:last-child {
+                padding-right: 18px;
+            }
+        }
+    }
+
+    &.is-columns-panned {
+        td.data-table-col-fixed-left {
+            box-shadow: 7px 0px 8px -3px rgba(0, 0, 0, 0.04);
+            z-index: 2;
+        }
+    }
+
+    .table {
+        margin-bottom: 0;
+        font-size: 0.75rem;
+
+        thead {
+            th {
+                border-top: 0;
+                border-bottom: none;
+            }
+        }
+
+        &.table-sm {
+            th,
+            td {
+                padding-left: 0.75rem;
+                padding-right: 0.75rem;
+
+                &:first-child {
+                    padding-left: 0;
+                }
+
+                &:last-child {
+                    padding-right: 0;
+                }
+            }
+        }
+
+        .btn {
+            font-size: 0.75rem;
+            font-weight: normal;
+        }
+    }
+
+    .card &:first-child {
+        table > thead > tr:first-child {
+            th:first-child {
+                border-top-left-radius: 0.35rem;
+            }
+
+            th:last-child {
+                border-top-right-radius: 0.35rem;
+            }
+        }
+    }
+
+    &-col-pan-btn {
+        position: absolute;
+        top: 50%;
+        z-index: 2;
+        margin-top: -12.5px;
+        padding: 1px 6px;
+
+        &-left {
+            left: -6px;
+        }
+
+        &-right {
+            right: -6px;
+        }
+    }
+
+    &-row-muted {
+        background-color: #f5f5f5;
+        color: #999;
+    }
+
+    &-row-total {
+        font-weight: bold;
+        color: $primary;
+
+        > td {
+            padding-bottom: 3rem;
+        }
+    }
+
+    .ember-table {
+        position: static;
+        overflow: visible;
+
+        .table {
+            border-collapse: separate;
+        }
+
+        thead th,
+        tfoot td {
+            background-color: $white;
+        }
+
+        tfoot {
+            //fixes an issue with the sticky footer polyfill not working in Safari
+            position: -webkit-sticky !important;
+            position: sticky !important;
+
+            td {
+                border-top: 1px solid $table-border-color;
+
+                &.data-table-col-fixed-left {
+                    border-right: none;
+                    box-shadow: none;
+                }
+
+                &.data-table-col-fixed-right {
+                    border-left: none;
+                }
+            }
+
+            //fixes an issue caused by this PR: https://github.com/Addepar/ember-table/pull/753
+            //because we are using fluid height tables, this logic incorrectly calculates the table height
+            //and pushes the footer rows below the visible viewport, as it thinks they wont leave enough room to see the table body rows
+            .force-bottom-sticky {
+                bottom: 0 !important;
+            }
+        }
+
+        .et-sort-indicator {
+            font-size: 0;
+
+            &:before {
+                font-family: $font-family-base;
+                font-size: 0.75rem;
+                color: lighten($text-muted, 10%);
+                display: inline-block;
+                border: none;
+                line-height: 1;
+                transform: rotate(0deg);
+                content: '\25be'; // down triangle
+            }
+
+            &.is-ascending:before {
+                transform: rotate(180deg);
+            }
+        }
+
+        td.is-fixed-left,
+        td.is-fixed-right,
+        th.is-fixed-left,
+        th.is-fixed-right {
+            background-color: $white;
+        }
+
+        td.is-fixed-left,
+        td.data-table-col-fixed-left {
+            border-right: 1px solid $table-border-color;
+        }
+
+        td.is-fixed-right,
+        td.data-table-col-fixed-right {
+            border-left: 1px solid $table-border-color;
+        }
+
+        .table-hover {
+            tbody > tr {
+                &:hover {
+                    > td.is-fixed-left,
+                    > td.is-fixed-right {
+                        background-color: $table-hover-bg-opaque;
+                    }
+                }
+
+                &.data-table-row-loading,
+                &.data-table-row-no-results {
+                    background-color: transparent;
+                }
+            }
+        }
+
+        .table-clickable-rows {
+            > tbody > tr {
+                cursor: pointer;
+
+                &.data-table-row-loading,
+                &.data-table-row-no-results {
+                    cursor: default;
+                }
+            }
+        }
+
+        .table-no-header {
+            > tbody > tr:first-child > td {
+                border-top: 0;
+            }
+        }
+    }
+}
