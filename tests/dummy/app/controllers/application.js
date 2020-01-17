@@ -1,7 +1,9 @@
 import Controller from '@ember/controller';
+import { A } from '@ember/array';
+import { action } from '@ember/object';
 
 class ApplicationController extends Controller {
-    columns = [
+    columns = A([
         {
             valuePath: 'date',
             name: 'Date',
@@ -11,9 +13,10 @@ class ApplicationController extends Controller {
         {
             valuePath: 'name',
             name: 'Name',
+            isFixedLeft: false,
             width: 100
         }
-    ];
+    ]);
 
     data = [
         {
@@ -25,6 +28,16 @@ class ApplicationController extends Controller {
             name: 'Gandalf the Grey'
         }
     ];
+
+    @action
+    loadMoreModels() {
+        return;
+    }
+
+    @action
+    updateSorts() {
+        return;
+    }
 }
 
 export default ApplicationController;

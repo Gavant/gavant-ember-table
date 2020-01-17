@@ -1,14 +1,15 @@
-<Table
-    @columns={{this.columns}}
-    @rows={{this.data}}
-    @hasMoreRows={{this.hasMore}}
-    @isLoading={{this.isLoadingModels}}
-    {{!-- @loadMoreRows={{action "loadMoreModels"}}
-    @updateSorts={{action "updateSorts"}}
-    @onRowClick={{action "transitionToTransaction"}} --}}
-    @enableSort={{true}}
-    @fillMode="nth-column"
-    @fillColumnIndex={{3}}
-/>
-
-<h1>Testing</h1>
+<div class="row justify-content-center">
+    <div class="col-6">
+        <GavantTable
+            @columns={{this.columns}}
+            @rows={{this.data}}
+            @hasMoreRows={{this.hasMore}}
+            @isLoading={{this.isLoadingModels}}
+            @loadMoreRows={{action "loadMoreModels"}}
+            @updateSorts={{action "updateSorts"}}
+            @enableSort={{true}}
+            @fillMode="nth-column"
+            @fillColumnIndex={{1}}
+        />
+    </div>
+</div>

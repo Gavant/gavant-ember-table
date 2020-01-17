@@ -1,1 +1,6 @@
-$table-hover-bg-opaque: #ececec;
+$table-hover-bg-opaque: #ececec !default;
+$primary: #285a92 !default;
+$white: #fff !default;
+$table-border-color: rgba(#000, 0.075) !default;
+$font-family-base: 'Lato', sans-serif !default;
+$text-muted: lighten(#6c757d, 15%);
