@@ -8,24 +8,44 @@ class ApplicationController extends Controller {
             valuePath: 'date',
             name: 'Date',
             isFixedLeft: true,
-            width: 100
+            width: 100,
+            staticWidth: 100
         },
         {
             valuePath: 'name',
             name: 'Name',
             isFixedLeft: false,
-            width: 100
+            width: 100,
+            staticWidth: 200
+        },
+        {
+            valuePath: 'age',
+            name: 'Age',
+            isFixedLeft: false,
+            textAlign: 'right',
+            width: 100,
+            staticWidth: 200
+        },
+        {
+            valuePath: 'tall',
+            name: 'Tall',
+            width: 100,
+            staticWidth: 200
         }
     ]);
 
     data = [
         {
             date: '1/1/2020',
-            name: 'Frodo Baggins'
+            name: 'Frodo Baggins',
+            age: 150,
+            tall: false
         },
         {
             date: '1/1/2021',
-            name: 'Gandalf the Grey'
+            name: 'Gandalf the Grey',
+            age: 145,
+            tall: true
         }
     ];
 

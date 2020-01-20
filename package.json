@@ -27,7 +27,8 @@
         "ember-cli-htmlbars": "^4.2.0",
         "ember-cli-typescript": "^3.1.2",
         "@gavant/ember-button-basic": "^0.0.9",
-        "ember-font-awesome": "^4.0.0-rc.4"
+        "ember-font-awesome": "^4.0.0-rc.4",
+        "ember-resize": "^0.3.4"
     },
     "devDependencies": {
         "@ember/optional-features": "^1.1.0",
@@ -60,7 +61,6 @@
         "ember-load-initializers": "^2.1.1",
         "ember-maybe-import-regenerator": "^0.1.6",
         "ember-qunit": "^4.6.0",
-        "ember-resize": "^0.3.4",
         "ember-resolver": "^7.0.0",
         "ember-responsive": "^3.0.5",
         "ember-source": "~3.15.0",

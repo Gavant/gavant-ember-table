@@ -207,7 +207,7 @@ class GavantTableComponent extends Component.extend({ ResizeAware }) {
         //and the last visible column is not the last defined column
         const lastColId = this.getColumnId(this.columns.lastObject);
         const visibleColId = this.getColumnId(this.visibleColumns.lastObject);
-        return (this.hasHiddenColumns && lastColId && visibleColId && lastColId) !== visibleColId;
+        return this.hasHiddenColumns && Boolean(lastColId && visibleColId) && lastColId !== visibleColId;
     }
 
     /**
@@ -232,7 +232,7 @@ class GavantTableComponent extends Component.extend({ ResizeAware }) {
         const nonFixedColId = this.getColumnId(this.nonFixedColumns.firstObject);
         const colId = this.allowFixedCols ? nonFixedColId : firstColId;
         const visibleColId = this.getColumnId(this.firstVisibleColumn);
-        return (this.hasHiddenColumns && colId && visibleColId && colId) !== visibleColId;
+        return this.hasHiddenColumns && Boolean(colId && visibleColId) && colId !== visibleColId;
     }
 
     /**
@@ -445,7 +445,7 @@ class GavantTableComponent extends Component.extend({ ResizeAware }) {
      * @returns {string}
      * @memberof GavantTableComponent
      */
-    getColumnId(col: any): string {
+    getColumnId(col: TableColumn): string {
         //allow columns to specify an "id" if they dont have a valuePath, or the valuePath is not unique
         return col && (col.id || col.valuePath);
     }

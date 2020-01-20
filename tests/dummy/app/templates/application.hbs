@@ -1,5 +1,5 @@
-<div class="row justify-content-center">
-    <div class="col-6">
+<div>
+    <div>
         <GavantTable
             @columns={{this.columns}}
             @rows={{this.data}}
@@ -7,9 +7,7 @@
             @isLoading={{this.isLoadingModels}}
             @loadMoreRows={{action "loadMoreModels"}}
             @updateSorts={{action "updateSorts"}}
-            @enableSort={{true}}
-            @fillMode="nth-column"
-            @fillColumnIndex={{1}}
+            @enableSort={{false}}
         />
     </div>
 </div>
