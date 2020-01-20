@@ -1,4 +1,7 @@
-declare module 'ember-table' {
+declare module 'ember-table/components/ember-table/component';
+declare module 'ember-table/components/ember-tbody/component';
+
+declare module 'table-components' {
     interface TableColumn {
         id?: string;
         valuePath: string;

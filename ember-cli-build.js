@@ -6,6 +6,11 @@ module.exports = function(defaults) {
     let app = new EmberAddon(defaults, {
         'ember-font-awesome': {
             includeComponent: true
+        },
+
+        'ember-bootstrap': {
+            bootstrapVersion: 4,
+            importBootstrapCSS: false
         }
     });
 

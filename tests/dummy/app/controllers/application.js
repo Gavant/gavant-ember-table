@@ -8,29 +8,44 @@ class ApplicationController extends Controller {
             valuePath: 'date',
             name: 'Date',
             isFixedLeft: true,
-            width: 100,
+            width: 200,
             staticWidth: 100
         },
         {
             valuePath: 'name',
             name: 'Name',
             isFixedLeft: false,
-            width: 100,
-            staticWidth: 200
+            width: 200,
+            staticWidth: 200,
+            maxWidth: 200,
+            minWidth: 200
         },
         {
             valuePath: 'age',
             name: 'Age',
             isFixedLeft: false,
-            textAlign: 'right',
-            width: 100,
-            staticWidth: 200
+            width: 200,
+            staticWidth: 200,
+            maxWidth: 200,
+            minWidth: 200
         },
         {
             valuePath: 'tall',
             name: 'Tall',
+            isFixedLeft: false,
+            width: 200,
+            staticWidth: 200,
+            maxWidth: 200,
+            minWidth: 200
+        },
+        {
+            valuePath: 'short',
+            name: 'Short',
+            isFixedLeft: false,
             width: 100,
-            staticWidth: 200
+            staticWidth: 200,
+            maxWidth: 100,
+            minWidth: 100
         }
     ]);
 
@@ -39,13 +54,15 @@ class ApplicationController extends Controller {
             date: '1/1/2020',
             name: 'Frodo Baggins',
             age: 150,
-            tall: false
+            tall: false,
+            short: true
         },
         {
             date: '1/1/2021',
             name: 'Gandalf the Grey',
             age: 145,
-            tall: true
+            tall: true,
+            short: false
         }
     ];
 

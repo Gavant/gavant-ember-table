@@ -1,0 +1,11 @@
+{{! template-lint-disable table-groups }}
+<table id={{@tableId}} class={{@tableClasses}}>
+    {{yield
+        (hash
+            api=api
+            head=(component "ember-thead" api=api)
+            body=(component "ember-tbody" api=api)
+            foot=(component "ember-tfoot" api=api)
+        )
+    }}
+</table>

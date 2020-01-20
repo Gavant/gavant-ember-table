@@ -12,16 +12,19 @@ import { t } from 'ember-intl';
 import ResizeAware from 'ember-resize/mixins/resize-aware';
 // @ts-ignore: Ignore import of compiled template
 import layout from '../templates/components/gavant-table';
-import { TableColumn } from 'ember-table';
+import { TableColumn } from 'table-components';
 import { SafeString } from '@ember/template/-private/handlebars';
 import Media from 'ember-responsive';
+import { observes } from '@ember-decorators/object';
 
 class GavantTableComponent extends Component.extend({ ResizeAware }) {
     @service media!: Media;
-    //configuration options
     layout = layout;
     classNames: string[] = ['data-table'];
-    showHeader: boolean = false;
+    classNameBindings: string[] = ['isServerRendered', 'hasHiddenColumns', 'isColumnsPanned'];
+    resizeWidthSensitive: boolean = true;
+    //configuration options
+    showHeader: boolean = true;
     noResultsText: string | null = null;
     tableClass: string = 'table';
     stripedRows: boolean = false;
@@ -52,8 +55,8 @@ class GavantTableComponent extends Component.extend({ ResizeAware }) {
     columns: NativeArray<TableColumn> = A();
     visibleColumns: NativeArray<TableColumn> = A();
     columnPanPosition: number = 0;
-    rows: Object[] = [];
-    sorts: Object[] = [];
+    rows: any[] = [];
+    sorts: any[] = [];
     isLoading: boolean = false;
     hasMoreRows: boolean = false;
     hasHiddenOverflow: boolean = false;
@@ -319,8 +322,8 @@ class GavantTableComponent extends Component.extend({ ResizeAware }) {
      * @type {*} any
      * @memberof GavantTableComponent
      */
-    @computed('columns.[]')
-    get onColumnsChange(): any {
+    @observes('columns.[]')
+    onColumnsChange(): any {
         return scheduleOnce('afterRender', this, 'updateColumnVisibility');
     }
 

@@ -1,0 +1,48 @@
+{{#vertical-collection
+    wrappedRows
+    containerSelector=_containerSelector
+    estimateHeight=estimateRowHeight
+    key=key
+    staticHeight=staticHeight
+    bufferSize=bufferSize
+    renderAll=renderAll
+    firstReached=firstReached
+    lastReached=lastReached
+    firstVisibleChanged=firstVisibleChanged
+    lastVisibleChanged=lastVisibleChanged
+    idForFirstItem=idForFirstItem
+as |rowValue|
+}}
+    {{#-ember-table-private/row-wrapper
+        rowValue=rowValue
+        columns=columns
+        columnMetaCache=columnMetaCache
+        rowMetaCache=rowMetaCache
+        canSelect=canSelect
+        rowSelectionMode=rowSelectionMode
+        checkboxSelectionMode=checkboxSelectionMode
+    as |api|
+    }}
+        {{#if hasBlock}}
+            {{yield
+                (hash
+                    rowValue=api.rowValue
+                    rowMeta=api.rowMeta
+                    cells=api.cells
+                    rowSelectionMode=api.rowSelectionMode
+                    row=(component "ember-tr" api=api)
+                )
+            }}
+        {{else}}
+            {{ember-tr api=api}}
+        {{/if}}
+    {{/-ember-table-private/row-wrapper}}
+{{else if shouldYieldToInverse}}
+    {{yield to="inverse"}}
+{{/vertical-collection}}
+{{#if this.isLoading}}
+    <Table::Row::Loading @columns={{this.columns}} />
+{{/if}}
+{{#if this.isEmpty}}
+    <Table::Row::NoResults @columns={{this.columns}} @noResultsText={{@noResultsText}} />
+{{/if}}
