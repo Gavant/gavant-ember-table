@@ -7,10 +7,6 @@
     padding-left: 1.25rem;
     padding-right: 1.25rem;
 
-    @include media-breakpoint-up(lg) {
-        min-height: 30rem;
-    }
-
     &.static-table {
         @include media-breakpoint-up(lg) {
             min-height: initial;
@@ -40,7 +36,6 @@
 
     .table {
         margin-bottom: 0;
-        font-size: 0.75rem;
 
         thead {
             th {
@@ -91,7 +86,7 @@
         padding: 1px 6px;
 
         &-left {
-            left: -6px;
+            left: -12px;
         }
 
         &-right {

@@ -1,13 +1,26 @@
-<div>
-    <div>
-        <GavantTable
-            @columns={{this.columns}}
-            @rows={{this.data}}
-            @hasMoreRows={{this.hasMore}}
-            @isLoading={{this.isLoadingModels}}
-            @loadMoreRows={{action "loadMoreModels"}}
-            @updateSorts={{action "updateSorts"}}
-            @enableSort={{false}}
-        />
-    </div>
+<div class="pannable-table">
+    <GavantTable
+        @columns={{this.columns}}
+        @rows={{this.data}}
+        @footerRows={{this.footerData}}
+        @hasMoreRows={{this.hasMore}}
+        @isLoading={{this.isLoadingModels}}
+        @loadMoreRows={{action "loadMoreModels"}}
+        @updateSorts={{action "updateSorts"}}
+        @enableSort={{false}}
+        @onRowClick={{action "alertData"}}
+    />
+</div>
+
+<div class="non-pannable-table">
+    <GavantTable
+        @columns={{this.columns}}
+        @rows={{this.data}}
+        @footerRows={{this.footerData}}
+        @hasMoreRows={{this.hasMore}}
+        @isLoading={{this.isLoadingModels}}
+        @loadMoreRows={{action "loadMoreModels"}}
+        @updateSorts={{action "updateSorts"}}
+        @enableSort={{false}}
+    />
 </div>

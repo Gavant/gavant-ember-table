@@ -9,41 +9,42 @@ class ApplicationController extends Controller {
             name: 'Date',
             isFixedLeft: true,
             width: 200,
-            staticWidth: 100
+            staticWidth: 200
         },
         {
             valuePath: 'name',
             name: 'Name',
             isFixedLeft: false,
-            width: 200,
-            staticWidth: 200,
-            maxWidth: 200,
-            minWidth: 200
+            width: 100,
+            staticWidth: 100,
+            maxWidth: 100,
+            minWidth: 100
         },
         {
             valuePath: 'age',
             name: 'Age',
             isFixedLeft: false,
-            width: 200,
-            staticWidth: 200,
-            maxWidth: 200,
-            minWidth: 200
+            textAlign: 'right',
+            width: 100,
+            staticWidth: 100,
+            maxWidth: 100,
+            minWidth: 100
         },
         {
             valuePath: 'tall',
             name: 'Tall',
             isFixedLeft: false,
-            width: 200,
-            staticWidth: 200,
-            maxWidth: 200,
-            minWidth: 200
+            width: 100,
+            staticWidth: 100,
+            maxWidth: 100,
+            minWidth: 100
         },
         {
             valuePath: 'short',
             name: 'Short',
             isFixedLeft: false,
             width: 100,
-            staticWidth: 200,
+            staticWidth: 100,
             maxWidth: 100,
             minWidth: 100
         }
@@ -66,6 +67,8 @@ class ApplicationController extends Controller {
         }
     ];
 
+    footerData = [{ age: 295 }];
+
     @action
     loadMoreModels() {
         return;
@@ -74,6 +77,12 @@ class ApplicationController extends Controller {
     @action
     updateSorts() {
         return;
+    }
+
+    @action
+    alertData(row) {
+        const data = row.rowValue;
+        alert(`${data.name} is ${data.age} years old.`);
     }
 }
 
