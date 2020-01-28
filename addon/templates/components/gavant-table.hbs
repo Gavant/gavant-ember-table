@@ -43,7 +43,7 @@
                         {{/if}}
                     {{/component}}
                 {{else if columnValue.isVisible}}
-                    {{or columnValue.name (htmlSafe "&nbsp;")}}
+                    {{or columnValue.name (html-safe "&nbsp;")}}
                     <EmberTh::SortIndicator @columnMeta={{columnMeta}} />
                     {{#if this.enableUserResize}}
                         <EmberTh::ResizeHandle @columnMeta={{columnMeta}} />
