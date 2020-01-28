@@ -1,1 +1,1 @@
-declare module 'ember-font-awesome/addon/components/fa-icon/component';
+declare module 'ember-font-awesome/components/fa-icon/component';
