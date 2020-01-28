@@ -41,8 +41,8 @@ as |rowValue|
     {{yield to="inverse"}}
 {{/vertical-collection}}
 {{#if this.isLoading}}
-    <Table::Row::Loading @columns={{this.columns}} />
+    <Row::Loading @columns={{this.columns}} />
 {{/if}}
 {{#if this.isEmpty}}
-    <Table::Row::NoResults @columns={{this.columns}} @noResultsText={{@noResultsText}} />
+    <Row::NoResults @columns={{this.columns}} @noResultsText={{@noResultsText}} />
 {{/if}}

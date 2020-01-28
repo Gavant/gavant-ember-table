@@ -56,7 +56,7 @@ class GavantTableComponent extends Component.extend({ ResizeAware }) {
     columnPanPosition: number = 0;
     rows: any[] = [];
     sorts: any[] = [];
-    isLoading: boolean = false;
+    isLoading: boolean = true;
     hasMoreRows: boolean = false;
     hasHiddenOverflow: boolean = false;
     containerWidth: number | null = null;
@@ -335,7 +335,9 @@ class GavantTableComponent extends Component.extend({ ResizeAware }) {
      */
     init() {
         super.init();
-        set(this, 'visibleColumns', this.columns);
+        this.columns.forEach((col) => {
+            set(col, 'isVisible', true);
+        });
     }
 
     /**
@@ -398,6 +400,7 @@ class GavantTableComponent extends Component.extend({ ResizeAware }) {
         }
 
         setProperties(this, { containerWidth, visibleColumns });
+        this.changeDisplay();
     }
 
     /**
@@ -501,6 +504,28 @@ class GavantTableComponent extends Component.extend({ ResizeAware }) {
     onUpdateSorts(sorts: any[]) {
         set(this, 'sorts', sorts);
         return tryInvoke(this, 'updateSorts', [sorts]);
+    }
+
+    /**
+     * Updates the visible columns based on `visibleColumns`
+     * (an array which includes columns based on their ability
+     * to fit within the table container)
+     *
+     * @memberof GavantTableComponent
+     */
+    @action
+    changeDisplay() {
+        const columns = get(this, 'columns');
+        const visibleColumns = get(this, 'visibleColumns');
+        columns.forEach((col) => {
+            if (visibleColumns.findBy('valuePath', col.valuePath)) {
+                set(col, 'width', col.staticWidth);
+                set(col, 'isVisible', true);
+            } else {
+                set(col, 'width', 0);
+                set(col, 'isVisible', false);
+            }
+        });
     }
 }
 

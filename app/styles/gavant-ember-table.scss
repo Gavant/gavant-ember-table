@@ -1,5 +1,6 @@
 @import 'gavant-ember-table/variables';
 @import 'ember-bootstrap/bootstrap';
+@import './progress-spinner/progress-spinner';
 
 .data-table {
     position: relative;
@@ -90,7 +91,7 @@
         }
 
         &-right {
-            right: -6px;
+            right: -12px;
         }
     }
 

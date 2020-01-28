@@ -12,5 +12,6 @@ declare module 'table-components' {
         minWidth?: number;
         maxWidth?: number;
         textAlign?: string;
+        isVisible?: boolean;
     }
 }

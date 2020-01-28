@@ -12,15 +12,21 @@
     />
 </div>
 
-<div class="non-pannable-table">
+<div class="pannable-table">
+    <h1>No Results</h1>
     <GavantTable
         @columns={{this.columns}}
-        @rows={{this.data}}
-        @footerRows={{this.footerData}}
-        @hasMoreRows={{this.hasMore}}
-        @isLoading={{this.isLoadingModels}}
-        @loadMoreRows={{action "loadMoreModels"}}
-        @updateSorts={{action "updateSorts"}}
-        @enableSort={{false}}
+        @rows={{array }}
+        @isLoading={{false}}
+        @noResultsText="Nothing was found in the mines of moria"
+    />
+</div>
+
+<div class="pannable-table">
+    <h1>isLoading</h1>
+    <GavantTable
+        @columns={{this.columns}}
+        @rows={{array }}
+        @isLoading={{true}}
     />
 </div>
