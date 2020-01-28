@@ -23,8 +23,8 @@
         "postpublish": "ember ts:clean"
     },
     "dependencies": {
-        "@fortawesome/free-solid-svg-icons": "^5.12.0",
         "@fortawesome/ember-fontawesome": "^0.2.1",
+        "@fortawesome/free-solid-svg-icons": "^5.12.0",
         "@gavant/ember-button-basic": "^0.0.9",
         "@glimmer/tracking": "^1.0.0",
         "@html-next/vertical-collection": "^1.0.0",
