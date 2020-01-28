@@ -11,5 +11,5 @@ export default class RowLoadingComponent extends Component {
 
     //readonly attributes
 
-    @readOnly('columns.length') colspan?: number;
+    @readOnly('columns.length') colspan!: number;
 }

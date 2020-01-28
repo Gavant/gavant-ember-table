@@ -31,6 +31,7 @@ class GavantTableComponent extends Component.extend({ ResizeAware }) {
     small: boolean = true;
     tableHeight: string = '';
     enableUserResize: boolean = false;
+    loadMoreRows?: () => Promise<any[]>;
     //ember-table's resizing must be enabled in order for fill-mode auto column
     //resizing to work, even if you don't want to allow user-invoked resizing
     enableResize: boolean = true;
@@ -198,6 +199,8 @@ class GavantTableComponent extends Component.extend({ ResizeAware }) {
 
     /**
      * CP that returns the table's current ability to pan right
+     * Columns can be panned right if there are hidden columns
+     * and the last visible column is not the last defined column
      *
      * @readonly
      * @type {boolean} canPanRight
@@ -205,8 +208,6 @@ class GavantTableComponent extends Component.extend({ ResizeAware }) {
      */
     @computed('hasHiddenColumns', 'columns.lastObject.{id,valuePath}', 'visibleColumns.lastObject.{id,valuePath}')
     get canPanRight(): boolean {
-        //columns can be panned right if there is hidden columns
-        //and the last visible column is not the last defined column
         const lastColId = this.getColumnId(get(get(this, 'columns'), 'lastObject'));
         const visibleColId = this.getColumnId(get(get(this, 'visibleColumns'), 'lastObject'));
         return this.hasHiddenColumns && Boolean(lastColId && visibleColId) && lastColId !== visibleColId;
@@ -214,6 +215,9 @@ class GavantTableComponent extends Component.extend({ ResizeAware }) {
 
     /**
      * CP that returns the table's ability to pan left
+     * Columns can be panned left if there are hidden columns
+     * and the first visible column (first NON-FIXED visible column, if fixed columns are enabled)
+     * is not the first defined column
      *
      * @readonly
      * @type {boolean} canPanLeft
@@ -227,9 +231,6 @@ class GavantTableComponent extends Component.extend({ ResizeAware }) {
         'firstVisibleColumn.{id,valuePath}'
     )
     get canPanLeft(): boolean {
-        //columns can be panned left if there are hidden columns
-        //and the first visible column (first NON-FIXED visible column, if fixed columns are enabled)
-        //is not the first defined column
         const firstColId = this.getColumnId(get(get(this, 'columns'), 'firstObject'));
         const nonFixedColId = this.getColumnId(get(get(this, 'nonFixedColumns'), 'firstObject'));
         const colId = this.allowFixedCols ? nonFixedColId : firstColId;
@@ -306,11 +307,11 @@ class GavantTableComponent extends Component.extend({ ResizeAware }) {
      * @memberof GavantTableComponent
      */
     @computed('fillColumnIndex', 'visibleColumns.length')
-    get adjustedFillColumnIndex(): number | null {
+    get adjustedFillColumnIndex(): number {
         if (this.fillColumnIndex) {
             return this.fillColumnIndex > this.visibleColumns.length - 1 ? 0 : this.fillColumnIndex;
         } else {
-            return this.fillColumnIndex;
+            return 0;
         }
     }
 
@@ -318,11 +319,11 @@ class GavantTableComponent extends Component.extend({ ResizeAware }) {
      * Updates the visible columns when the source columns array changes
      *
      * @readonly
-     * @type {*} any
+     * @type {Object}
      * @memberof GavantTableComponent
      */
     @observes('columns.[]')
-    onColumnsChange(): any {
+    onColumnsChange(): Object {
         return scheduleOnce('afterRender', this, 'updateColumnVisibility');
     }
 
@@ -354,12 +355,12 @@ class GavantTableComponent extends Component.extend({ ResizeAware }) {
 
     /**
      * Handle component container element resize events and hide/show columns as needed
+     * Resets pan position on container resize
      *
      * @memberof GavantTableComponent
      */
     debouncedDidResize() {
         if (this.constrainColumnsToFit) {
-            //reset pan position on container resize
             //TODO maybe eventually improve this to maintain pan position
             //and dynamically show/hide as needed?
             set(this, 'columnPanPosition', 0);
@@ -428,7 +429,7 @@ class GavantTableComponent extends Component.extend({ ResizeAware }) {
      * @returns {number}
      * @memberof GavantTableComponent
      */
-    getElementWidth(el: Element): number {
+    private getElementWidth(el: Element): number {
         let width = 0;
 
         if (el) {
@@ -450,7 +451,7 @@ class GavantTableComponent extends Component.extend({ ResizeAware }) {
      * @returns {(string | undefined)}
      * @memberof GavantTableComponent
      */
-    getColumnId(col: TableColumn | undefined): string | undefined {
+    getColumnId(col?: TableColumn): string | undefined {
         //allow columns to specify an "id" if they dont have a valuePath, or the valuePath is not unique
         return col && (col.id || col.valuePath);
     }
@@ -465,10 +466,9 @@ class GavantTableComponent extends Component.extend({ ResizeAware }) {
      */
     @action
     onLastReached() {
-        if (!this.isLoading && this.hasMoreRows) {
-            return tryInvoke(this, 'loadMoreRows');
+        if (!this.isLoading && this.hasMoreRows && this.loadMoreRows) {
+            this.loadMoreRows();
         }
-        return;
     }
 
     /**
