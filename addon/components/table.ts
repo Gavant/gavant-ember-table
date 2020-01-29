@@ -207,7 +207,7 @@ class TableComponent extends Component.extend({ ResizeAware }) {
     }
 
     /**
-     * CP that returns the table's current ability to pan right
+     * CP that returns the table's current ability to pan right.
      * Columns can be panned right if there are hidden columns
      * and the last visible column is not the last defined column
      *
@@ -223,7 +223,7 @@ class TableComponent extends Component.extend({ ResizeAware }) {
     }
 
     /**
-     * CP that returns the table's ability to pan left
+     * CP that returns the table's ability to pan left.
      * Columns can be panned left if there are hidden columns
      * and the first visible column (first NON-FIXED visible column, if fixed columns are enabled)
      * is not the first defined column
@@ -362,7 +362,7 @@ class TableComponent extends Component.extend({ ResizeAware }) {
     }
 
     /**
-     * Handle component container element resize events and hide/show columns as needed
+     * Handle component container element resize events and hide/show columns as needed.
      * Resets pan position on container resize
      *
      * @memberof TableComponent
@@ -458,14 +458,14 @@ class TableComponent extends Component.extend({ ResizeAware }) {
     }
 
     /**
-     * Returns the column's unique identifier or undefined
+     * Returns the column's unique identifier or undefined.
+     * Allow columns to specify an "id" if they dont have a valuePath, or the valuePath is not unique
      *
      * @param {(TableColumn | undefined)} col - A table column
      * @returns {(string | undefined)}
      * @memberof TableComponent
      */
     getColumnId(col?: TableColumn): string | undefined {
-        //allow columns to specify an "id" if they dont have a valuePath, or the valuePath is not unique
         return col && (col.id || col.valuePath);
     }
 
