@@ -4,7 +4,7 @@ import { set, computed, get, setProperties, action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { scheduleOnce } from '@ember/runloop';
 import { A } from '@ember/array';
-import { tryInvoke, isEmpty } from '@ember/utils';
+import { isEmpty } from '@ember/utils';
 import { htmlSafe } from '@ember/string';
 import { SafeString } from '@ember/template/-private/handlebars';
 import { lt, gte, conditional } from 'ember-awesome-macros';
@@ -32,12 +32,21 @@ class TableComponent extends Component.extend({ ResizeAware }) {
     tableHeight: string = '';
     enableUserResize: boolean = false;
     loadMoreRows?: () => Promise<any[]>;
+    protected updateSorts?: (sorts: TableSort[]) => void;
+    sortEmptyLast: boolean = false;
     //ember-table's resizing must be enabled in order for fill-mode auto column
     //resizing to work, even if you don't want to allow user-invoked resizing
     enableResize: boolean = true;
     enableReorder: boolean = false;
     enableSort: boolean = false;
-    sortFunction: any = null;
+    sortFunction?: (
+        itemA: any,
+        itemB: any,
+        sorts: TableSort[],
+        compare: () => number,
+        sortEmptyLast: boolean
+    ) => number;
+    compareFunction?: (itemA: any, itemB: any) => number;
     //the selector used by <VerticalCollection> to calculate occulsion rendering
     //set this to `null` for fixed height/scrollable tables
     containerSelector: string = this.elementId;
@@ -415,7 +424,7 @@ class TableComponent extends Component.extend({ ResizeAware }) {
      * @param {number} moveIndex -- A number indicating the number of columns to pan
      * @memberof TableComponent
      */
-    panColumns(moveIndex: number) {
+    private panColumns(moveIndex: number) {
         const newColumnPanPosition = this.columnPanPosition + moveIndex;
         const pannedColumns = this.allowFixedCols ? this.nonFixedColumns : this.columns;
         if (newColumnPanPosition < 0 || newColumnPanPosition >= pannedColumns.length) {
@@ -505,9 +514,11 @@ class TableComponent extends Component.extend({ ResizeAware }) {
      * @memberof TableComponent
      */
     @action
-    onUpdateSorts(sorts: any[]) {
+    onUpdateSorts(sorts: TableSort[]) {
         set(this, 'sorts', sorts);
-        return tryInvoke(this, 'updateSorts', [sorts]);
+        if (this.updateSorts) {
+            this.updateSorts(sorts);
+        }
     }
 }
 

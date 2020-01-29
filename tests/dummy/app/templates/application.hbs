@@ -1,5 +1,5 @@
 <div class="pannable-table">
-    <GavantTable
+    <Table
         @columns={{this.columns}}
         @rows={{this.data}}
         @footerRows={{this.footerData}}
@@ -7,7 +7,7 @@
         @isLoading={{this.isLoadingModels}}
         @loadMoreRows={{action "loadMoreModels"}}
         @updateSorts={{action "updateSorts"}}
-        @enableSort={{false}}
+        @enableSort={{true}}
         @onRowClick={{action "alertData"}}
     />
 </div>
