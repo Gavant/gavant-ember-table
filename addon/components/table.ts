@@ -40,13 +40,13 @@ class TableComponent extends Component.extend({ ResizeAware }) {
     enableReorder: boolean = false;
     enableSort: boolean = false;
     sortFunction?: (
-        itemA: any,
-        itemB: any,
+        itemA: TableColumn,
+        itemB: TableColumn,
         sorts: TableSort[],
-        compare: () => number,
+        compare: <T>(valueA: T, valueB: T, sortEmptyLast: boolean) => number,
         sortEmptyLast: boolean
     ) => number;
-    compareFunction?: (itemA: any, itemB: any) => number;
+    compareFunction?: <T>(valueA: T, valueB: T, sortEmptyLast: boolean) => number;
     //the selector used by <VerticalCollection> to calculate occulsion rendering
     //set this to `null` for fixed height/scrollable tables
     containerSelector: string = this.elementId;
