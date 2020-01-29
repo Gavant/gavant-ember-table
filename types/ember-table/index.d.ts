@@ -13,5 +13,11 @@ declare module 'table-components' {
         maxWidth?: number;
         textAlign?: string;
         isVisible?: boolean;
+        isSortable?: boolean;
+    }
+
+    interface TableSort {
+        valuePath: string;
+        isAscending: boolean;
     }
 }

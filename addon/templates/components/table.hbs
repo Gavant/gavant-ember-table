@@ -30,7 +30,8 @@
                 }}
                 as |columnValue columnMeta|
             >
-                {{#if (and columnValue.headerComponent columnValue.isVisible)}}
+                {{! ETWA "and" + "columnValue.isVisible"}}
+                {{#if (and columnValue.headerComponent columnValue.isVisible)}} 
                     {{#component
                         columnValue.headerComponent
                         columnValue=columnValue
@@ -42,6 +43,7 @@
                             <EmberTh::ResizeHandle @columnMeta={{columnMeta}} />
                         {{/if}}
                     {{/component}}
+                {{! ETWA "columnValue.isVisible"}}
                 {{else if columnValue.isVisible}}
                     {{or columnValue.name (html-safe "&nbsp;")}}
                     <EmberTh::SortIndicator @columnMeta={{columnMeta}} />
@@ -102,6 +104,7 @@
                 @onDoubleClick={{this.onCellDoubleClick}}
                 as |cellValue columnValue rowValue cellMeta columnMeta rowMeta|
             >
+                {{! ETWA "and" + "columnValue.isVisible"}}
                 {{#if (and columnValue.cellComponent columnValue.isVisible)}}
                     {{#component
                         columnValue.cellComponent
@@ -114,6 +117,7 @@
                     }}
                         {{cellValue}}
                     {{/component}}
+                {{! ETWA "columnValue.isVisible"}}
                 {{else if columnValue.isVisible}}
                     {{cellValue}}
                 {{/if}}
@@ -133,6 +137,7 @@
                 }}
                 as |cellValue columnValue rowValue cellMeta columnMeta rowMeta|
             >
+                {{! ETWA "and" + "columnValue.isVisible"}}
                 {{#if (and columnValue.footerComponent columnValue.isVisible)}}
                     {{#component
                         columnValue.footerComponent
@@ -145,6 +150,7 @@
                     }}
                         {{cellValue}}
                     {{/component}}
+                {{! ETWA "columnValue.isVisible"}}
                 {{else if columnValue.isVisible}}
                     {{cellValue}}
                 {{/if}}

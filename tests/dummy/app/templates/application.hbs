@@ -11,22 +11,3 @@
         @onRowClick={{action "alertData"}}
     />
 </div>
-
-<div class="pannable-table">
-    <h1>No Results</h1>
-    <GavantTable
-        @columns={{this.columns}}
-        @rows={{array }}
-        @isLoading={{false}}
-        @noResultsText="Nothing was found in the mines of moria"
-    />
-</div>
-
-<div class="pannable-table">
-    <h1>isLoading</h1>
-    <GavantTable
-        @columns={{this.columns}}
-        @rows={{array }}
-        @isLoading={{true}}
-    />
-</div>

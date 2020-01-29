@@ -4,9 +4,9 @@
 
 .data-table {
     position: relative;
-    padding-bottom: 1rem;
-    padding-left: 1.25rem;
-    padding-right: 1.25rem;
+    padding-bottom: $gavant-padding-bottom;
+    padding-left: $gavant-padding-left;
+    padding-right: $gavant-padding-right;
 
     &.static-table {
         @include media-breakpoint-up(lg) {
@@ -48,8 +48,8 @@
         &.table-sm {
             th,
             td {
-                padding-left: 0.75rem;
-                padding-right: 0.75rem;
+                padding-left: $gavant-td-padding-left;
+                padding-right: $gavant-td-padding-right;
 
                 &:first-child {
                     padding-left: 0;
@@ -102,10 +102,10 @@
 
     &-row-total {
         font-weight: bold;
-        color: $primary;
+        color: $gavant-primary;
 
         > td {
-            padding-bottom: 3rem;
+            padding-bottom: $gavant-tfoot-padding-bottom;
         }
     }
 
@@ -119,7 +119,7 @@
 
         thead th,
         tfoot td {
-            background-color: $white;
+            background-color: $gavant-table-fixed-cell-bg;
         }
 
         tfoot {
@@ -128,7 +128,7 @@
             position: sticky !important;
 
             td {
-                border-top: 1px solid $table-border-color;
+                border-top: 1px solid $gavant-table-border-color;
 
                 &.data-table-col-fixed-left {
                     border-right: none;
@@ -152,9 +152,9 @@
             font-size: 0;
 
             &:before {
-                font-family: $font-family-base;
+                font-family: $gavant-font-family-base;
                 font-size: 0.75rem;
-                color: lighten($text-muted, 10%);
+                color: lighten($gavant-text-muted, 10%);
                 display: inline-block;
                 border: none;
                 line-height: 1;
@@ -171,17 +171,17 @@
         td.is-fixed-right,
         th.is-fixed-left,
         th.is-fixed-right {
-            background-color: $white;
+            background-color: $gavant-table-fixed-cell-bg;
         }
 
         td.is-fixed-left,
         td.data-table-col-fixed-left {
-            border-right: 1px solid $table-border-color;
+            border-right: 1px solid $gavant-table-border-color;
         }
 
         td.is-fixed-right,
         td.data-table-col-fixed-right {
-            border-left: 1px solid $table-border-color;
+            border-left: 1px solid $gavant-table-border-color;
         }
 
         .table-hover {
@@ -189,7 +189,7 @@
                 &:hover {
                     > td.is-fixed-left,
                     > td.is-fixed-right {
-                        background-color: $table-hover-bg-opaque;
+                        background-color: $gavant-table-hover-bg-opaque;
                     }
                 }
 
