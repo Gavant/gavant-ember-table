@@ -1,0 +1,12 @@
+@import 'ember-bootstrap/bootstrap';
+@import 'gavant-ember-table';
+
+.pannable-table {
+    max-width: 450px;
+    margin-top: 100px;
+    margin-left: 5%;
+}
+
+.non-pannable-table {
+    margin-left: 5%;
+}

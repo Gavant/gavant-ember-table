@@ -1,5 +1,8 @@
 'use strict';
 
 module.exports = {
-  name: require('./package').name
+    name: '@gavant/ember-table',
+    included() {
+        this._super.included.apply(this, arguments);
+    }
 };
