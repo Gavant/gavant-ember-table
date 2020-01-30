@@ -111,8 +111,6 @@ Note: If both isLoading and hasMoreRows are false, and the rows array is empty, 
 
 More configuration options and api details can be found here: [ember-table](https://github.com/Addepar/ember-table).
 
-```
-
 ## Contributing
 
 See the [Contributing](CONTRIBUTING.md) guide for details.
@@ -120,4 +118,3 @@ See the [Contributing](CONTRIBUTING.md) guide for details.
 ## License
 
 This project is licensed under the [MIT License](LICENSE.md).
-```
