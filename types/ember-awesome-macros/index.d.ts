@@ -1,1 +1,1 @@
-declare module 'ember-intl';
+declare module 'ember-awesome-macros';

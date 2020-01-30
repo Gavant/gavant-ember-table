@@ -1,18 +1,11 @@
 @import 'gavant-ember-table/variables';
-@import 'ember-bootstrap/bootstrap';
 @import './progress-spinner/progress-spinner';
 
 .data-table {
     position: relative;
-    padding-bottom: $gavant-padding-bottom;
-    padding-left: $gavant-padding-left;
-    padding-right: $gavant-padding-right;
-
-    &.static-table {
-        @include media-breakpoint-up(lg) {
-            min-height: initial;
-        }
-    }
+    padding-bottom: $gvnt-tbl-padding-bottom;
+    padding-left: $gvnt-tbl-padding-left;
+    padding-right: $gvnt-tbl-padding-right;
 
     //since we can't detect how many columns to render in fastboot
     //make sure any overflow columns are hidden until the client re-renders
@@ -48,8 +41,8 @@
         &.table-sm {
             th,
             td {
-                padding-left: $gavant-td-padding-left;
-                padding-right: $gavant-td-padding-right;
+                padding-left: $gvnt-tbl-td-padding-left;
+                padding-right: $gvnt-tbl-td-padding-right;
 
                 &:first-child {
                     padding-left: 0;
@@ -102,10 +95,10 @@
 
     &-row-total {
         font-weight: bold;
-        color: $gavant-primary;
+        color: $gvnt-tbl-primary;
 
         > td {
-            padding-bottom: $gavant-tfoot-padding-bottom;
+            padding-bottom: $gvnt-tbl-tfoot-padding-bottom;
         }
     }
 
@@ -119,7 +112,7 @@
 
         thead th,
         tfoot td {
-            background-color: $gavant-table-fixed-cell-bg;
+            background-color: $gvnt-tbl-fixed-cell-bg;
         }
 
         tfoot {
@@ -128,7 +121,7 @@
             position: sticky !important;
 
             td {
-                border-top: 1px solid $gavant-table-border-color;
+                border-top: 1px solid $gvnt-tbl-border-color;
 
                 &.data-table-col-fixed-left {
                     border-right: none;
@@ -152,9 +145,9 @@
             font-size: 0;
 
             &:before {
-                font-family: $gavant-font-family-base;
+                font-family: $gvnt-tbl-font-family-base;
                 font-size: 0.75rem;
-                color: lighten($gavant-text-muted, 10%);
+                color: lighten($gvnt-tbl-text-muted, 10%);
                 display: inline-block;
                 border: none;
                 line-height: 1;
@@ -171,17 +164,17 @@
         td.is-fixed-right,
         th.is-fixed-left,
         th.is-fixed-right {
-            background-color: $gavant-table-fixed-cell-bg;
+            background-color: $gvnt-tbl-fixed-cell-bg;
         }
 
         td.is-fixed-left,
         td.data-table-col-fixed-left {
-            border-right: 1px solid $gavant-table-border-color;
+            border-right: 1px solid $gvnt-tbl-border-color;
         }
 
         td.is-fixed-right,
         td.data-table-col-fixed-right {
-            border-left: 1px solid $gavant-table-border-color;
+            border-left: 1px solid $gvnt-tbl-border-color;
         }
 
         .table-hover {
@@ -189,7 +182,7 @@
                 &:hover {
                     > td.is-fixed-left,
                     > td.is-fixed-right {
-                        background-color: $gavant-table-hover-bg-opaque;
+                        background-color: $gvnt-tbl-hover-bg-opaque;
                     }
                 }
 

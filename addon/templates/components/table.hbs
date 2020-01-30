@@ -56,7 +56,7 @@
                             @size="sm"
                             @slim={{true}}
                             @class="data-table-col-pan-btn data-table-col-pan-btn-left"
-                            @action={{action "panColumnsLeft"}}
+                            @action={{fn this.panColumnsLeft}}
                         >
                             <FaIcon @icon="chevron-left" />
                         </ButtonBasic>
@@ -67,7 +67,7 @@
                             @size="sm"
                             @slim={{true}}
                             @class="data-table-col-pan-btn data-table-col-pan-btn-right"
-                            @action={{action "panColumnsRight"}}
+                            @action={{fn this.panColumnsRight}}
                         >
                             <FaIcon @icon="chevron-right" />
                         </ButtonBasic>
@@ -85,7 +85,7 @@
         @estimateRowHeight={{this.estimateRowHeight}}
         @renderAll={{this.renderAllRows}}
         @containerSelector={{this.containerSelector}}
-        @lastReached={{action "onLastReached"}}
+        @lastReached={{fn this.onLastReached}}
         as |Body|
     >
         <Body.row

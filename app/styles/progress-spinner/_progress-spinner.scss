@@ -7,25 +7,24 @@
     opacity: 0;
     position: relative;
     transition: opacity 0.25s, width 0.25s;
-    border-color: $gavant-button-spinner-loading-color2 $gavant-button-spinner-loading-color1
-        $gavant-button-spinner-loading-color1;
+    border-color: $gvnt-btn-spinner-loading-color2 $gvnt-btn-spinner-loading-color1 $gvnt-btn-spinner-loading-color1;
     border-radius: 100%;
     border-style: solid;
-    border-width: $gavant-button-spinner-loading-border-width;
+    border-width: $gvnt-btn-spinner-loading-border-width;
     margin: 0;
     width: 0;
 
     &.active {
-        height: $gavant-button-spinner-loading-size;
-        width: $gavant-button-spinner-loading-size;
+        height: $gvnt-btn-spinner-loading-size;
+        width: $gvnt-btn-spinner-loading-size;
         opacity: 1;
         vertical-align: middle;
         animation: buttonSpinnerRotation 0.6s infinite linear;
 
         &.lg {
-            height: $gavant-button-spinner-loading-size-lg;
-            width: $gavant-button-spinner-loading-size-lg;
-            border-width: $gavant-button-spinner-loading-border-width-lg;
+            height: $gvnt-btn-spinner-loading-size-lg;
+            width: $gvnt-btn-spinner-loading-size-lg;
+            border-width: $gvnt-btn-spinner-loading-border-width-lg;
         }
     }
 

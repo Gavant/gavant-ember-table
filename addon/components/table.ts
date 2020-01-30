@@ -14,7 +14,7 @@ import { observes } from '@ember-decorators/object';
 import NativeArray from '@ember/array/-private/native-array';
 // @ts-ignore: Ignore import of compiled template
 import layout from '../templates/components/table';
-import { TableColumn, TableSort } from 'table-components';
+import { TableColumn, TableSort } from '@gavant/ember-table';
 
 class TableComponent extends Component.extend({ ResizeAware }) {
     @service media!: Media;

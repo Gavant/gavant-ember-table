@@ -5,9 +5,9 @@
         @footerRows={{this.footerData}}
         @hasMoreRows={{this.hasMore}}
         @isLoading={{this.isLoadingModels}}
-        @loadMoreRows={{action "loadMoreModels"}}
-        @updateSorts={{action "updateSorts"}}
+        @loadMoreRows={{fn this.loadMoreModels}}
+        @updateSorts={{fn this.updateSorts}}
         @enableSort={{true}}
-        @onRowClick={{action "alertData"}}
+        @onRowClick={{this.alertData}}
     />
 </div>
