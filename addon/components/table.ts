@@ -388,14 +388,14 @@ class TableComponent extends Component.extend({ ResizeAware }) {
         const allowFixedCols = containerWidth >= this.minFixedColTableWidth;
         const panPosition = this.columnPanPosition;
         let newTableWidth = 0;
-        let arrayComplete = false; //ETWA
+        let hasAllVisibleColumns = false; //ETWA
 
         for (const [i, col] of columns.entries()) {
             let colIndex = allowFixedCols ? this.nonFixedColumns.indexOf(col) : i;
             if ((col && col.isFixedLeft && allowFixedCols) || colIndex >= panPosition) {
                 let colWidth = col.staticWidth || 0;
                 let isVisible = (col.isFixedLeft && allowFixedCols) || newTableWidth + colWidth <= containerWidth;
-                if (isVisible && !arrayComplete) {
+                if (isVisible && !hasAllVisibleColumns) {
                     //^ETWA (&& !arrayComplete)
                     newTableWidth += colWidth;
                     set(col, 'isVisible', true); //ETWA
@@ -404,7 +404,7 @@ class TableComponent extends Component.extend({ ResizeAware }) {
                     // Prevent unwanted panning behavior on mobile that occurs with more than 2 columns
                     const isMobile = get(get(this, 'media'), 'isMobile');
                     if (isMobile && visibleColumns.length === 2) {
-                        arrayComplete = true; //ETWA
+                        hasAllVisibleColumns = true; //ETWA
                         // break; pre-ETWA
                     }
                 } else {
