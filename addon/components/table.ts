@@ -34,6 +34,7 @@ class TableComponent extends Component.extend({ ResizeAware }) {
     loadMoreRows?: () => Promise<any[]>;
     protected updateSorts?: (sorts: TableSort[]) => void;
     sortEmptyLast: boolean = false;
+    panButtonClass: string = 'btn btn-secondary';
     //ember-table's resizing must be enabled in order for fill-mode auto column
     //resizing to work, even if you don't want to allow user-invoked resizing
     enableResize: boolean = true;
