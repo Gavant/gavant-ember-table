@@ -52,8 +52,8 @@
                     {{/if}}
                     {{#if (and this.canPanLeft (eq columnValue this.firstVisibleColumn))}}
                         <button
-                            class="data-table-col-pan-btn data-table-col-pan-btn-left {{@buttonClass}}"
-                            {{ on "click" this.panColumnsLeft}}
+                            class="data-table-col-pan-btn data-table-col-pan-btn-left {{panButtonClass}}"
+                            {{on "click" this.panColumnsLeft}}
                             type="button"
                         >
                             &#8592;
@@ -61,7 +61,7 @@
                     {{/if}}
                     {{#if (and this.canPanRight (eq columnValue this.visibleColumns.lastObject))}}
                         <button
-                            class="data-table-col-pan-btn data-table-col-pan-btn-right {{@buttonClass}}"
+                            class="data-table-col-pan-btn data-table-col-pan-btn-right {{panButtonClass}}"
                             {{on "click" this.panColumnsRight}}
                             type="button"
                         >
