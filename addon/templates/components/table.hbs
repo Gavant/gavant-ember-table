@@ -51,26 +51,22 @@
                         <EmberTh::ResizeHandle @columnMeta={{columnMeta}} />
                     {{/if}}
                     {{#if (and this.canPanLeft (eq columnValue this.firstVisibleColumn))}}
-                        <ButtonBasic
-                            @type="secondary"
-                            @size="sm"
-                            @slim={{true}}
-                            @class="data-table-col-pan-btn data-table-col-pan-btn-left"
-                            @action={{fn this.panColumnsLeft}}
+                        <button
+                            class="data-table-col-pan-btn data-table-col-pan-btn-left {{@buttonClass}}"
+                            {{ on "click" this.panColumnsLeft}}
+                            type="button"
                         >
-                            <FaIcon @icon="chevron-left" />
-                        </ButtonBasic>
+                            &#8592;
+                        </button>
                     {{/if}}
                     {{#if (and this.canPanRight (eq columnValue this.visibleColumns.lastObject))}}
-                        <ButtonBasic
-                            @type="secondary"
-                            @size="sm"
-                            @slim={{true}}
-                            @class="data-table-col-pan-btn data-table-col-pan-btn-right"
-                            @action={{fn this.panColumnsRight}}
+                        <button
+                            class="data-table-col-pan-btn data-table-col-pan-btn-right {{@buttonClass}}"
+                            {{on "click" this.panColumnsRight}}
+                            type="button"
                         >
-                            <FaIcon @icon="chevron-right" />
-                        </ButtonBasic>
+                            &#8594;
+                        </button>
                     {{/if}}
                 {{/if}}
             </Row.cell>
