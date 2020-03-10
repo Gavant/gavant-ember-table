@@ -50,7 +50,7 @@ class TableComponent extends Component.extend({ ResizeAware }) {
     compareFunction?: <T>(valueA: T, valueB: T, sortEmptyLast: boolean) => number;
     //the selector used by <VerticalCollection> to calculate occulsion rendering
     //set this to `null` for fixed height/scrollable tables
-    containerSelector: string = this.elementId;
+    containerSelector: string = 'body';
     widthConstraint: string = 'lte-container';
     fillMode: string = 'first-column';
     fillColumnIndex: number | null = null;
