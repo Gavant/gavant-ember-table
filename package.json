@@ -1,6 +1,6 @@
 {
   "name": "@gavant/ember-table",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Data tables built using ember-table",
   "keywords": [
     "ember-addon"
