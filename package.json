@@ -35,7 +35,8 @@
     "ember-resize": "^0.3.4",
     "ember-responsive": "^3.0.5",
     "ember-table": "2.2.3",
-    "ember-truth-helpers": "^2.1.0"
+    "ember-truth-helpers": "^2.1.0",
+    "ember-useragent": "0.9.1"
   },
   "devDependencies": {
     "@ember/optional-features": "^1.1.0",
