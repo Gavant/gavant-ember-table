@@ -1,12 +1,16 @@
 import Controller from '@ember/controller';
 import { A } from '@ember/array';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 
 class ApplicationController extends Controller {
+    @tracked foobar = 'bar';
+
     columns = A([
         {
             valuePath: 'date',
             name: 'Date',
+            cellComponent: 'table/cell/table-meta',
             isFixedLeft: true,
             width: 200,
             staticWidth: 200
@@ -68,6 +72,11 @@ class ApplicationController extends Controller {
     ];
 
     footerData = [{ age: 295 }];
+
+    @action
+    updateFoobar(event) {
+        this.foobar = event.target.value;
+    }
 
     @action
     loadMoreModels() {

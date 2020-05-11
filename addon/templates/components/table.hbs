@@ -28,7 +28,7 @@
                     (if Row.columnValue.isFixedLeft " data-table-col-fixed-left")
                     (if (eq Row.columnValue this.firstVisibleNonFixedColumn) " data-table-col-first-nonfixed")
                 }}
-                as |columnValue columnMeta tableMeta|
+                as |columnValue columnMeta|
             >
                 {{! ETWA "and" + "columnValue.isVisible"}}
                 {{#if (and columnValue.headerComponent columnValue.isVisible)}}
@@ -36,7 +36,7 @@
                         columnValue.headerComponent
                         columnValue=columnValue
                         columnMeta=columnMeta
-                        tableMeta=tableMeta
+                        tableMeta=@tableMeta
                     }}
                         {{columnValue.name}}
                         <EmberTh::SortIndicator @columnMeta={{columnMeta}} />
@@ -99,7 +99,7 @@
                 }}
                 @onClick={{this.onCellClick}}
                 @onDoubleClick={{this.onCellDoubleClick}}
-                as |cellValue columnValue rowValue cellMeta columnMeta rowMeta tableMeta|
+                as |cellValue columnValue rowValue cellMeta columnMeta rowMeta|
             >
                 {{! ETWA "and" + "columnValue.isVisible"}}
                 {{#if (and columnValue.cellComponent columnValue.isVisible)}}
@@ -111,7 +111,7 @@
                         cellMeta=cellMeta
                         columnMeta=columnMeta
                         rowMeta=rowMeta
-                        tableMeta=tableMeta
+                        tableMeta=@tableMeta
                     }}
                         {{cellValue}}
                     {{/component}}
@@ -133,7 +133,7 @@
                     (if Row.columnValue.isFixedLeft " data-table-col-fixed-left")
                     (if (eq Row.columnValue this.firstVisibleNonFixedColumn) " data-table-col-first-nonfixed")
                 }}
-                as |cellValue columnValue rowValue cellMeta columnMeta rowMeta tableMeta|
+                as |cellValue columnValue rowValue cellMeta columnMeta rowMeta|
             >
                 {{! ETWA "and" + "columnValue.isVisible"}}
                 {{#if (and columnValue.footerComponent columnValue.isVisible)}}
@@ -145,7 +145,7 @@
                         cellMeta=cellMeta
                         columnMeta=columnMeta
                         rowMeta=rowMeta
-                        tableMeta=tableMeta
+                        tableMeta=@tableMeta
                     }}
                         {{cellValue}}
                     {{/component}}
