@@ -28,14 +28,15 @@
                     (if Row.columnValue.isFixedLeft " data-table-col-fixed-left")
                     (if (eq Row.columnValue this.firstVisibleNonFixedColumn) " data-table-col-first-nonfixed")
                 }}
-                as |columnValue columnMeta|
+                as |columnValue columnMeta tableMeta|
             >
                 {{! ETWA "and" + "columnValue.isVisible"}}
-                {{#if (and columnValue.headerComponent columnValue.isVisible)}} 
+                {{#if (and columnValue.headerComponent columnValue.isVisible)}}
                     {{#component
                         columnValue.headerComponent
                         columnValue=columnValue
                         columnMeta=columnMeta
+                        tableMeta=tableMeta
                     }}
                         {{columnValue.name}}
                         <EmberTh::SortIndicator @columnMeta={{columnMeta}} />
@@ -52,7 +53,7 @@
                     {{/if}}
                     {{#if (and this.canPanLeft (eq columnValue this.firstVisibleColumn))}}
                         <button
-                            class="data-table-col-pan-btn data-table-col-pan-btn-left {{panButtonClass}}"
+                            class="data-table-col-pan-btn data-table-col-pan-btn-left {{this.panButtonClass}}"
                             {{on "click" this.panColumnsLeft}}
                             type="button"
                         >
@@ -61,7 +62,7 @@
                     {{/if}}
                     {{#if (and this.canPanRight (eq columnValue this.visibleColumns.lastObject))}}
                         <button
-                            class="data-table-col-pan-btn data-table-col-pan-btn-right {{panButtonClass}}"
+                            class="data-table-col-pan-btn data-table-col-pan-btn-right {{this.panButtonClass}}"
                             {{on "click" this.panColumnsRight}}
                             type="button"
                         >
@@ -98,7 +99,7 @@
                 }}
                 @onClick={{this.onCellClick}}
                 @onDoubleClick={{this.onCellDoubleClick}}
-                as |cellValue columnValue rowValue cellMeta columnMeta rowMeta|
+                as |cellValue columnValue rowValue cellMeta columnMeta rowMeta tableMeta|
             >
                 {{! ETWA "and" + "columnValue.isVisible"}}
                 {{#if (and columnValue.cellComponent columnValue.isVisible)}}
@@ -110,6 +111,7 @@
                         cellMeta=cellMeta
                         columnMeta=columnMeta
                         rowMeta=rowMeta
+                        tableMeta=tableMeta
                     }}
                         {{cellValue}}
                     {{/component}}
@@ -131,7 +133,7 @@
                     (if Row.columnValue.isFixedLeft " data-table-col-fixed-left")
                     (if (eq Row.columnValue this.firstVisibleNonFixedColumn) " data-table-col-first-nonfixed")
                 }}
-                as |cellValue columnValue rowValue cellMeta columnMeta rowMeta|
+                as |cellValue columnValue rowValue cellMeta columnMeta rowMeta tableMeta|
             >
                 {{! ETWA "and" + "columnValue.isVisible"}}
                 {{#if (and columnValue.footerComponent columnValue.isVisible)}}
@@ -143,6 +145,7 @@
                         cellMeta=cellMeta
                         columnMeta=columnMeta
                         rowMeta=rowMeta
+                        tableMeta=tableMeta
                     }}
                         {{cellValue}}
                     {{/component}}
