@@ -1,4 +1,6 @@
 <div class="pannable-table">
+    <label for="foobar">Foo:</label>
+    <input id="foobar" value="{{this.foobar}}" {{on "input" this.updateFoobar}}/>
     <Table
         @columns={{this.columns}}
         @rows={{this.data}}
@@ -10,5 +12,8 @@
         @enableSort={{true}}
         @onRowClick={{this.alertData}}
         @panButtonClass="btn-primary"
+        @tableMeta={{hash
+          foobar=this.foobar
+        }}
     />
 </div>
