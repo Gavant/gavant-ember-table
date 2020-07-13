@@ -1,6 +1,12 @@
 <div class="pannable-table">
     <label for="foobar">Foo:</label>
     <input id="foobar" value="{{this.foobar}}" {{on "input" this.updateFoobar}}/>
+    <button
+      type="button"
+      {{on "click" this.toggleColumns}}
+    >
+      Toggle Columns
+    </button>
     <Table
         @columns={{this.columns}}
         @rows={{this.data}}

@@ -108,7 +108,7 @@ Note: If both isLoading and hasMoreRows are false, and the rows array is empty, 
 @onRowClick - An action that is fired when a row is clicked
 @enableSort - A boolean that allows/disallows sorting
 
-@tableMeta - a hash that takes in assigned data that can be accessed inside of components
+@tableMeta - A hash that takes in assigned data that can be accessed inside of components
 ```
 
 More configuration options and api details can be found here: [ember-table](https://github.com/Addepar/ember-table).

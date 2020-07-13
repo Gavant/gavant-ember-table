@@ -6,7 +6,7 @@ import { tracked } from '@glimmer/tracking';
 class ApplicationController extends Controller {
     @tracked foobar = 'bar';
 
-    columns = A([
+    @tracked columns = A([
         {
             valuePath: 'date',
             name: 'Date',
@@ -54,6 +54,8 @@ class ApplicationController extends Controller {
         }
     ]);
 
+    @tracked otherColumns = false;
+
     data = [
         {
             date: '1/1/2020',
@@ -92,6 +94,78 @@ class ApplicationController extends Controller {
     alertData(row) {
         const data = row.rowValue;
         alert(`${data.name} is ${data.age} years old.`);
+    }
+
+    @action
+    toggleColumns() {
+        this.columns = !this.otherColumns
+            ? A([
+                  {
+                      valuePath: 'date',
+                      name: 'Date',
+                      cellComponent: 'table/cell/table-meta',
+                      isFixedLeft: true,
+                      width: 200,
+                      staticWidth: 200
+                  },
+                  {
+                      valuePath: 'name',
+                      name: 'Name',
+                      isFixedLeft: false,
+                      width: 100,
+                      staticWidth: 100,
+                      maxWidth: 100,
+                      minWidth: 100
+                  }
+              ])
+            : A([
+                  {
+                      valuePath: 'date',
+                      name: 'Date',
+                      cellComponent: 'table/cell/table-meta',
+                      isFixedLeft: true,
+                      width: 200,
+                      staticWidth: 200
+                  },
+                  {
+                      valuePath: 'name',
+                      name: 'Name',
+                      isFixedLeft: false,
+                      width: 100,
+                      staticWidth: 100,
+                      maxWidth: 100,
+                      minWidth: 100
+                  },
+                  {
+                      valuePath: 'age',
+                      name: 'Age',
+                      isFixedLeft: false,
+                      textAlign: 'right',
+                      width: 100,
+                      staticWidth: 100,
+                      maxWidth: 100,
+                      minWidth: 100
+                  },
+                  {
+                      valuePath: 'tall',
+                      name: 'Tall',
+                      isFixedLeft: false,
+                      width: 100,
+                      staticWidth: 100,
+                      maxWidth: 100,
+                      minWidth: 100
+                  },
+                  {
+                      valuePath: 'short',
+                      name: 'Short',
+                      isFixedLeft: false,
+                      width: 100,
+                      staticWidth: 100,
+                      maxWidth: 100,
+                      minWidth: 100
+                  }
+              ]);
+        this.otherColumns = !this.otherColumns;
     }
 }
 
