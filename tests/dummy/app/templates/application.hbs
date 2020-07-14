@@ -12,14 +12,19 @@
         @rows={{this.data}}
         @footerRows={{this.footerData}}
         @hasMoreRows={{this.hasMore}}
-        @isLoading={{this.isLoadingModels}}
+        @isLoading={{true}}
         @loadMoreRows={{fn this.loadMoreModels}}
         @updateSorts={{fn this.updateSorts}}
-        @enableSort={{true}}
+        @enableSort={{this.enableSort}}
         @onRowClick={{this.alertData}}
         @panButtonClass="btn-primary"
         @tableMeta={{hash
           foobar=this.foobar
         }}
+        @resizeDebounce={{this.resizeDebounce}}
+        @showHeader={{this.showHeader}}
+        @stripedRows={{this.stripedRows}}
+        @enableReorder={{true}}
+        @enableUserResize={{true}}
     />
 </div>

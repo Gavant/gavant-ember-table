@@ -1,10 +1,6 @@
 declare module 'ember-table/components/ember-table/component';
 declare module 'ember-table/components/ember-tbody/component';
 
-declare function pluck<T, K extends keyof T>(o: T, propertyNames: K[] | K): T[K][] | T[K] {
-    return Array.isArray(propertyNames) ? propertyNames.map((n) => o[n]) : o[propertyNames];
-};
-
 declare module '@gavant/ember-table' {
     export interface ColumnValue {
         [index: string]: any;
