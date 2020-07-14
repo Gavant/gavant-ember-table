@@ -18,7 +18,7 @@
     >
         {{#if this.showHeader}}
             <T.head
-                @columns={{this.visibleColumns}}
+                @columns={{@columns}}
                 @enableResize={{this.enableResize}}
                 @enableReorder={{this.enableReorder}}
                 @widthConstraint={{this.widthConstraint}}
@@ -42,7 +42,7 @@
                         }}
                         as |columnValue columnMeta|
                     >
-                        {{#if columnValue.headerComponent}}
+                        {{#if (and columnValue.headerComponent columnValue.isVisible)}}
                             {{#component
                                 columnValue.headerComponent
                                 columnValue=columnValue
@@ -55,7 +55,7 @@
                                     <EmberTh::ResizeHandle @columnMeta={{columnMeta}} />
                                 {{/if}}
                             {{/component}}
-                        {{else}}
+                        {{else if columnValue.isVisible}}
                             {{or columnValue.name (html-safe "&nbsp;")}}
                             <EmberTh::SortIndicator @columnMeta={{columnMeta}} />
                             {{#if this.enableUserResize}}
@@ -112,7 +112,7 @@
                     @onDoubleClick={{@onCellDoubleClick}}
                     as |cellValue columnValue rowValue cellMeta columnMeta rowMeta|
                 >
-                    {{#if columnValue.cellComponent}}
+                    {{#if (and columnValue.cellComponent columnValue.isVisible)}}
                         {{#component
                             columnValue.cellComponent
                             cellValue=cellValue
@@ -125,7 +125,7 @@
                         }}
                             {{cellValue}}
                         {{/component}}
-                    {{else}}
+                    {{else if columnValue.isVisible}}
                         {{cellValue}}
                     {{/if}}
                 </Row.cell>
@@ -144,7 +144,7 @@
                     }}
                     as |cellValue columnValue rowValue cellMeta columnMeta rowMeta|
                 >
-                    {{#if columnValue.footerComponent}}
+                    {{#if (and columnValue.footerComponent columnValue.isVisible)}}
                         {{#component
                             columnValue.footerComponent
                             cellValue=(or (get rowValue columnValue.footerValuePath) cellValue)
@@ -157,7 +157,7 @@
                         }}
                             {{cellValue}}
                         {{/component}}
-                    {{else}}
+                    {{else if columnValue.isVisible}}
                         {{cellValue}}
                     {{/if}}
                 </Row.cell>

@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { guidFor } from '@ember/object/internals';
 import { or, and, gt } from '@ember/object/computed';
-import { computed, setProperties, action } from '@ember/object';
+import { computed, action, set } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { scheduleOnce } from '@ember/runloop';
 import { assert } from '@ember/debug';
@@ -374,7 +374,11 @@ class TableComponent extends Component<TableArgs> {
                 return !!col.staticWidth || col.staticWidth === 0;
             })
         );
-        this.visibleColumns = this.args.columns;
+        // this.visibleColumns = this.args.columns; // pre-ETWA
+        this.args.columns.forEach((col) => {
+            // ETWA
+            set(col, 'isVisible', true);
+        });
     }
 
     /**
@@ -418,27 +422,37 @@ class TableComponent extends Component<TableArgs> {
         const allowFixedCols = containerWidth >= this.minFixedColTableWidth;
         const panPosition = this.columnPanPosition;
         let newTableWidth = 0;
+        let hasAllVisibleColumns = false; // ETWA
 
         for (const [i, col] of columns.entries()) {
             let colIndex = allowFixedCols ? this.nonFixedColumns.indexOf(col) : i;
             if ((col && col.isFixedLeft && allowFixedCols) || colIndex >= panPosition) {
                 let colWidth = col.staticWidth || 0;
                 let isVisible = (col.isFixedLeft && allowFixedCols) || newTableWidth + colWidth <= containerWidth;
-                if (isVisible) {
+                if (isVisible && !hasAllVisibleColumns) {
                     newTableWidth += colWidth;
+                    set(col, 'isVisible', true); // ETWA
+                    set(col, 'width', colWidth); // ETWA
                     visibleColumns.pushObject(col);
                     // Prevent unwanted panning behavior on mobile that occurs with more than 2 columns
                     const isMobile = this.media.isMobile;
                     if (isMobile && visibleColumns.length === 2) {
-                        break;
+                        hasAllVisibleColumns = true; // ETWA
+                        // break; // pre-ETWA
                     }
                 } else {
-                    break;
+                    set(col, 'isVisible', false); // ETWA
+                    set(col, 'width', 0); // ETWA
+                    // break; // pre-ETWA
                 }
+            } else {
+                set(col, 'isVisible', false); // ETWA
+                set(col, 'width', 0); // ETWA
             }
         }
 
-        setProperties(this, { containerWidth, visibleColumns });
+        this.visibleColumns = visibleColumns;
+        this.containerWidth = containerWidth;
     }
 
     /**
