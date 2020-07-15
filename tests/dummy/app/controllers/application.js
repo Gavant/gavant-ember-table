@@ -44,7 +44,7 @@ class ApplicationController extends Controller {
             name: 'Short',
             isFixedLeft: false,
             width: 100,
-            staticWidth: 0,
+            staticWidth: 200,
             maxWidth: 100,
             minWidth: 100
         }

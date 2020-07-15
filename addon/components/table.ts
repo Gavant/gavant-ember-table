@@ -371,7 +371,7 @@ class TableComponent extends Component<TableArgs> {
         assert(
             'Property staticWidth is missing on one or more column objects',
             args.columns.every((col) => {
-                return !!col.staticWidth || col.staticWidth === 0;
+                return !!col.staticWidth;
             })
         );
         // this.visibleColumns = this.args.columns; // pre-ETWA
