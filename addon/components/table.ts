@@ -1,86 +1,168 @@
-import Component from '@ember/component';
-import { or, empty, not, and, gt, readOnly } from '@ember/object/computed';
-import { set, computed, get, setProperties, action } from '@ember/object';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { guidFor } from '@ember/object/internals';
+import { or, and, gt } from '@ember/object/computed';
+import { computed, action, set } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { scheduleOnce } from '@ember/runloop';
+import { assert } from '@ember/debug';
 import { A } from '@ember/array';
 import { isEmpty } from '@ember/utils';
 import { htmlSafe } from '@ember/string';
 import { SafeString } from '@ember/template/-private/handlebars';
 import { lt, gte, conditional } from 'ember-awesome-macros';
-import ResizeAware from 'ember-resize/mixins/resize-aware';
 import Media from 'ember-responsive';
-import { observes } from '@ember-decorators/object';
 import NativeArray from '@ember/array/-private/native-array';
-// @ts-ignore: Ignore import of compiled template
-import layout from '../templates/components/table';
-import { TableColumn, TableSort } from '@gavant/ember-table';
+import { ColumnValue, TableSort, RowClickEvent } from '@gavant/ember-table';
+import { argDefault } from '@gavant/ember-table/decorators/table';
 
-class TableComponent extends Component.extend({ ResizeAware }) {
-    @service media!: Media;
-    layout = layout;
-    classNames: string[] = ['data-table'];
-    classNameBindings: string[] = ['isServerRendered', 'hasHiddenColumns', 'isColumnsPanned'];
-    resizeWidthSensitive: boolean = true;
-    //configuration options
-    showHeader: boolean = true;
-    noResultsText: string | null = 'No results found';
-    tableClass: string = 'table';
-    stripedRows: boolean = false;
-    hoverableRows: boolean = true;
-    small: boolean = true;
-    tableHeight: string = '';
-    enableUserResize: boolean = false;
+export interface TableArgs {
+    [index: string]: any;
+
+    //booleans
+    constrainColumnsToFit: boolean;
+    hoverableRows?: boolean;
+    enableReorder?: boolean;
+    enableSort?: boolean;
+    enableUserResize?: boolean;
+    renderAllRows: boolean;
+    resizeWidthSensitive: boolean;
+    stripedRows?: boolean;
+    showEmptyFooter: boolean;
+    showHeader?: boolean;
+    small?: boolean;
+    sortEmptyLast?: boolean;
+
+    //attributes
+    bufferSize: number;
+    columns: NativeArray<ColumnValue>;
+    containerSelector?: string;
+    estimateRowHeight: number;
+    fillColumnIndex?: number | null;
+    fillMode?: string;
+    footerRows?: NativeArray<{
+        [valuePath: string]: any;
+    }>;
+    noResultsText?: string;
+    panButtonClass?: string;
+    resizeDebounce?: number;
+    resizeMode?: string;
+    rows: NativeArray<any>;
+    tableClass?: string;
+    tableHeight?: string;
+    widthConstraint?: string;
+
+    //methods
     loadMoreRows?: () => Promise<any[]>;
-    protected updateSorts?: (sorts: TableSort[]) => void;
-    sortEmptyLast: boolean = false;
-    panButtonClass: string = 'btn btn-secondary';
-    //ember-table's resizing must be enabled in order for fill-mode auto column
-    //resizing to work, even if you don't want to allow user-invoked resizing
-    enableResize: boolean = true;
-    enableReorder: boolean = false;
-    enableSort: boolean = false;
+    updateSorts?: (sorts: TableSort[]) => void;
+    onRowClick?: <T>(rowClickEvent: RowClickEvent<T>) => any;
+    onRowDoubleClick?: () => any;
+    /**
+     * An action that is triggered when @sorts is updated.
+     *
+     */
+    onHeaderAction?: () => any;
+    /**
+     * An action that is triggered when @columns are reordered.
+     *
+     */
+    onReorder?: () => any;
+    /**
+     * An action that is triggered when columns are resized.
+     *
+     */
+    onResize?: () => any;
     sortFunction?: (
-        itemA: TableColumn,
-        itemB: TableColumn,
+        itemA: ColumnValue,
+        itemB: ColumnValue,
         sorts: TableSort[],
         compare: <T>(valueA: T, valueB: T, sortEmptyLast: boolean) => number,
         sortEmptyLast: boolean
     ) => number;
     compareFunction?: <T>(valueA: T, valueB: T, sortEmptyLast: boolean) => number;
-    //the selector used by <VerticalCollection> to calculate occulsion rendering
-    //set this to `null` for fixed height/scrollable tables
-    containerSelector: string = 'body';
-    widthConstraint: string = 'lte-container';
-    fillMode: string = 'first-column';
-    fillColumnIndex: number | null = null;
-    resizeMode: string = 'standard';
-    bufferSize: number = 0;
-    estimateRowHeight: number = 30;
-    renderAllRows: boolean = false;
-    constrainColumnsToFit: boolean = true;
-    showEmptyFooter: boolean = false;
+}
 
-    //component state
-    columns: NativeArray<TableColumn> = A();
-    visibleColumns: NativeArray<TableColumn> = A();
-    columnPanPosition: number = 0;
-    rows: any[] = [];
-    sorts: TableSort[] = [];
-    isLoading: boolean = false;
-    hasMoreRows: boolean = false;
-    hasHiddenOverflow: boolean = false;
-    containerWidth: number | null = null;
+class TableComponent extends Component<TableArgs> {
+    @service media!: Media;
 
     //readonly attributes
 
+    //ember-table's resizing must be enabled in order for fill-mode auto column
+    //resizing to work, even if you don't want to allow user-invoked resizing
+    readonly enableResize: boolean = true;
+    readonly elementId = guidFor(this);
+
     /**
-     * CP that returns the default no-results text
+     * CP that returns a unique data-table ID
      *
-     * @type {string} defaultNoResultsText
+     * @readonly
+     * @type {string} tableId
      * @memberof TableComponent
      */
-    @readOnly('noResultsText') defaultNoResultsText!: string;
+    get tableId(): string {
+        return `data-table-${this.elementId}`;
+    }
+
+    /**
+     * CP that returns a CSS style for the table height
+     *
+     *
+     * @readonly
+     * @type {string} height
+     * @memberof TableComponent
+     */
+    @computed('tableHeight')
+    get height(): SafeString {
+        return htmlSafe(this.tableHeight ? `height: ${this.tableHeight};` : '');
+    }
+
+    //configuration options
+
+    @argDefault bufferSize: number = 0;
+    //the selector used by <VerticalCollection> to calculate occulsion rendering
+    //set this to `null` for fixed height/scrollable tables
+    @argDefault containerSelector: string = 'body';
+    @argDefault constrainColumnsToFit: boolean = true;
+    @argDefault enableReorder: boolean = false;
+    @argDefault enableSort: boolean = false;
+    @argDefault enableUserResize: boolean = false;
+    @argDefault estimateRowHeight: number = 30;
+    @argDefault fillColumnIndex: number | null = null;
+    @argDefault fillMode: string = 'first-column';
+    @argDefault footerRows: Array<any> = [];
+    @argDefault hasMoreRows: boolean = false;
+    @argDefault hoverableRows: boolean = true;
+    @argDefault isLoading: boolean = false;
+    @argDefault noResultsText: string = 'No results found';
+    @argDefault panButtonClass: string = 'btn btn-secondary';
+    @argDefault renderAllRows: boolean = false;
+    @argDefault resizeDebounce: number = 250;
+    @argDefault resizeMode: string = 'standard';
+    @argDefault resizeWidthSensitive: boolean = true;
+    @argDefault showEmptyFooter: boolean = false;
+    @argDefault showHeader: boolean = true;
+    @argDefault small: boolean = true;
+    @argDefault sortEmptyLast: boolean = false;
+    @argDefault stripedRows: boolean = false;
+    @argDefault tableClass: string = 'table';
+    @argDefault tableHeight: string = '';
+    @argDefault widthConstraint: string = 'lte-container';
+
+    //component state
+    @tracked columnPanPosition: number = 0;
+    @tracked containerWidth: number | null = null;
+    @tracked hasHiddenOverflow: boolean = false;
+    @tracked sorts: TableSort[] = [];
+    @tracked visibleColumns: NativeArray<ColumnValue> = A();
+    @tracked containerElement: HTMLElement | null = null;
+
+    get noRows(): boolean {
+        return this.args.rows.length === 0;
+    }
+
+    get notLoading(): boolean {
+        return !this.isLoading;
+    }
 
     /**
      * CP that returns whether the table rows are clickable
@@ -89,22 +171,6 @@ class TableComponent extends Component.extend({ ResizeAware }) {
      * @memberof TableComponent
      */
     @or('onRowClick', 'onRowDoubleClick') clickableRows!: boolean;
-
-    /**
-     * CP that returns whether the table is empty
-     *
-     * @type {boolean} noRows
-     * @memberof TableComponent
-     */
-    @empty('rows') noRows!: boolean;
-
-    /**
-     * CP that returns whether the table is NOT loading
-     *
-     * @type {boolean} notLoading
-     * @memberof TableComponent
-     */
-    @not('isLoading') notLoading!: boolean;
 
     /**
      * CP that returns whether a fully-loaded table is empty
@@ -120,7 +186,7 @@ class TableComponent extends Component.extend({ ResizeAware }) {
      * @type {boolean} hasHiddenColumns
      * @memberof TableComponent
      */
-    @lt('visibleColumns.length', 'columns.length') hasHiddenColumns!: boolean;
+    @lt('visibleColumns.length', 'args.columns.length') hasHiddenColumns!: boolean;
 
     /**
      * CP that returns whether the table is currently panned
@@ -142,21 +208,21 @@ class TableComponent extends Component.extend({ ResizeAware }) {
      * CP that returns which column should be used as the first
      * visible column
      *
-     * @type {TableColumn} firstVisibleColumn
+     * @type {ColumnValue} firstVisibleColumn
      * @memberof TableComponent
      */
     @conditional('allowFixedCols', 'firstVisibleNonFixedColumn', 'visibleColumns.firstObject')
-    firstVisibleColumn!: TableColumn;
+    firstVisibleColumn!: ColumnValue;
 
     /**
      * CP that returns the first visible non-fixed column
      *
      * @readonly
-     * @type {(TableColumn | undefined)} firstVisibleNonFixedColumn
+     * @type {(ColumnValue | undefined)} firstVisibleNonFixedColumn
      * @memberof TableComponent
      */
     @computed('visibleColumns.@each.isFixedLeft')
-    get firstVisibleNonFixedColumn(): TableColumn | undefined {
+    get firstVisibleNonFixedColumn(): ColumnValue | undefined {
         return this.visibleColumns && this.visibleColumns.find((col) => !col.isFixedLeft);
     }
 
@@ -164,24 +230,16 @@ class TableComponent extends Component.extend({ ResizeAware }) {
      * CP that returns the array of fixed columns
      *
      * @readonly
-     * @type {NativeArray<TableColumn>} fixedColumns
+     * @type {NativeArray<ColumnValue>} fixedColumns
      * @memberof TableComponent
      */
-    @computed('columns.@each.isFixedLeft')
-    get fixedColumns(): NativeArray<TableColumn> {
-        return A((this.columns || A()).filter((col) => col.isFixedLeft));
+
+    get fixedColumns(): NativeArray<ColumnValue> {
+        return A((this.args.columns || A()).filter((col) => col.isFixedLeft));
     }
 
-    /**
-     * CP that returns the array of non-fixed columns
-     *
-     * @readonly
-     * @type {NativeArray<TableColumn>}
-     * @memberof TableComponent
-     */
-    @computed('columns.@each.isFixedLeft')
-    get nonFixedColumns(): NativeArray<TableColumn> {
-        return A((this.columns || A()).filter((col) => !col.isFixedLeft));
+    get nonFixedColumns(): NativeArray<ColumnValue> {
+        return A((this.args.columns || A()).filter((col) => !col.isFixedLeft));
     }
 
     /**
@@ -197,8 +255,8 @@ class TableComponent extends Component.extend({ ResizeAware }) {
         //fixed columns are disabled if the widest non-fixed column cannot
         //fit in the container at the same time as the fixed column(s)
         if (!isEmpty(this.fixedColumns)) {
-            const sortedColumns = get(this, 'nonFixedColumns').sortBy('staticWidth');
-            const widestColumn = get(sortedColumns, 'lastObject');
+            const sortedColumns = this.nonFixedColumns.sortBy('staticWidth');
+            const widestColumn = sortedColumns[sortedColumns.length - 1];
             const widestColumnWidth = widestColumn ? widestColumn.staticWidth : 0;
             const fixedWidth = this.fixedColumns.reduce((prev, col) => prev + col.staticWidth, 0);
             return widestColumnWidth + fixedWidth;
@@ -218,8 +276,8 @@ class TableComponent extends Component.extend({ ResizeAware }) {
      */
     @computed('hasHiddenColumns', 'columns.lastObject.{id,valuePath}', 'visibleColumns.lastObject.{id,valuePath}')
     get canPanRight(): boolean {
-        const lastColId = this.getColumnId(get(get(this, 'columns'), 'lastObject'));
-        const visibleColId = this.getColumnId(get(get(this, 'visibleColumns'), 'lastObject'));
+        const lastColId = this.getColumnId(this.args.columns[this.args.columns.length - 1]);
+        const visibleColId = this.getColumnId(this.visibleColumns[this.visibleColumns.length - 1]);
         return this.hasHiddenColumns && Boolean(lastColId && visibleColId) && lastColId !== visibleColId;
     }
 
@@ -241,36 +299,11 @@ class TableComponent extends Component.extend({ ResizeAware }) {
         'firstVisibleColumn.{id,valuePath}'
     )
     get canPanLeft(): boolean {
-        const firstColId = this.getColumnId(get(get(this, 'columns'), 'firstObject'));
-        const nonFixedColId = this.getColumnId(get(get(this, 'nonFixedColumns'), 'firstObject'));
+        const firstColId = this.getColumnId(this.args.columns[0]);
+        const nonFixedColId = this.getColumnId(this.nonFixedColumns[0]);
         const colId = this.allowFixedCols ? nonFixedColId : firstColId;
         const visibleColId = this.getColumnId(this.firstVisibleColumn);
         return this.hasHiddenColumns && Boolean(colId && visibleColId) && colId !== visibleColId;
-    }
-
-    /**
-     * CP that returns a unique data-table ID
-     *
-     * @readonly
-     * @type {string} tableId
-     * @memberof TableComponent
-     */
-    @computed('elementId')
-    get tableId(): string {
-        return `data-table-${this.elementId}`;
-    }
-
-    /**
-     * CP that returns a CSS style for the table height
-     *
-     *
-     * @readonly
-     * @type {string} height
-     * @memberof TableComponent
-     */
-    @computed('tableHeight')
-    get height(): SafeString {
-        return htmlSafe(this.tableHeight ? `height: ${this.tableHeight};` : '');
     }
 
     /**
@@ -281,7 +314,6 @@ class TableComponent extends Component.extend({ ResizeAware }) {
      * @type {string} tableClassNames
      * @memberof TableComponent
      */
-    @computed('tableClass', 'showHeader', 'stripedRows', 'hoverableRows', 'clickableRows', 'small')
     get tableClassNames(): string {
         const classNames = A([this.tableClass]);
 
@@ -325,18 +357,6 @@ class TableComponent extends Component.extend({ ResizeAware }) {
         }
     }
 
-    /**
-     * Updates the visible columns when the source columns array changes
-     *
-     * @readonly
-     * @type {Object}
-     * @memberof TableComponent
-     */
-    @observes('columns.[]')
-    onColumnsChange(): Object {
-        return scheduleOnce('afterRender', this, 'updateColumnVisibility');
-    }
-
     //methods
 
     /**
@@ -344,10 +364,21 @@ class TableComponent extends Component.extend({ ResizeAware }) {
      *
      * @memberof TableComponent
      */
-    init() {
-        super.init();
-        this.columns.setEach('isVisible', true); // ETWA
-        // set(this, 'visibleColumns', this.columns); // pre-ETWA
+    constructor(owner: unknown, args: TableArgs) {
+        super(owner, args);
+        assert('@rows is not an instanceof Array.', args.rows instanceof Array);
+        assert('@columns is not an instanceof Array', args.columns instanceof Array);
+        assert(
+            'Property staticWidth is missing on one or more column objects',
+            args.columns.every((col) => {
+                return !!col.staticWidth;
+            })
+        );
+        // this.visibleColumns = this.args.columns; // pre-ETWA
+        this.args.columns.forEach((col) => {
+            // ETWA
+            set(col, 'isVisible', true);
+        });
     }
 
     /**
@@ -355,8 +386,9 @@ class TableComponent extends Component.extend({ ResizeAware }) {
      *
      * @memberof TableComponent
      */
-    didInsertElement() {
-        super.didInsertElement();
+    @action
+    didInsertTable() {
+        this.containerElement = document.getElementById(this.elementId);
         if (this.constrainColumnsToFit) {
             scheduleOnce('afterRender', this, 'updateColumnVisibility');
         }
@@ -368,11 +400,12 @@ class TableComponent extends Component.extend({ ResizeAware }) {
      *
      * @memberof TableComponent
      */
-    debouncedDidResize() {
-        if (this.constrainColumnsToFit) {
+    @action
+    debouncedRender() {
+        if (this.constrainColumnsToFit && this.resizeWidthSensitive) {
             //TODO maybe eventually improve this to maintain pan position
             //and dynamically show/hide as needed?
-            set(this, 'columnPanPosition', 0);
+            this.columnPanPosition = 0;
             scheduleOnce('afterRender', this, 'updateColumnVisibility');
         }
     }
@@ -383,13 +416,13 @@ class TableComponent extends Component.extend({ ResizeAware }) {
      * @memberof TableComponent
      */
     updateColumnVisibility() {
-        const columns = this.columns || A();
-        const visibleColumns: NativeArray<TableColumn> = A();
-        const containerWidth = this.getElementWidth(this.element);
+        const columns = this.args.columns || A();
+        const visibleColumns: NativeArray<ColumnValue> = A();
+        const containerWidth = this.getElementWidth(this.containerElement);
         const allowFixedCols = containerWidth >= this.minFixedColTableWidth;
         const panPosition = this.columnPanPosition;
         let newTableWidth = 0;
-        let hasAllVisibleColumns = false; //ETWA
+        let hasAllVisibleColumns = false; // ETWA
 
         for (const [i, col] of columns.entries()) {
             let colIndex = allowFixedCols ? this.nonFixedColumns.indexOf(col) : i;
@@ -397,29 +430,29 @@ class TableComponent extends Component.extend({ ResizeAware }) {
                 let colWidth = col.staticWidth || 0;
                 let isVisible = (col.isFixedLeft && allowFixedCols) || newTableWidth + colWidth <= containerWidth;
                 if (isVisible && !hasAllVisibleColumns) {
-                    //^ETWA (&& !arrayComplete)
                     newTableWidth += colWidth;
-                    set(col, 'isVisible', true); //ETWA
-                    set(col, 'width', colWidth); //ETWA
+                    set(col, 'isVisible', true); // ETWA
+                    set(col, 'width', colWidth); // ETWA
                     visibleColumns.pushObject(col);
                     // Prevent unwanted panning behavior on mobile that occurs with more than 2 columns
-                    const isMobile = get(get(this, 'media'), 'isMobile');
+                    const isMobile = this.media.isMobile;
                     if (isMobile && visibleColumns.length === 2) {
-                        hasAllVisibleColumns = true; //ETWA
-                        // break; pre-ETWA
+                        hasAllVisibleColumns = true; // ETWA
+                        // break; // pre-ETWA
                     }
                 } else {
-                    set(col, 'isVisible', false); //ETWA
-                    set(col, 'width', 0); //ETWA
-                    // break; pre-ETWA
+                    set(col, 'isVisible', false); // ETWA
+                    set(col, 'width', 0); // ETWA
+                    // break; // pre-ETWA
                 }
             } else {
-                set(col, 'isVisible', false); //ETWA
-                set(col, 'width', 0); //ETWA
+                set(col, 'isVisible', false); // ETWA
+                set(col, 'width', 0); // ETWA
             }
         }
 
-        setProperties(this, { containerWidth, visibleColumns });
+        this.visibleColumns = visibleColumns;
+        this.containerWidth = containerWidth;
     }
 
     /**
@@ -431,12 +464,12 @@ class TableComponent extends Component.extend({ ResizeAware }) {
      */
     private panColumns(moveIndex: number) {
         const newColumnPanPosition = this.columnPanPosition + moveIndex;
-        const pannedColumns = this.allowFixedCols ? this.nonFixedColumns : this.columns;
+        const pannedColumns = this.allowFixedCols ? this.nonFixedColumns : this.args.columns;
         if (newColumnPanPosition < 0 || newColumnPanPosition >= pannedColumns.length) {
             return;
         }
 
-        set(this, 'columnPanPosition', newColumnPanPosition);
+        this.columnPanPosition = newColumnPanPosition;
         this.updateColumnVisibility();
     }
 
@@ -447,7 +480,10 @@ class TableComponent extends Component.extend({ ResizeAware }) {
      * @returns {number}
      * @memberof TableComponent
      */
-    private getElementWidth(el: Element): number {
+    private getElementWidth(el: HTMLElement | null): number {
+        if (!el) {
+            return 0;
+        }
         let width = 0;
 
         if (el) {
@@ -466,11 +502,11 @@ class TableComponent extends Component.extend({ ResizeAware }) {
      * Returns the column's unique identifier or undefined.
      * Allow columns to specify an "id" if they dont have a valuePath, or the valuePath is not unique
      *
-     * @param {(TableColumn | undefined)} col - A table column
+     * @param {(ColumnValue | undefined)} col - A table column
      * @returns {(string | undefined)}
      * @memberof TableComponent
      */
-    getColumnId(col?: TableColumn): string | undefined {
+    getColumnId(col?: ColumnValue): string | undefined {
         return col && (col.id || col.valuePath);
     }
 
@@ -479,14 +515,15 @@ class TableComponent extends Component.extend({ ResizeAware }) {
     /**
      * Invokes an action to load a new page of rows
      *
-     * @returns {Promise}
+     * @returns {Promise | void}
      * @memberof TableComponent
      */
     @action
     onLastReached() {
-        if (!this.isLoading && this.hasMoreRows && this.loadMoreRows) {
-            this.loadMoreRows();
+        if (!this.isLoading && this.hasMoreRows && this.args.loadMoreRows) {
+            return this.args.loadMoreRows();
         }
+        return;
     }
 
     /**
@@ -520,9 +557,9 @@ class TableComponent extends Component.extend({ ResizeAware }) {
      */
     @action
     onUpdateSorts(sorts: TableSort[]) {
-        set(this, 'sorts', sorts);
-        if (this.updateSorts) {
-            this.updateSorts(sorts);
+        this.sorts = sorts;
+        if (this.args.updateSorts) {
+            this.args.updateSorts(sorts);
         }
     }
 }

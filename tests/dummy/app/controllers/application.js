@@ -6,7 +6,7 @@ import { tracked } from '@glimmer/tracking';
 class ApplicationController extends Controller {
     @tracked foobar = 'bar';
 
-    columns = A([
+    @tracked columns = A([
         {
             valuePath: 'date',
             name: 'Date',
@@ -20,9 +20,7 @@ class ApplicationController extends Controller {
             name: 'Name',
             isFixedLeft: false,
             width: 100,
-            staticWidth: 100,
-            maxWidth: 100,
-            minWidth: 100
+            staticWidth: 100
         },
         {
             valuePath: 'age',
@@ -30,9 +28,7 @@ class ApplicationController extends Controller {
             isFixedLeft: false,
             textAlign: 'right',
             width: 100,
-            staticWidth: 100,
-            maxWidth: 100,
-            minWidth: 100
+            staticWidth: 100
         },
         {
             valuePath: 'tall',
@@ -48,11 +44,13 @@ class ApplicationController extends Controller {
             name: 'Short',
             isFixedLeft: false,
             width: 100,
-            staticWidth: 100,
+            staticWidth: 200,
             maxWidth: 100,
             minWidth: 100
         }
     ]);
+
+    @tracked otherColumns = false;
 
     data = [
         {
@@ -73,6 +71,11 @@ class ApplicationController extends Controller {
 
     footerData = [{ age: 295 }];
 
+    @tracked resizeDebounce = 100;
+    @tracked showHeader = true;
+    @tracked stripedRows = false;
+    @tracked enableSort = true;
+
     @action
     updateFoobar(event) {
         this.foobar = event.target.value;
@@ -92,6 +95,14 @@ class ApplicationController extends Controller {
     alertData(row) {
         const data = row.rowValue;
         alert(`${data.name} is ${data.age} years old.`);
+    }
+
+    @action
+    toggleColumns() {
+        this.resizeDebounce = this.resizeDebounce === 100 ? 2000 : 100;
+        this.showHeader = !this.showHeader;
+        this.stripedRows = !this.stripedRows;
+        this.enableSort = !this.enableSort;
     }
 }
 

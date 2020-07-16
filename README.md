@@ -95,23 +95,46 @@ footerData = [
 
 Other optional configurations:
 
+@**attribute** { **type**: **defaultValue** } - **description**
+
 ```
-@isLoading - A boolean that will display a progress spinner within the table when false.
-@hasMoreRows - A boolean whether more rows are available that haven't been loaded yet.
-@noResultsText - A string displayed when there are no rows. Default - "No results founds"
+@bufferSize {number: 0} - Used by the table's <VerticalCollection> to render rows before and after the visible collection.
+@containerSelector {string: 'body} - The selector used by <VerticalCollection> to calculate occulsion rendering. Set this to `null` for fixed height/scrollable tables.
+@constrainColumnsToFit {boolean: true} - Forces the columns to fit within the table container on any column visibility update.
+@enableReorder {boolean: false} - Enable/disable column re-ordering.
+@enableSort {boolean: false} - Enable/disable row sorting.
+@enableUserResize {boolean: false} - Enable/disable column re-sizing. Note: Column objects with max/min widths will not be resizable.
+@estimateRowHeight {number: 30} - Used by <VerticalCollection> to estimate the row height when rendering.
+@fillColumnIndex {number | null : null} - The column index of the column that will receive any un-allocated width.
+@fillMode {string: 'first-column'} - The fill mode used by Ember Table to allocate additional width.
+@footerRows {array<any>: []} - The footer rows to be displayed. i.e. for a table with a 'subtotal' column:
 
-Note: If both isLoading and hasMoreRows are false, and the rows array is empty, noResultsText will be displayed
+    footerRows: { subtotal:500};
 
-@loadMoreRows - A function that updates the rows array when isLoading is false, hasMoreRows is true and the user has reached the bottom of the table.
+@hasMoreRows {boolean: false} - A boolean used to indicate if the table should invoke @loadMoreRows.
+@hoverableRows {boolean: true} - Enable/disable hoverable rows.
+@isLoading {boolean: false} - Will display a progress spinner within the table when true.
+@noResultsText {string: 'No results found'} - Displayed when there are no rows.
+@panButtonClass {string: 'btn btn-secondary'} - The class given to the pan-buttons when there are hidden columns.
+@renderAllRows {boolean: false} - Used by <VerticalCollection> to determine if all rows should be rendered.
+@resizeDebounce {number: 250} - The debounce time used by the resize listener to update column visibility.
+@resizeMode {string: 'standard'} - The resize mode used by EmberTable when resizing columns. Note: @enableUserResize must be true.
+@resizeWidthSensitive {boolean: true} - Enable/disable column visibility updates on width resizing.
+@showEmptyFooter {boolean: false} - Enable/disable the footer when empty.
+@showHeader {boolean: true} - Enable/disable the table header.
+@small {boolean: true} - Appends 'table-sm' to the table class when true.
+@sortEmptyLast {boolean: false} - When enabled, empty column values will always be sorted last.
+@stripedRows {boolean: false} - Enable/disabled striped rows.
+@tableClass {string: 'table'} - The class for the EmberTable.
+@tableHeight {string: ''} - The height style given to the table. i.e. '300px'
+@widthConstraint {string: 'lte-container'} - The width constraint used by EmberTable.
 
-@updateSorts - A function that updates the sorts array.
-@onRowClick - An action that is fired when a row is clicked
-@enableSort - A boolean that allows/disallows sorting
-
-@tableMeta - a hash that takes in assigned data that can be accessed inside of components
+@loadMoreRows {() => any: null} - A method that updates the rows array when isLoading is false, hasMoreRows is true and the user has reached the bottom of the table.
+@onRowClick {()=> any: null} - The method triggered on row click.
+@onRowDoubleClick {()=> any: null} - The method triggered on row double click.
 ```
 
-More configuration options and api details can be found here: [ember-table](https://github.com/Addepar/ember-table).
+More configuration options and api details can be found here: [ember-table](https://github.com/Addepar/ember-table) - [vertical-collection](https://html-next.github.io/vertical-collection/)
 
 ## Contributing
 
