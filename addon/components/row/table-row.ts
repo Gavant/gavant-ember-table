@@ -53,6 +53,13 @@ export default class TableRow extends Component<TableRowArgs> {
         return this.args.tableMeta.expandedRows?.includes(this.rowValue.id) ?? false;
     }
 
+    /**
+     * Invoke the passed in "onRowClick" method, passing up
+     * additional useful data.
+     *
+     * @param {MouseEvent} event
+     * @returns {void}
+     */
     @action
     onClick(event: MouseEvent) {
         if (this.args.onClick) {
@@ -64,6 +71,13 @@ export default class TableRow extends Component<TableRowArgs> {
         }
     }
 
+    /**
+     * Invoke the passed in "onRowDoubleClick" method, passing up
+     * additional useful data.
+     *
+     * @param {MouseEvent} event
+     * @returns {void}
+     */
     @action
     onDoubleClick(event: MouseEvent) {
         if (this.args.onDoubleClick) {
