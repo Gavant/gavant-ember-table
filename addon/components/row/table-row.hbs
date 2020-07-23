@@ -25,8 +25,6 @@
         {{/if}}
     {{/each}}
 </tr>
-{{!-- this could probably be a getter that checks if the row's @api.rowValue object --}}
-{{!-- is in an array passed into the table via like @tableMeta.expandedRows --}}
 {{#if this.isExpanded}}
     <tr class="et-tr">
         <td colspan={{@api.cells.length}}>

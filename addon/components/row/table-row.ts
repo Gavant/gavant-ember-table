@@ -50,7 +50,7 @@ export default class TableRow extends Component<TableRowArgs> {
     }
 
     get isExpanded() {
-        return this.args.tableMeta.expandedRows.includes(this.rowValue.id);
+        return this.args.tableMeta.expandedRows?.includes(this.rowValue.id) ?? false;
     }
 
     @action
