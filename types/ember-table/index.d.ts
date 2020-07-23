@@ -72,9 +72,9 @@ declare module '@gavant/ember-table' {
 
     export interface RowClickEvent<T> {
         event: MouseEvent;
-        cellValue?: any;
-        columnValue: ColumnValue;
         rowValue: T;
+        rowMeta: RowMeta<T>;
+        tableMeta?: TableMeta;
     }
 
     export interface TableAPI<T> {

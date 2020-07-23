@@ -20,7 +20,7 @@
                 @columnMeta={{api.columnMeta}}
                 @rowValue={{api.rowValue}}
                 @rowMeta={{api.rowMeta}}
-                @cell={{component "ember-td" api=api tableMeta=@tableMeta}}
+                @tableMeta={{@tableMeta}}
             />
         {{/if}}
     {{/each}}

@@ -60,7 +60,7 @@ export default class TableRow extends Component<TableRowArgs> {
             const rowMeta = this.rowMeta;
             const tableMeta = this.args.tableMeta;
 
-            return this.args.onClick(rowValue, rowMeta, tableMeta, event);
+            return this.args.onClick({ event, rowValue, rowMeta, tableMeta });
         }
     }
 
@@ -71,7 +71,7 @@ export default class TableRow extends Component<TableRowArgs> {
             const rowMeta = this.rowMeta;
             const tableMeta = this.args.tableMeta;
 
-            return this.args.onDoubleClick(rowValue, rowMeta, tableMeta, event);
+            return this.args.onDoubleClick({ event, rowValue, rowMeta, tableMeta });
         }
     }
 }

@@ -109,6 +109,7 @@
                         (if Row.columnValue.isFixedLeft " data-table-col-fixed-left")
                         (if (eq Row.columnValue this.firstVisibleNonFixedColumn) " data-table-col-first-nonfixed")
                     }}
+                    @tableMeta={{@tableMeta}}
                     @onClick={{@onCellClick}}
                     @onDoubleClick={{@onCellDoubleClick}}
                     as |cellValue columnValue rowValue cellMeta columnMeta rowMeta|
