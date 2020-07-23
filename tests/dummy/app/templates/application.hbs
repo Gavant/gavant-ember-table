@@ -11,6 +11,7 @@
         @columns={{this.columns}}
         @rows={{this.data}}
         @footerRows={{this.footerData}}
+        @afterRowComponent="custom-row"
         @hasMoreRows={{this.hasMore}}
         @isLoading={{true}}
         @loadMoreRows={{fn this.loadMoreModels}}
@@ -19,7 +20,8 @@
         @onRowClick={{this.alertData}}
         @panButtonClass="btn-primary"
         @tableMeta={{hash
-          foobar=this.foobar
+          expandedRowComponent="custom-row"
+          expandedRows=this.expandedRows
         }}
         @resizeDebounce={{this.resizeDebounce}}
         @showHeader={{this.showHeader}}

@@ -5083,17 +5083,6 @@ ember-auto-import@^1.2.15, ember-auto-import@^1.4.1, ember-auto-import@^1.5.3:
     walk-sync "^0.3.3"
     webpack "~4.28"
 
-ember-awesome-macros@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/ember-awesome-macros/-/ember-awesome-macros-5.0.1.tgz#fbe36a680165eb63a402e587a0d808ba54b5be5b"
-  integrity sha512-qqXc/AOf3gc7lr4tMmGMIulQ7uyWOsPWSIxSspnzgtUJ955M1iXRLyefh8US/+oWdKGMYNum/4vdTkV6SP3Eeg==
-  dependencies:
-    broccoli-file-creator "^2.1.1"
-    broccoli-merge-trees "^3.0.0"
-    ember-cli-babel "^7.7.3"
-    ember-cli-string-utils "^1.1.0"
-    ember-macro-helpers "^4.2.2"
-
 ember-bootstrap@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/ember-bootstrap/-/ember-bootstrap-3.1.1.tgz#b069395b06f66790d835d278877d27fe9c00b5dd"
@@ -5775,15 +5764,6 @@ ember-load-initializers@^2.1.1:
   dependencies:
     ember-cli-babel "^7.11.0"
     ember-cli-typescript "^2.0.2"
-
-ember-macro-helpers@^4.2.2:
-  version "4.2.2"
-  resolved "https://registry.yarnpkg.com/ember-macro-helpers/-/ember-macro-helpers-4.2.2.tgz#dfb28b2b21f9fd49ade599f68c99e73ce5692cdc"
-  integrity sha512-E46MnpjMu+ZXRw/5A1tADZKFJADGpSAcsclcaBNfV/B1aRPV3PTTnCpDvYC1wfJ4kwwUh0DRLDH/OpBv+/41pQ==
-  dependencies:
-    ember-cli-babel "^7.7.3"
-    ember-cli-string-utils "^1.1.0"
-    ember-cli-test-info "^1.0.0"
 
 ember-maybe-import-regenerator@^0.1.6:
   version "0.1.6"

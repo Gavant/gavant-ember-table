@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 
 class ApplicationController extends Controller {
     @tracked foobar = 'bar';
+    @tracked expandedRows = [];
 
     @tracked columns = A([
         {
@@ -58,14 +59,16 @@ class ApplicationController extends Controller {
             name: 'Frodo Baggins',
             age: 150,
             tall: false,
-            short: true
+            short: true,
+            id: '67'
         },
         {
             date: '1/1/2021',
             name: 'Gandalf the Grey',
             age: 145,
             tall: true,
-            short: false
+            short: false,
+            id: '63'
         }
     ];
 
@@ -93,8 +96,14 @@ class ApplicationController extends Controller {
 
     @action
     alertData(row) {
-        const data = row.rowValue;
-        alert(`${data.name} is ${data.age} years old.`);
+        let expandedRows = this.expandedRows.concat([]);
+        if (expandedRows.includes(row.id)) {
+            const indAt = expandedRows.indexOf(row.id);
+            expandedRows.splice(indAt, 1);
+        } else {
+            expandedRows = this.expandedRows.concat([row.id]);
+        }
+        this.expandedRows = expandedRows;
     }
 
     @action

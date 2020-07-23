@@ -1,0 +1,41 @@
+<tr role="button" class="et-tr" {{on "click" this.onClick}} {{on "dblclick" this.onDoubleClick}}>
+    {{#each @api.cells as |api|}}
+        {{#if hasBlock}}
+            {{yield (hash
+                api=api
+                cellValue=api.cellValue
+                cellMeta=api.cellMeta
+                columnValue=api.columnValue
+                columnMeta=api.columnMeta
+                rowValue=api.rowValue
+                rowMeta=api.rowMeta
+                cell=(component "ember-td" api=api tableMeta=@tableMeta)
+            )}}
+        {{else}}
+            <EmberTd
+                @api={{api}}
+                @cellValue={{api.cellValue}}
+                @cellMeta={{api.cellMeta}}
+                @columnValue={{api.columnValue}}
+                @columnMeta={{api.columnMeta}}
+                @rowValue={{api.rowValue}}
+                @rowMeta={{api.rowMeta}}
+                @cell={{component "ember-td" api=api tableMeta=@tableMeta}}
+            />
+        {{/if}}
+    {{/each}}
+</tr>
+{{!-- this could probably be a getter that checks if the row's @api.rowValue object --}}
+{{!-- is in an array passed into the table via like @tableMeta.expandedRows --}}
+{{#if this.isExpanded}}
+    <tr class="et-tr">
+        <td colspan={{@api.cells.length}}>
+            {{component @tableMeta.expandedRowComponent
+                api=@api
+                rowValue=@api.rowValue
+                rowMeta=@api.rowMeta
+                tableMeta=@tableMeta
+            }}
+        </td>
+    </tr>
+{{/if}}
