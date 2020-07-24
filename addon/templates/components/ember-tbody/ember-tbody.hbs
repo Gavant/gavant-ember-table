@@ -24,24 +24,14 @@ as |rowValue|
         checkboxSelectionMode=checkboxSelectionMode
     as |api|
     }}
-        {{#if @tableMeta.expandedRowComponent}}
+        {{#if hasBlock}}
             {{yield
                 (hash
                     rowValue=api.rowValue
                     rowMeta=api.rowMeta
                     cells=api.cells
                     rowSelectionMode=api.rowSelectionMode
-                    row=(component "row/table-row" api=api tableMeta=@tableMeta)
-                )
-            }}
-        {{else if hasBlock}}
-            {{yield
-                (hash
-                    rowValue=api.rowValue
-                    rowMeta=api.rowMeta
-                    cells=api.cells
-                    rowSelectionMode=api.rowSelectionMode
-                    row=(component "ember-tr" api=api tableMeta=@tableMeta)
+                    row=(component @rowComponent api=api tableMeta=@tableMeta)
                 )
             }}
         {{else}}

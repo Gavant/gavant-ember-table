@@ -91,7 +91,7 @@ class TableComponent extends Component<TableArgs> {
     readonly elementId = guidFor(this);
 
     /**
-     * CP that returns a unique data-table ID
+     * Returns a unique data-table ID
      *
      * @readonly
      * @type {string} tableId
@@ -102,7 +102,7 @@ class TableComponent extends Component<TableArgs> {
     }
 
     /**
-     * CP that returns a CSS style for the table height
+     * CSS style for the table height
      *
      *
      * @readonly
@@ -136,6 +136,7 @@ class TableComponent extends Component<TableArgs> {
     @argDefault resizeDebounce: number = 250;
     @argDefault resizeMode: string = 'standard';
     @argDefault resizeWidthSensitive: boolean = true;
+    @argDefault rowComponent: string = 'ember-tr';
     @argDefault showEmptyFooter: boolean = false;
     @argDefault showHeader: boolean = true;
     @argDefault small: boolean = true;
@@ -161,46 +162,97 @@ class TableComponent extends Component<TableArgs> {
         return !this.isLoading;
     }
 
+    /**
+     * Returns whether the table rows are clickable.
+     *
+     * @readonly
+     * @type {boolean}
+     */
     get clickableRows(): boolean {
         return !!this.args.onRowClick || !!this.args.onRowDoubleClick;
     }
 
+    /**
+     * Returns whether a fully-loaded table is empty.
+     *
+     * @readonly
+     * @type {boolean}
+     */
     get isEmpty(): boolean {
         return this.noRows && this.notLoading;
     }
 
+    /**
+     * Returns whether there are non-render columns.
+     *
+     * @readonly
+     * @type {boolean}
+     */
     get hasHiddenColumns(): boolean {
         return this.visibleColumns.length < this.args.columns.length;
     }
 
+    /**
+     * Returns whether the table is currently panned.
+     *
+     * @readonly
+     * @type {boolean}
+     */
     get isColumnsPanned(): boolean {
         return this.columnPanPosition > 0;
     }
 
+    /**
+     * Returns true when `containerWidth` >= `minFixedColTableWidth`.
+     *
+     * @readonly
+     * @type {boolean}
+     */
     get allowFixedCols(): boolean {
         return (this.containerWidth || 0) >= this.minFixedColTableWidth;
     }
 
+    /**
+     * Returns which column should be used as the first visible column.
+     *
+     * @readonly
+     */
     get firstVisibleColumn() {
-        return this.allowFixedCols && this.firstVisibleNonFixedColumn
-            ? this.firstVisibleNonFixedColumn
-            : this.visibleColumns[0];
+        return this.allowFixedCols ? this.firstVisibleNonFixedColumn : this.visibleColumns[0];
     }
 
+    /**
+     * Returns the first visible non-fixed column.
+     *
+     * @readonly
+     * @type {(ColumnValue | undefined)}
+     */
     get firstVisibleNonFixedColumn(): ColumnValue | undefined {
         return this.visibleColumns && this.visibleColumns.find((col) => !col.isFixedLeft);
     }
 
+    /**
+     * Returns the array of fixed columns.
+     *
+     * @readonly
+     * @type {NativeArray<ColumnValue>}
+     */
     get fixedColumns(): NativeArray<ColumnValue> {
         return A((this.args.columns || A()).filter((col) => col.isFixedLeft));
     }
 
+    /**
+     * Returns the array of non-fixed columns.
+     *
+     * @readonly
+     * @type {NativeArray<ColumnValue>}
+     */
     get nonFixedColumns(): NativeArray<ColumnValue> {
         return A((this.args.columns || A()).filter((col) => !col.isFixedLeft));
     }
 
     /**
-     * CP that determines the minimum table width when
+     * Determines the minimum table width when
      * fixed columns are present, else returns 0
      *
      * @readonly
@@ -222,7 +274,7 @@ class TableComponent extends Component<TableArgs> {
     }
 
     /**
-     * CP that returns the table's current ability to pan right.
+     * Returns the table's current ability to pan right.
      * Columns can be panned right if there are hidden columns
      * and the last visible column is not the last defined column
      *
@@ -237,7 +289,7 @@ class TableComponent extends Component<TableArgs> {
     }
 
     /**
-     * CP that returns the table's ability to pan left.
+     * Returns the table's ability to pan left.
      * Columns can be panned left if there are hidden columns
      * and the first visible column (first NON-FIXED visible column, if fixed columns are enabled)
      * is not the first defined column
@@ -255,7 +307,7 @@ class TableComponent extends Component<TableArgs> {
     }
 
     /**
-     * CP that returns a class string that includes all of
+     * Returns a class string that includes all of
      * the enabled properties
      *
      * @readonly
@@ -289,7 +341,7 @@ class TableComponent extends Component<TableArgs> {
     }
 
     /**
-     * CP that returns a new fillColumnIndex when the current
+     * Returns a new fillColumnIndex when the current
      * fillColumnIndex is out of range
      *
      * @readonly

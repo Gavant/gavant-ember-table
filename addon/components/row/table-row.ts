@@ -49,10 +49,6 @@ export default class TableRow extends Component<TableRowArgs> {
         return this.rowSelectionMode === SELECT_MODE.MULTIPLE || this.rowSelectionMode === SELECT_MODE.SINGLE;
     }
 
-    get isExpanded() {
-        return this.args.tableMeta.expandedRows?.includes(this.rowValue.id) ?? false;
-    }
-
     /**
      * Invoke the passed in "onRowClick" method, passing up
      * additional useful data.

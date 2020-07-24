@@ -29,6 +29,7 @@ declare module '@gavant/ember-table' {
     }
 
     export interface ColumnMeta {
+        [index: string]: any;
         //attributes
         readonly isLeaf: boolean;
         readonly isFixed: boolean;
@@ -48,6 +49,7 @@ declare module '@gavant/ember-table' {
     }
 
     export interface RowMeta<T> {
+        [index: string]: any;
         //attributes
         readonly index: number;
         readonly canCollapse: boolean;
