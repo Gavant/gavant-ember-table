@@ -51,7 +51,8 @@
         {{/if}}
     {{/each}}
 </tr>
-<tr class="et-tr">
+{{!-- template-lint-disable no-inline-styles --}}
+<tr class="et-tr" style={{this.collapsedStyle}}>
     {{#if this.isExpanded}}
             <td colspan={{@api.cells.length}}>
                 {{component @tableMeta.expandedRowComponent
