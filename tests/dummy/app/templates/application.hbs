@@ -18,9 +18,9 @@
         @enableSort={{this.enableSort}}
         @onRowClick={{this.alertData}}
         @panButtonClass="btn-primary"
+        @rowComponent="row/expandable-row"
         @tableMeta={{hash
           expandedRowComponent="custom-row"
-          expandedRows=this.expandedRows
         }}
         @resizeDebounce={{this.resizeDebounce}}
         @showHeader={{this.showHeader}}

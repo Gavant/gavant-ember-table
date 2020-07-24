@@ -95,15 +95,8 @@ class ApplicationController extends Controller {
     }
 
     @action
-    alertData(row) {
-        let expandedRows = this.expandedRows.concat([]);
-        if (expandedRows.includes(row.id)) {
-            const indAt = expandedRows.indexOf(row.id);
-            expandedRows.splice(indAt, 1);
-        } else {
-            expandedRows = this.expandedRows.concat([row.id]);
-        }
-        this.expandedRows = expandedRows;
+    alertData(rowClickEvent) {
+        rowClickEvent.rowMeta.set('isExpanded', !rowClickEvent.rowMeta.isExpanded);
     }
 
     @action

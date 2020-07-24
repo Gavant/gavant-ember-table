@@ -46,7 +46,7 @@
         {{/if}}
     {{/each}}
 </tr>
-{{#if this.isExpanded}}
+{{#if this.rowMeta.isExpanded}}
     <tr class="et-tr">
         <td colspan={{@api.cells.length}}>
             {{component @tableMeta.expandedRowComponent
