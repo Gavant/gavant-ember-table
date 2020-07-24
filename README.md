@@ -98,6 +98,8 @@ Other optional configurations:
 @**attribute** { **type**: **defaultValue** } - **description**
 
 ```
+@tableMeta {hash: {} } - A table meta object that is passed to every table component, allowing access from anywhere.
+
 @bufferSize {number: 0} - Used by the table's <VerticalCollection> to render rows before and after the visible collection.
 @containerSelector {string: 'body} - The selector used by <VerticalCollection> to calculate occulsion rendering. Set this to `null` for fixed height/scrollable tables.
 @constrainColumnsToFit {boolean: true} - Forces the columns to fit within the table container on any column visibility update.
@@ -132,6 +134,104 @@ Other optional configurations:
 @loadMoreRows {() => any: null} - A method that updates the rows array when isLoading is false, hasMoreRows is true and the user has reached the bottom of the table.
 @onRowClick {()=> any: null} - The method triggered on row click.
 @onRowDoubleClick {()=> any: null} - The method triggered on row double click.
+```
+
+##### Using the Expandable Row Component
+
+The following is a basic implementation of the expandable-row component pattern.
+
+###### Controller
+
+```
+export default class FooController extends Controller {
+    ...
+
+    @tracked expandedColumns = [];
+
+    get columns() {
+        return [
+            {
+                valuePath: 'name',
+                name: 'Name',
+                isFixedLeft: false,
+                width: 100,
+                staticWidth: 100
+            },
+            {
+                valuePath: 'id',
+                cellComponent: 'table/cell/button',
+                width: 100,
+                staticWidth: 100,
+                maxWidth: 100,
+                minWidth: 100,
+                toggleRow: this.toggleRow
+            }
+        ];
+    }
+
+    @action
+    toggleRow(rowValue) {
+        const expandedRows = this.expandedRows.concat([]);
+        const rowExpanded = expandedRows.includes(rowValue);
+        if (rowExpanded) {
+            const ind = expandedRows.indexOf(rowValue);
+            expandedRows.splice(ind, 1);
+        } else {
+            expandedRows.push(rowValue);
+        }
+        this.expandedRows = expandedRows;
+    }
+}
+```
+
+###### Template
+
+```
+    <Table
+        @columns={{this.columns}}
+        ...
+        @rowComponent="row/expandable-row"
+        @tableMeta={{hash
+          expandedRowComponent="custom-row"
+          expandedRows=this.expandedRows
+        }}
+    />
+```
+
+###### table/cell/button
+
+```
+import Component from '@glimmer/component';
+import { action } from '@ember/object';
+
+export default class TableCellButtonComponent extends Component {
+    @action
+    onClick(event) {
+        event.stopPropagation();
+        this.args.columnValue.toggleRow(this.args.rowValue);
+    }
+}
+-------- Template ----------
+<button type="button" {{on "click" this.onClick}}>Expand Row</button>
+```
+
+###### components/custom-row
+
+```
+<div class="d-flex flex-row justify-content-around">
+    <div class="d-flex">
+        {{@tableMeta.foo}}
+    </div>
+    <div class="alert alert-primary" role="alert">
+        Pass in necessary things through the tableMeta hash! {{@tableMeta.bar}}
+    </div>
+    <div class="d-flex">
+        Look I have access to rowValue here! {{@rowValue.name}}
+    </div>
+</div>
+<div class="d-flex flex-row justify-content-between">
+    <span class="badge badge-primary">I can also access the TBody api {{@api.rowMeta.prev}}</span>
+</div>
 ```
 
 More configuration options and api details can be found here: [ember-table](https://github.com/Addepar/ember-table) - [vertical-collection](https://html-next.github.io/vertical-collection/)

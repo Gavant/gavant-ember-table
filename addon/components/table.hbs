@@ -47,7 +47,7 @@
                                 columnValue.headerComponent
                                 columnValue=columnValue
                                 columnMeta=columnMeta
-                                tableMeta=@tableMeta
+                                tableMeta=this.tableMeta
                             }}
                                 {{columnValue.name}}
                                 <EmberTh::SortIndicator @columnMeta={{columnMeta}} />
@@ -94,7 +94,7 @@
             @renderAll={{this.renderAllRows}}
             @containerSelector={{this.containerSelector}}
             @lastReached={{fn this.onLastReached}}
-            @tableMeta={{@tableMeta}}
+            @tableMeta={{this.tableMeta}}
             @rowComponent={{this.rowComponent}}
             as |Body|
         >
@@ -110,7 +110,7 @@
                         (if Row.columnValue.isFixedLeft " data-table-col-fixed-left")
                         (if (eq Row.columnValue this.firstVisibleNonFixedColumn) " data-table-col-first-nonfixed")
                     }}
-                    @tableMeta={{@tableMeta}}
+                    @tableMeta={{this.tableMeta}}
                     @onClick={{@onCellClick}}
                     @onDoubleClick={{@onCellDoubleClick}}
                     as |cellValue columnValue rowValue cellMeta columnMeta rowMeta|
@@ -124,7 +124,7 @@
                             cellMeta=cellMeta
                             columnMeta=columnMeta
                             rowMeta=rowMeta
-                            tableMeta=@tableMeta
+                            tableMeta=this.tableMeta
                         }}
                             {{cellValue}}
                         {{/component}}
@@ -156,7 +156,7 @@
                             cellMeta=cellMeta
                             columnMeta=columnMeta
                             rowMeta=rowMeta
-                            tableMeta=@tableMeta
+                            tableMeta=this.tableMeta
                         }}
                             {{cellValue}}
                         {{/component}}

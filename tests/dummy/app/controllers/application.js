@@ -5,7 +5,7 @@ import { tracked } from '@glimmer/tracking';
 
 class ApplicationController extends Controller {
     @tracked foobar = 'bar';
-    @tracked expandedRows = [];
+    @tracked expandedRows = A([]);
 
     @tracked columns = A([
         {
@@ -48,12 +48,133 @@ class ApplicationController extends Controller {
             staticWidth: 200,
             maxWidth: 100,
             minWidth: 100
+        },
+        {
+            valuePath: 'id',
+            cellComponent: 'table/cell/button',
+            width: 225,
+            staticWidth: 225,
+            maxWidth: 225,
+            minWidth: 225,
+            toggleRow: this.toggleRow
         }
     ]);
 
     @tracked otherColumns = false;
 
     data = [
+        {
+            date: '1/1/2020',
+            name: 'Frodo Baggins',
+            age: 150,
+            tall: false,
+            short: true,
+            id: '67'
+        },
+        {
+            date: '1/1/2021',
+            name: 'Gandalf the Grey',
+            age: 145,
+            tall: true,
+            short: false,
+            id: '63'
+        },
+        {
+            date: '1/1/2020',
+            name: 'Frodo Baggins',
+            age: 150,
+            tall: false,
+            short: true,
+            id: '67'
+        },
+        {
+            date: '1/1/2021',
+            name: 'Gandalf the Grey',
+            age: 145,
+            tall: true,
+            short: false,
+            id: '63'
+        },
+        {
+            date: '1/1/2020',
+            name: 'Frodo Baggins',
+            age: 150,
+            tall: false,
+            short: true,
+            id: '67'
+        },
+        {
+            date: '1/1/2021',
+            name: 'Gandalf the Grey',
+            age: 145,
+            tall: true,
+            short: false,
+            id: '63'
+        },
+        {
+            date: '1/1/2020',
+            name: 'Frodo Baggins',
+            age: 150,
+            tall: false,
+            short: true,
+            id: '67'
+        },
+        {
+            date: '1/1/2021',
+            name: 'Gandalf the Grey',
+            age: 145,
+            tall: true,
+            short: false,
+            id: '63'
+        },
+        {
+            date: '1/1/2020',
+            name: 'Frodo Baggins',
+            age: 150,
+            tall: false,
+            short: true,
+            id: '67'
+        },
+        {
+            date: '1/1/2021',
+            name: 'Gandalf the Grey',
+            age: 145,
+            tall: true,
+            short: false,
+            id: '63'
+        },
+        {
+            date: '1/1/2020',
+            name: 'Frodo Baggins',
+            age: 150,
+            tall: false,
+            short: true,
+            id: '67'
+        },
+        {
+            date: '1/1/2021',
+            name: 'Gandalf the Grey',
+            age: 145,
+            tall: true,
+            short: false,
+            id: '63'
+        },
+        {
+            date: '1/1/2020',
+            name: 'Frodo Baggins',
+            age: 150,
+            tall: false,
+            short: true,
+            id: '67'
+        },
+        {
+            date: '1/1/2021',
+            name: 'Gandalf the Grey',
+            age: 145,
+            tall: true,
+            short: false,
+            id: '63'
+        },
         {
             date: '1/1/2020',
             name: 'Frodo Baggins',
@@ -95,8 +216,16 @@ class ApplicationController extends Controller {
     }
 
     @action
-    alertData(rowClickEvent) {
-        rowClickEvent.rowMeta.set('isExpanded', !rowClickEvent.rowMeta.isExpanded);
+    toggleRow(rowValue) {
+        const expandedRows = this.expandedRows.concat([]);
+        const rowExpanded = expandedRows.includes(rowValue);
+        if (rowExpanded) {
+            const ind = expandedRows.indexOf(rowValue);
+            expandedRows.splice(ind, 1);
+        } else {
+            expandedRows.push(rowValue);
+        }
+        this.expandedRows = expandedRows;
     }
 
     @action

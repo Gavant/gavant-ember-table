@@ -1,10 +1,9 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { TableAPI, RowMeta, TableMeta } from '@gavant/ember-table';
+import { TableAPI, TableMeta } from '@gavant/ember-table';
 
-interface TableRowArgs {
+export interface TableRowArgs {
     api: TableAPI<any>;
-    rowMeta: RowMeta<any>;
     tableMeta: TableMeta;
     onClick?(...args: any[]): void;
     onDoubleClick?(...args: any[]): void;
@@ -38,11 +37,11 @@ export default class TableRow extends Component<TableRowArgs> {
     }
 
     get isSelected() {
-        return this.args.rowMeta.isSelected;
+        return this.rowMeta.isSelected;
     }
 
     get isGroupSelected() {
-        return this.args.rowMeta.isGroupSelected;
+        return this.rowMeta.isGroupSelected;
     }
 
     get isSelectable() {
