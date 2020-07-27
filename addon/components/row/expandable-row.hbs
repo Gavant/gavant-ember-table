@@ -51,8 +51,10 @@
         {{/if}}
     {{/each}}
 </tr>
-{{!-- template-lint-disable no-inline-styles --}}
-<tr class="et-tr" style={{this.collapsedStyle}}>
+{{!-- TODO ideally this row should be completely unrendered if not expanded, --}}
+{{!-- or at least hidden with a class/style, but there is a bug in           --}}
+{{!--  vertical-collection preventing this. --}}
+<tr class="et-tr">
     {{#if this.isExpanded}}
         <td colspan={{@api.cells.length}}>
             {{component @tableMeta.expandedRowComponent

@@ -146,7 +146,7 @@ The following is a basic implementation of the expandable-row component pattern.
 export default class FooController extends Controller {
     ...
 
-    @tracked expandedColumns = [];
+    @tracked expandedRows = [];
 
     get columns() {
         return [
