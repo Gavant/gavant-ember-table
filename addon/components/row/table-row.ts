@@ -4,7 +4,7 @@ import { TableAPI, TableMeta } from '@gavant/ember-table';
 
 export interface TableRowArgs {
     api: TableAPI<any>;
-    tableMeta: TableMeta;
+    tableMeta?: TableMeta;
     onClick?(...args: any[]): void;
     onDoubleClick?(...args: any[]): void;
 }

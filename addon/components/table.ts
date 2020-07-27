@@ -154,12 +154,6 @@ class TableComponent extends Component<TableArgs> {
     @tracked visibleColumns: NativeArray<ColumnValue> = A();
     @tracked containerElement: HTMLElement | null = null;
 
-    get tableMeta() {
-        return this.args.tableMeta
-            ? { ...this.args.tableMeta, isLoading: this.isLoading }
-            : { isLoading: this.isLoading };
-    }
-
     get noRows(): boolean {
         return this.args.rows.length === 0;
     }

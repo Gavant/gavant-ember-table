@@ -1,6 +1,6 @@
 {{! template-lint-disable no-inline-styles }}
 <div
-    class="data-table 
+    class="data-table
         {{~if this.hasHiddenColumns " has-hidden-columns"}}
         {{~if @isServerRendered " is-server-rendered"}}
         {{~if this.isColumnsPanned " is-columns-panned"}}"
@@ -47,7 +47,7 @@
                                 columnValue.headerComponent
                                 columnValue=columnValue
                                 columnMeta=columnMeta
-                                tableMeta=this.tableMeta
+                                tableMeta=@tableMeta
                             }}
                                 {{columnValue.name}}
                                 <EmberTh::SortIndicator @columnMeta={{columnMeta}} />
@@ -94,7 +94,7 @@
             @renderAll={{this.renderAllRows}}
             @containerSelector={{this.containerSelector}}
             @lastReached={{fn this.onLastReached}}
-            @tableMeta={{this.tableMeta}}
+            @tableMeta={{@tableMeta}}
             @rowComponent={{this.rowComponent}}
             @staticHeight={{@staticHeight}}
             as |Body|
@@ -111,7 +111,7 @@
                         (if Row.columnValue.isFixedLeft " data-table-col-fixed-left")
                         (if (eq Row.columnValue this.firstVisibleNonFixedColumn) " data-table-col-first-nonfixed")
                     }}
-                    @tableMeta={{this.tableMeta}}
+                    @tableMeta={{@tableMeta}}
                     @onClick={{@onCellClick}}
                     @onDoubleClick={{@onCellDoubleClick}}
                     as |cellValue columnValue rowValue cellMeta columnMeta rowMeta|
@@ -125,7 +125,7 @@
                             cellMeta=cellMeta
                             columnMeta=columnMeta
                             rowMeta=rowMeta
-                            tableMeta=this.tableMeta
+                            tableMeta=@tableMeta
                         }}
                             {{cellValue}}
                         {{/component}}
@@ -157,7 +157,7 @@
                             cellMeta=cellMeta
                             columnMeta=columnMeta
                             rowMeta=rowMeta
-                            tableMeta=this.tableMeta
+                            tableMeta=@tableMeta
                         }}
                             {{cellValue}}
                         {{/component}}

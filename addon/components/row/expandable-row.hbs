@@ -54,13 +54,13 @@
 {{!-- template-lint-disable no-inline-styles --}}
 <tr class="et-tr" style={{this.collapsedStyle}}>
     {{#if this.isExpanded}}
-            <td colspan={{@api.cells.length}}>
-                {{component @tableMeta.expandedRowComponent
-                    api=@api
-                    rowValue=@api.rowValue
-                    rowMeta=@api.rowMeta
-                    tableMeta=@tableMeta
-                }}
-            </td>
+        <td colspan={{@api.cells.length}}>
+            {{component @tableMeta.expandedRowComponent
+                api=@api
+                rowValue=@api.rowValue
+                rowMeta=@api.rowMeta
+                tableMeta=@tableMeta
+            }}
+        </td>
     {{/if}}
 </tr>

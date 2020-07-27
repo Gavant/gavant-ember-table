@@ -1,11 +1,15 @@
 import Controller from '@ember/controller';
 import { A } from '@ember/array';
 import { action } from '@ember/object';
+import { later } from '@ember/runloop';
 import { tracked } from '@glimmer/tracking';
+import rsvp from 'rsvp';
 
 class ApplicationController extends Controller {
     @tracked foobar = 'bar';
     @tracked expandedRows = A([]);
+    @tracked hasMore = true;
+    @tracked isLoading = false;
 
     @tracked columns = A([
         {
@@ -62,7 +66,7 @@ class ApplicationController extends Controller {
 
     @tracked otherColumns = false;
 
-    data = [
+    @tracked data = A([
         {
             date: '1/1/2020',
             name: 'Frodo Baggins',
@@ -191,7 +195,7 @@ class ApplicationController extends Controller {
             short: false,
             id: '63'
         }
-    ];
+    ]);
 
     footerData = [{ age: 295 }];
 
@@ -207,7 +211,25 @@ class ApplicationController extends Controller {
 
     @action
     loadMoreModels() {
-        return;
+        this.isLoading = true;
+        return new rsvp.Promise((resolve) => {
+            later(() => {
+                const newRows = [];
+                for (let i = 0; i <= 10; i++) {
+                    newRows.push({
+                        date: new Date().toISOString(),
+                        name: `New Row ${i}`,
+                        age: 150,
+                        tall: false,
+                        short: true,
+                        id: `${Date.now() + i}`
+                    });
+                }
+                this.data.pushObjects(newRows);
+                this.isLoading = false;
+                return resolve(newRows);
+            }, 1000);
+        });
     }
 
     @action

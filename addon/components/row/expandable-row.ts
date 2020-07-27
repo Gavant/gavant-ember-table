@@ -3,7 +3,7 @@ import Ember from 'ember';
 
 export default class ExpandableRow extends TableRow {
     get isExpanded() {
-        return this.args.tableMeta.expandedRows?.includes(this.rowValue) ?? false;
+        return this.args.tableMeta?.expandedRows?.includes(this.rowValue) ?? false;
     }
 
     get collapsedStyle() {
