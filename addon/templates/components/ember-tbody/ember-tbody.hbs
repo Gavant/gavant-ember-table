@@ -31,7 +31,7 @@ as |rowValue|
                     rowMeta=api.rowMeta
                     cells=api.cells
                     rowSelectionMode=api.rowSelectionMode
-                    row=(component "ember-tr" api=api)
+                    row=(component @rowComponent api=api tableMeta=@tableMeta)
                 )
             }}
         {{else}}

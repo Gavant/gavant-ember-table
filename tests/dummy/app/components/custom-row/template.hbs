@@ -1,0 +1,14 @@
+<div class="d-flex flex-row justify-content-around">
+    <div class="d-flex">
+        {{@tableMeta.foo}}
+    </div>
+    <div class="alert alert-primary" role="alert">
+        Pass in necessary things through the tableMeta hash! {{@tableMeta.bar}}
+    </div>
+    <div class="d-flex">
+        Look I have access to rowValue here! {{@rowValue.name}}
+    </div>
+</div>
+<div class="d-flex flex-row justify-content-between">
+    <span class="badge badge-primary">I can also access the TBody api {{@api.rowMeta.prev}}</span>
+</div>

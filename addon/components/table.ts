@@ -1,8 +1,7 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { guidFor } from '@ember/object/internals';
-import { or, and, gt } from '@ember/object/computed';
-import { computed, action, set } from '@ember/object';
+import { action, set } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { scheduleOnce } from '@ember/runloop';
 import { assert } from '@ember/debug';
@@ -10,7 +9,6 @@ import { A } from '@ember/array';
 import { isEmpty } from '@ember/utils';
 import { htmlSafe } from '@ember/string';
 import { SafeString } from '@ember/template/-private/handlebars';
-import { lt, gte, conditional } from 'ember-awesome-macros';
 import Media from 'ember-responsive';
 import NativeArray from '@ember/array/-private/native-array';
 import { ColumnValue, TableSort, RowClickEvent } from '@gavant/ember-table';
@@ -93,7 +91,7 @@ class TableComponent extends Component<TableArgs> {
     readonly elementId = guidFor(this);
 
     /**
-     * CP that returns a unique data-table ID
+     * Returns a unique data-table ID
      *
      * @readonly
      * @type {string} tableId
@@ -104,14 +102,13 @@ class TableComponent extends Component<TableArgs> {
     }
 
     /**
-     * CP that returns a CSS style for the table height
+     * CSS style for the table height
      *
      *
      * @readonly
      * @type {string} height
      * @memberof TableComponent
      */
-    @computed('tableHeight')
     get height(): SafeString {
         return htmlSafe(this.tableHeight ? `height: ${this.tableHeight};` : '');
     }
@@ -139,6 +136,7 @@ class TableComponent extends Component<TableArgs> {
     @argDefault resizeDebounce: number = 250;
     @argDefault resizeMode: string = 'standard';
     @argDefault resizeWidthSensitive: boolean = true;
+    @argDefault rowComponent: string = 'ember-tr';
     @argDefault showEmptyFooter: boolean = false;
     @argDefault showHeader: boolean = true;
     @argDefault small: boolean = true;
@@ -165,92 +163,102 @@ class TableComponent extends Component<TableArgs> {
     }
 
     /**
-     * CP that returns whether the table rows are clickable
-     *
-     * @type {boolean} clickableRows
-     * @memberof TableComponent
-     */
-    @or('onRowClick', 'onRowDoubleClick') clickableRows!: boolean;
-
-    /**
-     * CP that returns whether a fully-loaded table is empty
-     *
-     * @type {boolean} isEmpty
-     * @memberof TableComponent
-     */
-    @and('noRows', 'notLoading') isEmpty!: boolean;
-
-    /**
-     * CP that returns whether there are non-rendered columns
-     *
-     * @type {boolean} hasHiddenColumns
-     * @memberof TableComponent
-     */
-    @lt('visibleColumns.length', 'args.columns.length') hasHiddenColumns!: boolean;
-
-    /**
-     * CP that returns whether the table is currently panned
-     *
-     * @type {boolean} isColumnsPanned
-     * @memberof TableComponent
-     */
-    @gt('columnPanPosition', 0) isColumnsPanned!: boolean;
-
-    /**
-     * CP that returns true when `containerWidth` >= `minFixedColTableWidth`
-     *
-     * @type {boolean} allowFixedCols
-     * @memberof TableComponent
-     */
-    @gte('containerWidth', 'minFixedColTableWidth') allowFixedCols!: boolean;
-
-    /**
-     * CP that returns which column should be used as the first
-     * visible column
-     *
-     * @type {ColumnValue} firstVisibleColumn
-     * @memberof TableComponent
-     */
-    @conditional('allowFixedCols', 'firstVisibleNonFixedColumn', 'visibleColumns.firstObject')
-    firstVisibleColumn!: ColumnValue;
-
-    /**
-     * CP that returns the first visible non-fixed column
+     * Returns whether the table rows are clickable.
      *
      * @readonly
-     * @type {(ColumnValue | undefined)} firstVisibleNonFixedColumn
-     * @memberof TableComponent
+     * @type {boolean}
      */
-    @computed('visibleColumns.@each.isFixedLeft')
+    get clickableRows(): boolean {
+        return !!this.args.onRowClick || !!this.args.onRowDoubleClick;
+    }
+
+    /**
+     * Returns whether a fully-loaded table is empty.
+     *
+     * @readonly
+     * @type {boolean}
+     */
+    get isEmpty(): boolean {
+        return this.noRows && this.notLoading;
+    }
+
+    /**
+     * Returns whether there are non-render columns.
+     *
+     * @readonly
+     * @type {boolean}
+     */
+    get hasHiddenColumns(): boolean {
+        return this.visibleColumns.length < this.args.columns.length;
+    }
+
+    /**
+     * Returns whether the table is currently panned.
+     *
+     * @readonly
+     * @type {boolean}
+     */
+    get isColumnsPanned(): boolean {
+        return this.columnPanPosition > 0;
+    }
+
+    /**
+     * Returns true when `containerWidth` >= `minFixedColTableWidth`.
+     *
+     * @readonly
+     * @type {boolean}
+     */
+    get allowFixedCols(): boolean {
+        return (this.containerWidth || 0) >= this.minFixedColTableWidth;
+    }
+
+    /**
+     * Returns which column should be used as the first visible column.
+     *
+     * @readonly
+     */
+    get firstVisibleColumn() {
+        return this.allowFixedCols ? this.firstVisibleNonFixedColumn : this.visibleColumns[0];
+    }
+
+    /**
+     * Returns the first visible non-fixed column.
+     *
+     * @readonly
+     * @type {(ColumnValue | undefined)}
+     */
     get firstVisibleNonFixedColumn(): ColumnValue | undefined {
         return this.visibleColumns && this.visibleColumns.find((col) => !col.isFixedLeft);
     }
 
     /**
-     * CP that returns the array of fixed columns
+     * Returns the array of fixed columns.
      *
      * @readonly
-     * @type {NativeArray<ColumnValue>} fixedColumns
-     * @memberof TableComponent
+     * @type {NativeArray<ColumnValue>}
      */
-
     get fixedColumns(): NativeArray<ColumnValue> {
         return A((this.args.columns || A()).filter((col) => col.isFixedLeft));
     }
 
+    /**
+     * Returns the array of non-fixed columns.
+     *
+     * @readonly
+     * @type {NativeArray<ColumnValue>}
+     */
     get nonFixedColumns(): NativeArray<ColumnValue> {
         return A((this.args.columns || A()).filter((col) => !col.isFixedLeft));
     }
 
     /**
-     * CP that determines the minimum table width when
+     * Determines the minimum table width when
      * fixed columns are present, else returns 0
      *
      * @readonly
      * @type {number} minFixedColTableWidth
      * @memberof TableComponent
      */
-    @computed('fixedColumns.@each.width', 'nonFixedColumns.@each.width')
     get minFixedColTableWidth(): number {
         //fixed columns are disabled if the widest non-fixed column cannot
         //fit in the container at the same time as the fixed column(s)
@@ -266,7 +274,7 @@ class TableComponent extends Component<TableArgs> {
     }
 
     /**
-     * CP that returns the table's current ability to pan right.
+     * Returns the table's current ability to pan right.
      * Columns can be panned right if there are hidden columns
      * and the last visible column is not the last defined column
      *
@@ -274,7 +282,6 @@ class TableComponent extends Component<TableArgs> {
      * @type {boolean} canPanRight
      * @memberof TableComponent
      */
-    @computed('hasHiddenColumns', 'columns.lastObject.{id,valuePath}', 'visibleColumns.lastObject.{id,valuePath}')
     get canPanRight(): boolean {
         const lastColId = this.getColumnId(this.args.columns[this.args.columns.length - 1]);
         const visibleColId = this.getColumnId(this.visibleColumns[this.visibleColumns.length - 1]);
@@ -282,7 +289,7 @@ class TableComponent extends Component<TableArgs> {
     }
 
     /**
-     * CP that returns the table's ability to pan left.
+     * Returns the table's ability to pan left.
      * Columns can be panned left if there are hidden columns
      * and the first visible column (first NON-FIXED visible column, if fixed columns are enabled)
      * is not the first defined column
@@ -291,13 +298,6 @@ class TableComponent extends Component<TableArgs> {
      * @type {boolean} canPanLeft
      * @memberof TableComponent
      */
-    @computed(
-        'hasHiddenColumns',
-        'allowFixedCols',
-        'columns.firstObject.{id,valuePath}',
-        'nonFixedColumns.firstObject.{id,valuePath}',
-        'firstVisibleColumn.{id,valuePath}'
-    )
     get canPanLeft(): boolean {
         const firstColId = this.getColumnId(this.args.columns[0]);
         const nonFixedColId = this.getColumnId(this.nonFixedColumns[0]);
@@ -307,7 +307,7 @@ class TableComponent extends Component<TableArgs> {
     }
 
     /**
-     * CP that returns a class string that includes all of
+     * Returns a class string that includes all of
      * the enabled properties
      *
      * @readonly
@@ -341,14 +341,13 @@ class TableComponent extends Component<TableArgs> {
     }
 
     /**
-     * CP that returns a new fillColumnIndex when the current
+     * Returns a new fillColumnIndex when the current
      * fillColumnIndex is out of range
      *
      * @readonly
      * @type {(number | null)} adjustedFillColumnIndex
      * @memberof TableComponent
      */
-    @computed('fillColumnIndex', 'visibleColumns.length')
     get adjustedFillColumnIndex(): number {
         if (this.fillColumnIndex) {
             return this.fillColumnIndex > this.visibleColumns.length - 1 ? 0 : this.fillColumnIndex;
@@ -368,12 +367,6 @@ class TableComponent extends Component<TableArgs> {
         super(owner, args);
         assert('@rows is not an instanceof Array.', args.rows instanceof Array);
         assert('@columns is not an instanceof Array', args.columns instanceof Array);
-        assert(
-            'Property staticWidth is missing on one or more column objects',
-            args.columns.every((col) => {
-                return !!col.staticWidth;
-            })
-        );
         // this.visibleColumns = this.args.columns; // pre-ETWA
         this.args.columns.forEach((col) => {
             // ETWA

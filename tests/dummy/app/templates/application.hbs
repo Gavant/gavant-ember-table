@@ -1,6 +1,4 @@
 <div class="pannable-table">
-    <label for="foobar">Foo:</label>
-    <input id="foobar" value="{{this.foobar}}" {{on "input" this.updateFoobar}}/>
     <button
       type="button"
       {{on "click" this.toggleColumns}}
@@ -12,19 +10,16 @@
         @rows={{this.data}}
         @footerRows={{this.footerData}}
         @hasMoreRows={{this.hasMore}}
-        @isLoading={{true}}
+        @isLoading={{this.isLoading}}
         @loadMoreRows={{fn this.loadMoreModels}}
-        @updateSorts={{fn this.updateSorts}}
-        @enableSort={{this.enableSort}}
+        @enableSort={{false}}
         @onRowClick={{this.alertData}}
         @panButtonClass="btn-primary"
+        @rowComponent="row/expandable-row"
         @tableMeta={{hash
-          foobar=this.foobar
+          expandedRowComponent="custom-row"
+          expandedRows=this.expandedRows
         }}
-        @resizeDebounce={{this.resizeDebounce}}
-        @showHeader={{this.showHeader}}
-        @stripedRows={{this.stripedRows}}
-        @enableReorder={{true}}
-        @enableUserResize={{true}}
+        @staticHeight={{false}}
     />
 </div>

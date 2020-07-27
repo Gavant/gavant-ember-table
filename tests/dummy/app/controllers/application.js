@@ -1,10 +1,15 @@
 import Controller from '@ember/controller';
 import { A } from '@ember/array';
 import { action } from '@ember/object';
+import { later } from '@ember/runloop';
 import { tracked } from '@glimmer/tracking';
+import rsvp from 'rsvp';
 
 class ApplicationController extends Controller {
     @tracked foobar = 'bar';
+    @tracked expandedRows = A([]);
+    @tracked hasMore = true;
+    @tracked isLoading = false;
 
     @tracked columns = A([
         {
@@ -47,27 +52,150 @@ class ApplicationController extends Controller {
             staticWidth: 200,
             maxWidth: 100,
             minWidth: 100
+        },
+        {
+            valuePath: 'id',
+            cellComponent: 'table/cell/button',
+            width: 225,
+            staticWidth: 225,
+            maxWidth: 225,
+            minWidth: 225,
+            toggleRow: this.toggleRow
         }
     ]);
 
     @tracked otherColumns = false;
 
-    data = [
+    @tracked data = A([
         {
             date: '1/1/2020',
             name: 'Frodo Baggins',
             age: 150,
             tall: false,
-            short: true
+            short: true,
+            id: '67'
         },
         {
             date: '1/1/2021',
             name: 'Gandalf the Grey',
             age: 145,
             tall: true,
-            short: false
+            short: false,
+            id: '63'
+        },
+        {
+            date: '1/1/2020',
+            name: 'Frodo Baggins',
+            age: 150,
+            tall: false,
+            short: true,
+            id: '67'
+        },
+        {
+            date: '1/1/2021',
+            name: 'Gandalf the Grey',
+            age: 145,
+            tall: true,
+            short: false,
+            id: '63'
+        },
+        {
+            date: '1/1/2020',
+            name: 'Frodo Baggins',
+            age: 150,
+            tall: false,
+            short: true,
+            id: '67'
+        },
+        {
+            date: '1/1/2021',
+            name: 'Gandalf the Grey',
+            age: 145,
+            tall: true,
+            short: false,
+            id: '63'
+        },
+        {
+            date: '1/1/2020',
+            name: 'Frodo Baggins',
+            age: 150,
+            tall: false,
+            short: true,
+            id: '67'
+        },
+        {
+            date: '1/1/2021',
+            name: 'Gandalf the Grey',
+            age: 145,
+            tall: true,
+            short: false,
+            id: '63'
+        },
+        {
+            date: '1/1/2020',
+            name: 'Frodo Baggins',
+            age: 150,
+            tall: false,
+            short: true,
+            id: '67'
+        },
+        {
+            date: '1/1/2021',
+            name: 'Gandalf the Grey',
+            age: 145,
+            tall: true,
+            short: false,
+            id: '63'
+        },
+        {
+            date: '1/1/2020',
+            name: 'Frodo Baggins',
+            age: 150,
+            tall: false,
+            short: true,
+            id: '67'
+        },
+        {
+            date: '1/1/2021',
+            name: 'Gandalf the Grey',
+            age: 145,
+            tall: true,
+            short: false,
+            id: '63'
+        },
+        {
+            date: '1/1/2020',
+            name: 'Frodo Baggins',
+            age: 150,
+            tall: false,
+            short: true,
+            id: '67'
+        },
+        {
+            date: '1/1/2021',
+            name: 'Gandalf the Grey',
+            age: 145,
+            tall: true,
+            short: false,
+            id: '63'
+        },
+        {
+            date: '1/1/2020',
+            name: 'Frodo Baggins',
+            age: 150,
+            tall: false,
+            short: true,
+            id: '67'
+        },
+        {
+            date: '1/1/2021',
+            name: 'Gandalf the Grey',
+            age: 145,
+            tall: true,
+            short: false,
+            id: '63'
         }
-    ];
+    ]);
 
     footerData = [{ age: 295 }];
 
@@ -83,7 +211,25 @@ class ApplicationController extends Controller {
 
     @action
     loadMoreModels() {
-        return;
+        this.isLoading = true;
+        return new rsvp.Promise((resolve) => {
+            later(() => {
+                const newRows = [];
+                for (let i = 0; i <= 10; i++) {
+                    newRows.push({
+                        date: new Date().toISOString(),
+                        name: `New Row ${i}`,
+                        age: 150,
+                        tall: false,
+                        short: true,
+                        id: `${Date.now() + i}`
+                    });
+                }
+                this.data.pushObjects(newRows);
+                this.isLoading = false;
+                return resolve(newRows);
+            }, 1000);
+        });
     }
 
     @action
@@ -92,9 +238,16 @@ class ApplicationController extends Controller {
     }
 
     @action
-    alertData(row) {
-        const data = row.rowValue;
-        alert(`${data.name} is ${data.age} years old.`);
+    toggleRow(rowValue) {
+        const expandedRows = this.expandedRows.concat([]);
+        const rowExpanded = expandedRows.includes(rowValue);
+        if (rowExpanded) {
+            const ind = expandedRows.indexOf(rowValue);
+            expandedRows.splice(ind, 1);
+        } else {
+            expandedRows.push(rowValue);
+        }
+        this.expandedRows = expandedRows;
     }
 
     @action
