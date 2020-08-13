@@ -1,25 +1,7 @@
-<div class="pannable-table">
-    <button
-      type="button"
-      {{on "click" this.toggleColumns}}
-    >
-      Toggle Columns
-    </button>
-    <Table
-        @columns={{this.columns}}
-        @rows={{this.data}}
-        @footerRows={{this.footerData}}
-        @hasMoreRows={{this.hasMore}}
-        @isLoading={{this.isLoading}}
-        @loadMoreRows={{fn this.loadMoreModels}}
-        @enableSort={{false}}
-        @onRowClick={{this.alertData}}
-        @panButtonClass="btn-primary"
-        @rowComponent="row/expandable-row"
-        @tableMeta={{hash
-          expandedRowComponent="custom-row"
-          expandedRows=this.expandedRows
-        }}
-        @staticHeight={{false}}
-    />
+<div class="header-fixed">
+  <LinkTo @route="table">Normal paging</LinkTo>
+  <LinkTo @route="table-reversed">Reversed paging</LinkTo>
+</div>
+<div class="content">
+    {{outlet}}
 </div>

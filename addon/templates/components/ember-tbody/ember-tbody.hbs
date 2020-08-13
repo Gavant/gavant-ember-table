@@ -1,4 +1,7 @@
 {{!-- template-lint-disable  --}}
+{{#if (and showTopLoading isLoading)}}
+    <Row::Loading @columns={{columns}} />
+{{/if}}
 {{#vertical-collection
     wrappedRows
     containerSelector=_containerSelector
@@ -41,9 +44,9 @@ as |rowValue|
 {{else if shouldYieldToInverse}}
     {{yield to="inverse"}}
 {{/vertical-collection}}
-{{#if this.isLoading}}
-    <Row::Loading @columns={{this.columns}} />
+{{#if (and showBottomLoading isLoading)}}
+    <Row::Loading @columns={{columns}} />
 {{/if}}
-{{#if this.isEmpty}}
-    <Row::NoResults @columns={{this.columns}} @noResultsText={{@noResultsText}} />
+{{#if isEmpty}}
+    <Row::NoResults @columns={{columns}} @noResultsText={{@noResultsText}} />
 {{/if}}

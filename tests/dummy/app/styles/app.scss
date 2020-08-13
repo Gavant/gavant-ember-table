@@ -1,11 +1,40 @@
+$gvnt-tbl-padding-left: 0;
+$gvnt-tbl-padding-right: 0;
+
 @import 'ember-bootstrap/bootstrap';
 @import 'gavant-ember-table';
 
-.pannable-table {
-    margin-top: 100px;
-    margin-left: 5%;
+.content {
+    padding: 60px 1rem 1rem 1rem;
 }
 
-.non-pannable-table {
-    margin-left: 5%;
+.header-fixed {
+    display: flex;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    height: 60px;
+    padding: 1rem;
+    background-color: #f1f1f1;
+
+    > a {
+        display: block;
+        margin-left: 0.5rem;
+    }
+}
+
+.sticky-controls {
+    display: flex;
+    align-items: center;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    height: 40px;
+    padding: 0 1rem;
+    background-color: #fff;
 }
