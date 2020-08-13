@@ -130,8 +130,11 @@ Other optional configurations:
 @tableClass {string: 'table'} - The class for the EmberTable.
 @tableHeight {string: ''} - The height style given to the table. i.e. '300px'
 @widthConstraint {string: 'lte-container'} - The width constraint used by EmberTable.
+@headerStickyOffset {number: 0} - When column headers are "sticky", this sets their offset (in pixels) from the top of the scrollable container
+@footerStickyOffset {number: 0} - When column footers are "sticky", this sets their offset (in pixels) from the bottom of the scrollable container
 
-@loadMoreRows {() => any: null} - A method that updates the rows array when isLoading is false, hasMoreRows is true and the user has reached the bottom of the table.
+@loadMoreRows {() => any: null} - A method that updates the rows array when isLoading is false, hasMoreRows is true, and the user has reached the bottom of the table.
+@loadPreviousRows {() => any: null} - A method that updates the rows array when isLoading is false, hasMoreRows is true, and the user has reached the top of the table.
 @onRowClick {()=> any: null} - The method triggered on row click.
 @onRowDoubleClick {()=> any: null} - The method triggered on row double click.
 ```
