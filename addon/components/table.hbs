@@ -14,6 +14,8 @@
         style={{this.height}}
         @tableId={{this.tableId}}
         @tableClasses={{this.tableClassNames}}
+        @headerStickyOffset={{this.headerStickyOffset}}
+        @footerStickyOffset={{this.footerStickyOffset}}
         as |T|
     >
         {{#if this.showHeader}}
@@ -89,6 +91,8 @@
         {{/if}}
         <T.body
             @isLoading={{this.isLoading}}
+            @showBottomLoading={{this.showBottomLoading}}
+            @showTopLoading={{this.showTopLoading}}
             @isEmpty={{this.isEmpty}}
             @noResultsText={{this.noResultsText}}
             @rows={{@rows}}
@@ -96,7 +100,8 @@
             @estimateRowHeight={{this.estimateRowHeight}}
             @renderAll={{this.renderAllRows}}
             @containerSelector={{this.containerSelector}}
-            @lastReached={{fn this.onLastReached}}
+            @firstReached={{this.onFirstReached}}
+            @lastReached={{this.onLastReached}}
             @tableMeta={{@tableMeta}}
             @rowComponent={{this.rowComponent}}
             @staticHeight={{@staticHeight}}

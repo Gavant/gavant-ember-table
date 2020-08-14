@@ -5,7 +5,7 @@ import { later } from '@ember/runloop';
 import { tracked } from '@glimmer/tracking';
 import rsvp from 'rsvp';
 
-class ApplicationController extends Controller {
+class TableReversedController extends Controller {
     @tracked foobar = 'bar';
     @tracked expandedRows = A([]);
     @tracked hasMore = true;
@@ -66,136 +66,7 @@ class ApplicationController extends Controller {
 
     @tracked otherColumns = false;
 
-    @tracked data = A([
-        {
-            date: '1/1/2020',
-            name: 'Frodo Baggins',
-            age: 150,
-            tall: false,
-            short: true,
-            id: '67'
-        },
-        {
-            date: '1/1/2021',
-            name: 'Gandalf the Grey',
-            age: 145,
-            tall: true,
-            short: false,
-            id: '63'
-        },
-        {
-            date: '1/1/2020',
-            name: 'Frodo Baggins',
-            age: 150,
-            tall: false,
-            short: true,
-            id: '67'
-        },
-        {
-            date: '1/1/2021',
-            name: 'Gandalf the Grey',
-            age: 145,
-            tall: true,
-            short: false,
-            id: '63'
-        },
-        {
-            date: '1/1/2020',
-            name: 'Frodo Baggins',
-            age: 150,
-            tall: false,
-            short: true,
-            id: '67'
-        },
-        {
-            date: '1/1/2021',
-            name: 'Gandalf the Grey',
-            age: 145,
-            tall: true,
-            short: false,
-            id: '63'
-        },
-        {
-            date: '1/1/2020',
-            name: 'Frodo Baggins',
-            age: 150,
-            tall: false,
-            short: true,
-            id: '67'
-        },
-        {
-            date: '1/1/2021',
-            name: 'Gandalf the Grey',
-            age: 145,
-            tall: true,
-            short: false,
-            id: '63'
-        },
-        {
-            date: '1/1/2020',
-            name: 'Frodo Baggins',
-            age: 150,
-            tall: false,
-            short: true,
-            id: '67'
-        },
-        {
-            date: '1/1/2021',
-            name: 'Gandalf the Grey',
-            age: 145,
-            tall: true,
-            short: false,
-            id: '63'
-        },
-        {
-            date: '1/1/2020',
-            name: 'Frodo Baggins',
-            age: 150,
-            tall: false,
-            short: true,
-            id: '67'
-        },
-        {
-            date: '1/1/2021',
-            name: 'Gandalf the Grey',
-            age: 145,
-            tall: true,
-            short: false,
-            id: '63'
-        },
-        {
-            date: '1/1/2020',
-            name: 'Frodo Baggins',
-            age: 150,
-            tall: false,
-            short: true,
-            id: '67'
-        },
-        {
-            date: '1/1/2021',
-            name: 'Gandalf the Grey',
-            age: 145,
-            tall: true,
-            short: false,
-            id: '63'
-        },
-        {
-            date: '1/1/2020',
-            name: 'Frodo Baggins',
-            age: 150,
-            tall: false,
-            short: true,
-            id: '67'
-        },
-        {
-            date: '1/1/2021',
-            name: 'Gandalf the Grey',
-            age: 145,
-            tall: true,
-            short: false,
-            id: '63'
-        }
-    ]);
+    @tracked model = [];
 
     footerData = [{ age: 295 }];
 
@@ -210,7 +81,7 @@ class ApplicationController extends Controller {
     }
 
     @action
-    loadMoreModels() {
+    loadPreviousModels() {
         this.isLoading = true;
         return new rsvp.Promise((resolve) => {
             later(() => {
@@ -225,10 +96,10 @@ class ApplicationController extends Controller {
                         id: `${Date.now() + i}`
                     });
                 }
-                this.data.pushObjects(newRows);
+                this.model.unshiftObjects(newRows.reverse());
                 this.isLoading = false;
                 return resolve(newRows);
-            }, 1000);
+            }, 500);
         });
     }
 
@@ -259,4 +130,4 @@ class ApplicationController extends Controller {
     }
 }
 
-export default ApplicationController;
+export default TableReversedController;

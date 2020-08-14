@@ -148,8 +148,11 @@ export interface TableArgs {
     tableClass?: string;
     tableHeight?: string;
     widthConstraint?: string;
+    headerStickyOffset?: number;
+    footerStickyOffset?: number;
 
     //methods
+    loadPreviousRows?: () => Promise<any[]>;
     loadMoreRows?: () => Promise<any[]>;
     updateSorts?: (sorts: TableSort[]) => void;
     onRowClick?: <T>(rowClickEvent: RowClickEvent<T>) => any;
@@ -244,6 +247,8 @@ class TableComponent extends Component<TableArgs> {
     @argDefault tableClass: string = 'table';
     @argDefault tableHeight: string = '';
     @argDefault widthConstraint: string = 'lte-container';
+    @argDefault headerStickyOffset: number = 0;
+    @argDefault footerStickyOffset: number = 0;
 
     //component state
     @tracked columnPanPosition: number = 0;
@@ -259,6 +264,14 @@ class TableComponent extends Component<TableArgs> {
 
     get notLoading(): boolean {
         return !this.isLoading;
+    }
+
+    get showBottomLoading() {
+        return !!this.args.loadMoreRows;
+    }
+
+    get showTopLoading() {
+        return !!this.args.loadPreviousRows;
     }
 
     /**
@@ -612,7 +625,21 @@ class TableComponent extends Component<TableArgs> {
     //actions
 
     /**
-     * Invokes an action to load a new page of rows
+     * Invokes an action to load a new page of rows when the first row in the table is reached/in view
+     *
+     * @returns {Promise | void}
+     * @memberof TableComponent
+     */
+    @action
+    onFirstReached() {
+        if (!this.isLoading && this.hasMoreRows && this.args.loadPreviousRows) {
+            return this.args.loadPreviousRows();
+        }
+        return;
+    }
+
+    /**
+     * Invokes an action to load a new page of rows when the last row in the table is reached/in view
      *
      * @returns {Promise | void}
      * @memberof TableComponent

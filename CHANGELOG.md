@@ -1,11 +1,16 @@
 # Changelog
 
-## v0.2.3
+## v0.6.1
+
+### Pull Requests
+
+-   [#11](https://github.com/Gavant/gavant-ember-table/pull/11) Reverse pagination & custom sticky offsets _by [Gavant/feature](https://github.com/Gavant/feature)_
+
 ## v0.3.0
 
 ### Pull Requests
 
-- [#4](https://github.com/Gavant/gavant-ember-table/pull/4)  🚀  *by [Gavant/feature](https://github.com/Gavant/feature)*
+-   [#4](https://github.com/Gavant/gavant-ember-table/pull/4) 🚀 _by [Gavant/feature](https://github.com/Gavant/feature)_
 
 -   Add dependency on ember-useragent@0.9.1 to fix fastboot issues
 
