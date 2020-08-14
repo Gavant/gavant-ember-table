@@ -565,8 +565,6 @@ class TableComponent extends Component<TableArgs> {
         this.containerWidth = containerWidth;
     }
 
-    getSubcolumnsWidth(column: ColumnValue) {}
-
     /**
      * Pans the table's visible column to the left or right the provided number of columns
      * e.g. `-1` pans one column to the left, `2` pans two columns to the right
