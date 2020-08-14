@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { TableAPI, TableMeta } from '@gavant/ember-table';
+import { TableAPI, TableMeta } from '@gavant/ember-table/components/table';
 
 export interface TableRowArgs {
     api: TableAPI<any>;

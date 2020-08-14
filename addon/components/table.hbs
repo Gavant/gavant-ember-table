@@ -44,6 +44,7 @@
                         }}
                         as |columnValue columnMeta|
                     >
+
                         {{#if (and columnValue.headerComponent columnValue.isVisible)}}
                             {{#component
                                 columnValue.headerComponent
@@ -72,6 +73,7 @@
                                     &#8592;
                                 </button>
                             {{/if}}
+
                             {{#if (and this.canPanRight (eq columnValue this.visibleColumns.lastObject))}}
                                 <button
                                     class="data-table-col-pan-btn data-table-col-pan-btn-right {{this.panButtonClass}}"
@@ -83,6 +85,7 @@
                             {{/if}}
                         {{/if}}
                     </Row.cell>
+
                 </Head.row>
             </T.head>
         {{/if}}

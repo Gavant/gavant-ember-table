@@ -11,8 +11,107 @@ import { htmlSafe } from '@ember/string';
 import { SafeString } from '@ember/template/-private/handlebars';
 import Media from 'ember-responsive';
 import NativeArray from '@ember/array/-private/native-array';
-import { ColumnValue, TableSort, RowClickEvent } from '@gavant/ember-table';
 import { argDefault } from '@gavant/ember-table/decorators/table';
+
+export interface ColumnValue {
+    [index: string]: any;
+    id?: string;
+    valuePath?: string;
+    name: string;
+    isFixedLeft?: boolean;
+    width: number;
+    staticWidth: number;
+    minWidth?: number;
+    maxWidth?: number;
+    textAlign?: string;
+    isSortable?: boolean;
+    headerClassNames?: string;
+    headerComponent?: string;
+    cellClassNames?: string;
+    cellComponent?: string;
+    footerValuePath?: string;
+    footerClassNames?: string;
+    footerComponent?: string;
+    subcolumns?: ColumnValue[];
+}
+
+export interface TableSort {
+    valuePath: string;
+    isAscending: boolean;
+}
+
+export interface ColumnMeta {
+    [index: string]: any;
+    //attributes
+    readonly isLeaf: boolean;
+    readonly isFixed: boolean;
+    readonly isReorderable: boolean;
+    readonly isResizable: boolean;
+    readonly isSortable: boolean;
+    readonly offsetLeft: number;
+    readonly offsetRight: number;
+    readonly width: number;
+    readonly columnSpan: number;
+    readonly rowSpan: number;
+    readonly index: number;
+    readonly isMultiSorted: boolean;
+    readonly isSorted: boolean;
+    readonly isSortedAsc: boolean;
+    readonly sortIndex: number;
+}
+
+export interface RowMeta<T> {
+    [index: string]: any;
+    //attributes
+    readonly index: number;
+    readonly canCollapse: boolean;
+    readonly depth: number;
+    readonly isCollapsed: boolean;
+    readonly isGroupSelected: boolean;
+    readonly isSelected: boolean;
+    readonly first: T;
+    readonly last: T;
+    readonly next: T;
+    readonly prev: T;
+
+    //methods
+    select(arg0: RowMetaSelect): void;
+}
+
+interface RowMetaSelect {
+    toggle?: boolean;
+    range?: boolean;
+    single?: boolean;
+}
+
+export interface RowClickEvent<T> {
+    event: MouseEvent;
+    rowValue: T;
+    rowMeta: RowMeta<T>;
+    tableMeta?: TableMeta;
+}
+
+export interface TableAPI<T> {
+    cells: TableCell<T>[];
+    rowMeta: RowMeta<T>;
+    rowSelectionMode: string;
+    rowValue: T;
+    isHeader: boolean;
+}
+
+export interface TableCell<T> {
+    checkboxSelectionMode: string;
+    columnMeta: ColumnMeta;
+    columnValue: ColumnValue;
+    rowMeta: RowMeta<T>;
+    rowSelectionMode: string;
+    rowValue: T;
+    cellValue: any;
+}
+
+export interface TableMeta {
+    [index: string]: any;
+}
 
 export interface TableArgs {
     [index: string]: any;
@@ -384,6 +483,11 @@ class TableComponent extends Component<TableArgs> {
         this.args.columns.forEach((col) => {
             // ETWA
             set(col, 'isVisible', true);
+            if (col.subcolumns) {
+                col.subcolumns.forEach((subColumn) => {
+                    set(subColumn, 'isVisible', true);
+                });
+            }
         });
     }
 
@@ -460,6 +564,8 @@ class TableComponent extends Component<TableArgs> {
         this.visibleColumns = visibleColumns;
         this.containerWidth = containerWidth;
     }
+
+    getSubcolumnsWidth(column: ColumnValue) {}
 
     /**
      * Pans the table's visible column to the left or right the provided number of columns
