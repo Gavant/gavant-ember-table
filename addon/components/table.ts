@@ -11,7 +11,6 @@ import { htmlSafe } from '@ember/string';
 import { SafeString } from '@ember/template/-private/handlebars';
 import Media from 'ember-responsive';
 import NativeArray from '@ember/array/-private/native-array';
-// import { ColumnValue, TableSort, RowClickEvent } from '@gavant/ember-table';
 import { argDefault } from '@gavant/ember-table/decorators/table';
 
 export interface ColumnValue {
