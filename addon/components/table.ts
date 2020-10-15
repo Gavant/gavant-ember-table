@@ -249,12 +249,12 @@ class TableComponent extends Component<TableArgs> {
     @argDefault widthConstraint: string = 'lte-container';
     @argDefault headerStickyOffset: number = 0;
     @argDefault footerStickyOffset: number = 0;
+    @argDefault sorts: TableSort[] = [];
 
     //component state
     @tracked columnPanPosition: number = 0;
     @tracked containerWidth: number | null = null;
     @tracked hasHiddenOverflow: boolean = false;
-    @tracked sorts: TableSort[] = [];
     @tracked visibleColumns: NativeArray<ColumnValue> = A();
     @tracked containerElement: HTMLElement | null = null;
 
@@ -681,7 +681,6 @@ class TableComponent extends Component<TableArgs> {
      */
     @action
     onUpdateSorts(sorts: TableSort[]) {
-        this.sorts = sorts;
         if (this.args.updateSorts) {
             this.args.updateSorts(sorts);
         }

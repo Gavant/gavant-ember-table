@@ -12,7 +12,7 @@
         @hasMoreRows={{this.hasMore}}
         @isLoading={{this.isLoading}}
         @loadMoreRows={{this.loadMoreModels}}
-        @enableSort={{false}}
+        @enableSort={{true}}
         @onRowClick={{this.alertData}}
         @panButtonClass="btn-primary"
         @rowComponent="row/expandable-row"
@@ -22,5 +22,7 @@
         }}
         @staticHeight={{false}}
         @headerStickyOffset={{60}}
+        @sorts={{this.sorts}}
+        @updateSorts={{this.updateSorts}}
     />
 </div>

@@ -10,6 +10,7 @@ class TableController extends Controller {
     @tracked expandedRows = A([]);
     @tracked hasMore = true;
     @tracked isLoading = false;
+    @tracked sorts = [{ valuePath: 'date', isAscending: false }];
 
     @tracked columns = A([
         {
@@ -18,14 +19,16 @@ class TableController extends Controller {
             cellComponent: 'table/cell/table-meta',
             isFixedLeft: true,
             width: 200,
-            staticWidth: 200
+            staticWidth: 200,
+            isSortable: true
         },
         {
             valuePath: 'name',
             name: 'Name',
             isFixedLeft: false,
             width: 100,
-            staticWidth: 100
+            staticWidth: 100,
+            isSortable: true
         },
         {
             valuePath: 'age',
@@ -104,8 +107,8 @@ class TableController extends Controller {
     }
 
     @action
-    updateSorts() {
-        return;
+    updateSorts(newSorts) {
+        this.sorts = newSorts;
     }
 
     @action
