@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.6.3
+
+### Pull Requests
+
+-   [#13](https://github.com/Gavant/gavant-ember-table/pull/13) Convert `sorts` into a component arg _by [Gavant/bug](https://github.com/Gavant/bug)_
+
 ## v0.6.2
 
 -   Add ability to show subcolumns
