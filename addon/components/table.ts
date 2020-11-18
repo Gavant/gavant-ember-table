@@ -1,17 +1,18 @@
-import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
-import { guidFor } from '@ember/object/internals';
-import { action, set } from '@ember/object';
-import { inject as service } from '@ember/service';
-import { scheduleOnce } from '@ember/runloop';
-import { assert } from '@ember/debug';
 import { A } from '@ember/array';
-import { isEmpty } from '@ember/utils';
+import NativeArray from '@ember/array/-private/native-array';
+import { assert } from '@ember/debug';
+import { action, set } from '@ember/object';
+import { guidFor } from '@ember/object/internals';
+import { scheduleOnce } from '@ember/runloop';
+import { inject as service } from '@ember/service';
 import { htmlSafe } from '@ember/string';
 import { SafeString } from '@ember/template/-private/handlebars';
-import Media from 'ember-responsive';
-import NativeArray from '@ember/array/-private/native-array';
+import { isEmpty } from '@ember/utils';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+
 import { argDefault } from '@gavant/ember-table/decorators/table';
+import Media from 'ember-responsive';
 
 export interface ColumnValue {
     [index: string]: any;
@@ -539,7 +540,7 @@ class TableComponent extends Component<TableArgs> {
             if ((col && col.isFixedLeft && allowFixedCols) || colIndex >= panPosition) {
                 let colWidth = col.staticWidth || 0;
                 let isVisible = (col.isFixedLeft && allowFixedCols) || newTableWidth + colWidth <= containerWidth;
-                if (isVisible && !hasAllVisibleColumns) {
+                if (isVisible && !hasAllVisibleColumns && columns[i - 1]?.isVisible) {
                     newTableWidth += colWidth;
                     set(col, 'isVisible', true); // ETWA
                     set(col, 'width', colWidth); // ETWA
