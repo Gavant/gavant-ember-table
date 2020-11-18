@@ -1,17 +1,18 @@
-import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
-import { guidFor } from '@ember/object/internals';
-import { action, set } from '@ember/object';
-import { inject as service } from '@ember/service';
-import { scheduleOnce } from '@ember/runloop';
-import { assert } from '@ember/debug';
 import { A } from '@ember/array';
-import { isEmpty } from '@ember/utils';
+import NativeArray from '@ember/array/-private/native-array';
+import { assert } from '@ember/debug';
+import { action, set } from '@ember/object';
+import { guidFor } from '@ember/object/internals';
+import { scheduleOnce } from '@ember/runloop';
+import { inject as service } from '@ember/service';
 import { htmlSafe } from '@ember/string';
 import { SafeString } from '@ember/template/-private/handlebars';
-import Media from 'ember-responsive';
-import NativeArray from '@ember/array/-private/native-array';
+import { isEmpty } from '@ember/utils';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+
 import { argDefault } from '@gavant/ember-table/decorators/table';
+import Media from 'ember-responsive';
 
 export interface ColumnValue {
     [index: string]: any;
@@ -553,6 +554,8 @@ class TableComponent extends Component<TableArgs> {
                 } else {
                     set(col, 'isVisible', false); // ETWA
                     set(col, 'width', 0); // ETWA
+                    // Once you find a column that wont fit, don't try and make anymore visible
+                    hasAllVisibleColumns = true; // ETWA
                     // break; // pre-ETWA
                 }
             } else {
