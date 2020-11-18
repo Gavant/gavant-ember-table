@@ -534,13 +534,14 @@ class TableComponent extends Component<TableArgs> {
         const panPosition = this.columnPanPosition;
         let newTableWidth = 0;
         let hasAllVisibleColumns = false; // ETWA
+        let breakFromLoop = false;
 
         for (const [i, col] of columns.entries()) {
             let colIndex = allowFixedCols ? this.nonFixedColumns.indexOf(col) : i;
             if ((col && col.isFixedLeft && allowFixedCols) || colIndex >= panPosition) {
                 let colWidth = col.staticWidth || 0;
                 let isVisible = (col.isFixedLeft && allowFixedCols) || newTableWidth + colWidth <= containerWidth;
-                if (isVisible && !hasAllVisibleColumns && (i === 0 || columns[i - 1]?.isVisible)) {
+                if (isVisible && !hasAllVisibleColumns && !breakFromLoop) {
                     newTableWidth += colWidth;
                     set(col, 'isVisible', true); // ETWA
                     set(col, 'width', colWidth); // ETWA
@@ -554,6 +555,7 @@ class TableComponent extends Component<TableArgs> {
                 } else {
                     set(col, 'isVisible', false); // ETWA
                     set(col, 'width', 0); // ETWA
+                    breakFromLoop = true;
                     // break; // pre-ETWA
                 }
             } else {
