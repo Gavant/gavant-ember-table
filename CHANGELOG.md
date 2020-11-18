@@ -1,8 +1,12 @@
 # Changelog
 
-## v0.6.3
+## v0.6.4
 
 ### Pull Requests
+
+-   [#14](https://github.com/Gavant/gavant-ember-table/pull/14) Visible column bug _by [Gavant](https://github.com/Gavant)_
+
+## v0.6.3
 
 -   [#13](https://github.com/Gavant/gavant-ember-table/pull/13) Convert `sorts` into a component arg _by [Gavant/bug](https://github.com/Gavant/bug)_
 
