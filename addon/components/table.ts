@@ -540,7 +540,7 @@ class TableComponent extends Component<TableArgs> {
             if ((col && col.isFixedLeft && allowFixedCols) || colIndex >= panPosition) {
                 let colWidth = col.staticWidth || 0;
                 let isVisible = (col.isFixedLeft && allowFixedCols) || newTableWidth + colWidth <= containerWidth;
-                if (isVisible && !hasAllVisibleColumns && columns[i - 1]?.isVisible) {
+                if (isVisible && !hasAllVisibleColumns && (i === 0 || columns[i - 1]?.isVisible)) {
                     newTableWidth += colWidth;
                     set(col, 'isVisible', true); // ETWA
                     set(col, 'width', colWidth); // ETWA
