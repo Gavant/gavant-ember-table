@@ -554,7 +554,8 @@ class TableComponent extends Component<TableArgs> {
                 } else {
                     set(col, 'isVisible', false); // ETWA
                     set(col, 'width', 0); // ETWA
-                    hasAllVisibleColumns = true;
+                    // Once you find a column that wont fit, don't try and make anymore visible
+                    hasAllVisibleColumns = true; // ETWA
                     // break; // pre-ETWA
                 }
             } else {
