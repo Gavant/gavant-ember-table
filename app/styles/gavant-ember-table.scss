@@ -13,14 +13,22 @@
         overflow: hidden;
     }
 
-    //pre-ETWA: Provides space for the pan-button
-    // &.has-hidden-columns {
-    //     .table > thead > tr {
-    //         > th:last-child {
-    //             padding-right: 18px;
-    //         }
-    //     }
-    // }
+    &.has-hidden-columns {
+        .table > thead > tr {
+            // pre-ETWA: Provides space for the pan-button
+            // (if (not Row.columnValue.isVisible) " is-hidden")
+            // (if (and this.canPanRight (eq Row.columnValue this.visibleColumns.lastObject)) " data-table-col-has-pan-btn")
+            // both lines above should also be removed from the table template if/when the work-around is removed.
+            // > th:last-child {
+            //     padding-right: 18px;
+            // }
+
+            // ETWA
+            > th.data-table-col-has-pan-btn {
+                padding-right: 18px;
+            }
+        }
+    }
 
     &.is-columns-panned {
         td.data-table-col-fixed-left {
