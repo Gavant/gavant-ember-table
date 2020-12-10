@@ -41,6 +41,7 @@
                             Row.columnValue.headerClassNames
                             (if Row.columnValue.isFixedLeft " data-table-col-fixed-left")
                             (if (eq Row.columnValue this.firstVisibleNonFixedColumn) " data-table-col-first-nonfixed")
+                            (if (not Row.columnValue.isVisible) " is-hidden")
                         }}
                         as |columnValue columnMeta|
                     >

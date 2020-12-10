@@ -13,13 +13,14 @@
         overflow: hidden;
     }
 
-    &.has-hidden-columns {
-        .table > thead > tr {
-            > th:last-child {
-                padding-right: 18px;
-            }
-        }
-    }
+    //pre-ETWA: Provides space for the pan-button
+    // &.has-hidden-columns {
+    //     .table > thead > tr {
+    //         > th:last-child {
+    //             padding-right: 18px;
+    //         }
+    //     }
+    // }
 
     &.is-columns-panned {
         td.data-table-col-fixed-left {
@@ -35,6 +36,9 @@
             th {
                 border-top: 0;
                 border-bottom: none;
+                &.is-hidden {
+                    padding: 0;
+                }
             }
         }
 
