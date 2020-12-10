@@ -36,6 +36,9 @@
             th {
                 border-top: 0;
                 border-bottom: none;
+                // ETWA
+                // if (not Row.columnValue.isVisible) " is-hidden") should also be
+                // removed from the table template when fixed.
                 &.is-hidden {
                     padding: 0;
                 }
