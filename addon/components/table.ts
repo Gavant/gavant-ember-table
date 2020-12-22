@@ -12,7 +12,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
 import { argDefault } from '@gavant/ember-table/decorators/table';
-import Media from 'ember-responsive';
+import Media from 'ember-responsive/services/media';
 
 export interface ColumnValue {
     [index: string]: any;
