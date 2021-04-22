@@ -11,8 +11,9 @@ import { isEmpty } from '@ember/utils';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
-import { argDefault } from '@gavant/ember-table/decorators/table';
 import Media from 'ember-responsive/services/media';
+
+import { argDefault } from '@gavant/ember-table/decorators/table';
 
 export interface ColumnValue {
     [index: string]: any;
@@ -141,6 +142,8 @@ export interface TableArgs {
     footerRows?: NativeArray<{
         [valuePath: string]: any;
     }>;
+    idForFirstItem?: string;
+    key?: string;
     noResultsText?: string;
     panButtonClass?: string;
     resizeDebounce?: number;
@@ -251,6 +254,7 @@ class TableComponent extends Component<TableArgs> {
     @argDefault headerStickyOffset: number = 0;
     @argDefault footerStickyOffset: number = 0;
     @argDefault sorts: TableSort[] = [];
+    @argDefault key: string = '@identity';
 
     //component state
     @tracked columnPanPosition: number = 0;
