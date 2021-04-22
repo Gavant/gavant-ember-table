@@ -1,22 +1,29 @@
 {{! template-lint-disable no-inline-styles }}
 <div
     class="data-table
-        {{~if this.hasHiddenColumns " has-hidden-columns"}}
-        {{~if @isServerRendered " is-server-rendered"}}
-        {{~if this.isColumnsPanned " is-columns-panned"}}"
+
+
+        {{if this.hasHiddenColumns " has-hidden-columns"}}
+
+
+
+        {{if @isServerRendered " is-server-rendered"}}
+
+
+
+        {{if this.isColumnsPanned " is-columns-panned"}}"
     id={{this.elementId}}
+    ...attributes
     {{did-update this.debouncedRender @columns}}
     {{did-insert this.didInsertTable}}
-    ...attributes
 >
-    <div {{did-resize this.debouncedRender debounce=this.resizeDebounce}} ></div>
+    <div {{did-resize this.debouncedRender debounce=this.resizeDebounce}}></div>
     <EmberTable
         style={{this.height}}
         @tableId={{this.tableId}}
         @tableClasses={{this.tableClassNames}}
         @headerStickyOffset={{this.headerStickyOffset}}
-        @footerStickyOffset={{this.footerStickyOffset}}
-        as |T|
+        @footerStickyOffset={{this.footerStickyOffset}} as |T|
     >
         {{#if this.showHeader}}
             <T.head
@@ -32,8 +39,7 @@
                 @onUpdateSorts={{if this.enableSort this.onUpdateSorts}}
                 @onReorder={{@onReorder}}
                 @onResize={{@onResize}}
-                @sorts={{this.sorts}}
-                as |Head|
+                @sorts={{this.sorts}} as |Head|
             >
                 <Head.row as |Row|>
                     <Row.cell
@@ -42,11 +48,12 @@
                             (if Row.columnValue.isFixedLeft " data-table-col-fixed-left")
                             (if (eq Row.columnValue this.firstVisibleNonFixedColumn) " data-table-col-first-nonfixed")
                             (if (not Row.columnValue.isVisible) " is-hidden")
-                            (if (and this.canPanRight (eq Row.columnValue this.visibleColumns.lastObject)) " data-table-col-has-pan-btn")
-                        }}
-                        as |columnValue columnMeta|
+                            (if
+                                (and this.canPanRight (eq Row.columnValue this.visibleColumns.lastObject))
+                                " data-table-col-has-pan-btn"
+                            )
+                        }} as |columnValue columnMeta|
                     >
-
                         {{#if (and columnValue.headerComponent columnValue.isVisible)}}
                             {{#component
                                 columnValue.headerComponent
@@ -69,8 +76,8 @@
                             {{#if (and this.canPanLeft (eq columnValue this.firstVisibleColumn))}}
                                 <button
                                     class="data-table-col-pan-btn data-table-col-pan-btn-left {{this.panButtonClass}}"
-                                    {{on "click" this.panColumnsLeft}}
                                     type="button"
+                                    {{on "click" this.panColumnsLeft}}
                                 >
                                     &#8592;
                                 </button>
@@ -79,15 +86,14 @@
                             {{#if (and this.canPanRight (eq columnValue this.visibleColumns.lastObject))}}
                                 <button
                                     class="data-table-col-pan-btn data-table-col-pan-btn-right {{this.panButtonClass}}"
-                                    {{on "click" this.panColumnsRight}}
                                     type="button"
+                                    {{on "click" this.panColumnsRight}}
                                 >
                                     &#8594;
                                 </button>
                             {{/if}}
                         {{/if}}
                     </Row.cell>
-
                 </Head.row>
             </T.head>
         {{/if}}
@@ -100,20 +106,20 @@
             @rows={{@rows}}
             @bufferSize={{this.bufferSize}}
             @estimateRowHeight={{this.estimateRowHeight}}
+            @idForFirstItem={{@idForFirstItem}}
+            @key={{this.key}}
             @renderAll={{this.renderAllRows}}
             @containerSelector={{this.containerSelector}}
             @firstReached={{this.onFirstReached}}
             @lastReached={{this.onLastReached}}
             @tableMeta={{@tableMeta}}
             @rowComponent={{this.rowComponent}}
-            @staticHeight={{@staticHeight}}
-            as |Body|
+            @staticHeight={{@staticHeight}} as |Body|
         >
             <Body.row
                 class={{Body.rowValue.rowClassNames}}
                 @onClick={{@onRowClick}}
-                @onDoubleClick={{@onRowDoubleClick}}
-                as |Row|
+                @onDoubleClick={{@onRowDoubleClick}} as |Row|
             >
                 <Row.cell
                     class={{concat
@@ -123,8 +129,8 @@
                     }}
                     @tableMeta={{@tableMeta}}
                     @onClick={{@onCellClick}}
-                    @onDoubleClick={{@onCellDoubleClick}}
-                    as |cellValue columnValue rowValue cellMeta columnMeta rowMeta|
+                    @onDoubleClick={{@onCellDoubleClick
+                    }} as |cellValue columnValue rowValue cellMeta columnMeta rowMeta|
                 >
                     {{#if (and columnValue.cellComponent columnValue.isVisible)}}
                         {{#component
@@ -145,18 +151,14 @@
                 </Row.cell>
             </Body.row>
         </T.body>
-        <T.foot
-            @rows={{if (and (or this.showEmptyFooter @rows) this.footerRows) this.footerRows}}
-            as |Foot|
-        >
+        <T.foot @rows={{if (and (or this.showEmptyFooter @rows) this.footerRows) this.footerRows}} as |Foot|>
             <Foot.row as |Row|>
                 <Row.cell
                     class={{concat
                         Row.columnValue.footerClassNames
                         (if Row.columnValue.isFixedLeft " data-table-col-fixed-left")
                         (if (eq Row.columnValue this.firstVisibleNonFixedColumn) " data-table-col-first-nonfixed")
-                    }}
-                    as |cellValue columnValue rowValue cellMeta columnMeta rowMeta|
+                    }} as |cellValue columnValue rowValue cellMeta columnMeta rowMeta|
                 >
                     {{#if (and columnValue.footerComponent columnValue.isVisible)}}
                         {{#component
