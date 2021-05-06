@@ -1,18 +1,14 @@
-import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { TableAPI, TableMeta } from '@gavant/ember-table/components/table';
+import Component from '@glimmer/component';
+
+import { SelectionMode, TableAPI, TableMeta } from '@gavant/ember-table/components/table';
 
 export interface TableRowArgs {
     api: TableAPI<any>;
     tableMeta?: TableMeta;
+    rowSelectionMode: SelectionMode;
     onClick?(...args: any[]): void;
     onDoubleClick?(...args: any[]): void;
-}
-
-enum SELECT_MODE {
-    NONE = 'none',
-    SINGLE = 'single',
-    MULTIPLE = 'multiple'
 }
 
 export default class TableRow extends Component<TableRowArgs> {
@@ -29,7 +25,7 @@ export default class TableRow extends Component<TableRowArgs> {
     }
 
     get rowSelectionMode() {
-        return this.args.api.rowSelectionMode;
+        return this.args.rowSelectionMode;
     }
 
     get isHeader() {
@@ -45,7 +41,7 @@ export default class TableRow extends Component<TableRowArgs> {
     }
 
     get isSelectable() {
-        return this.rowSelectionMode === SELECT_MODE.MULTIPLE || this.rowSelectionMode === SELECT_MODE.SINGLE;
+        return this.rowSelectionMode === SelectionMode.MULTIPLE || this.rowSelectionMode === SelectionMode.SINGLE;
     }
 
     /**

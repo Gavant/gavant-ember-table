@@ -25,6 +25,7 @@ as |rowValue|
         canSelect=canSelect
         rowSelectionMode=rowSelectionMode
         checkboxSelectionMode=checkboxSelectionMode
+        rowsCount=wrappedRows.length
     as |api|
     }}
         {{#if hasBlock}}
@@ -34,6 +35,7 @@ as |rowValue|
                     rowMeta=api.rowMeta
                     cells=api.cells
                     rowSelectionMode=api.rowSelectionMode
+                    rowsCount=api.rowsCount
                     row=(component @rowComponent api=api tableMeta=@tableMeta)
                 )
             }}

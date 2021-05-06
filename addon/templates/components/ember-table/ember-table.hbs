@@ -1,8 +1,8 @@
 {{!-- template-lint-disable  --}}
 <div
     data-test-ember-table-overflow
-    class="ember-table-overflow"
     id="{{elementId}}-overflow"
+    class={{@tableClasses}}
 >
     <table>
         {{yield (hash

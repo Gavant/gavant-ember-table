@@ -12,6 +12,31 @@ import { tracked } from '@glimmer/tracking';
 
 import { argDefault } from '@gavant/ember-table/decorators/table';
 
+export enum SelectionMode {
+    NONE = 'none',
+    SINGLE = 'single',
+    MULTIPLE = 'multiple'
+}
+
+export enum FillMode {
+    EQUAL = 'equal-column',
+    FIRST = 'first-column',
+    LAST = 'last-column',
+    NTH = 'nth-column'
+}
+
+export enum ResizeMode {
+    STANDARD = 'standard',
+    FLUID = 'fluid'
+}
+
+export enum WidthConstraint {
+    NONE = 'none',
+    EQUAL = 'eq-container',
+    GREATER_THAN = 'gte-container',
+    LESS_THAN = 'lte-container'
+}
+
 export interface ColumnValue {
     id?: string;
     valuePath?: string;
@@ -89,17 +114,14 @@ export interface RowClickEvent<T> {
 export interface TableAPI<T> {
     cells: TableCell<T>[];
     rowMeta: RowMeta<T>;
-    rowSelectionMode: string;
     rowValue: T;
     isHeader: boolean;
 }
 
 export interface TableCell<T> {
-    checkboxSelectionMode: string;
     columnMeta: ColumnMeta;
     columnValue: ColumnValue;
     rowMeta: RowMeta<T>;
-    rowSelectionMode: string;
     rowValue: T;
     cellValue: any;
 }
@@ -107,67 +129,289 @@ export interface TableCell<T> {
 export interface TableMeta {
     [index: string]: any;
 }
+export interface TBodyArgs<T> {
+    /**
+     * The number of extra rows to render on either side of the table's viewport
+     *
+     * @type {number}
+     * @memberof TBodyArgs
+     */
+    bufferSize?: number;
 
-export interface TableArgs {
-    //booleans
-    constrainColumnsToFit: boolean;
-    hoverableRows?: boolean;
+    /**
+     * Sets which row selection behavior to follow. Possible values are 'none' (clicking on a row does nothing),
+     * 'single' (clicking on a row selects it and deselects other rows), and 'multiple' (multiple rows can be selected through ctrl/cmd-click or shift-click).
+     *
+     * @type {SelectionMode}
+     * @memberof TBodyArgs
+     */
+    checkboxSelectionMode?: SelectionMode;
+
+    /**
+     * A selector string that will select the element from which to calculate the viewable height.
+     * Set to null for fixed height tables
+     *
+     * @type {string}
+     * @memberof TBodyArgs
+     */
+    containerSelector?: string;
+
+    /**
+     * Boolean flag that enables collapsing tree nodes
+     *
+     * @type {boolean}
+     * @memberof TBodyArgs
+     */
+    enableCollapse?: boolean;
+
+    /**
+     * Boolean flag that enables tree behavior if items have a `children` property
+     *
+     * @type {boolean}
+     * @memberof TBodyArgs
+     */
+    enableTree?: boolean;
+
+    /**
+     * Estimated height for each row. This number is used to decide how many rows will be rendered at initial rendering.
+     *
+     * @type {number}
+     * @memberof TBodyArgs
+     */
+    estimateRowHeight?: number;
+
+    /**
+     * An action that is triggered when the first visible row of the table changes.
+     *
+     * @memberof TBodyArgs
+     */
+    firstVisibleChanged?: () => void;
+
+    /**
+     * The property is passed through to the vertical-collection. If set,
+     * upon initialization the scroll position will be set such that the item with the provided id is at the top left on screen.
+     * If the item with id cannot be found, scrollTop is set to 0.
+     *
+     * @type {string}
+     * @memberof TBodyArgs
+     */
+    idForFirstItem?: string;
+
+    /**
+     * This key is the property used by the collection to determine whether an array mutation is an append, prepend, or complete replacement.
+     * It is also the key that is passed to the actions, and can be used to restore scroll position with idForFirstItem. This is passed through to the vertical-collection.
+     *
+     * @type {string}
+     * @memberof TBodyArgs
+     */
+    key?: string;
+
+    /**
+     * An action that is triggered when the last visible row of the table changes.
+     *
+     * @memberof TBodyArgs
+     */
+    lastVisibleChanged?: () => void;
+
+    /**
+     * An action that is called when the row selection of the table changes. Will be called with either an array or individual row, depending on the checkboxSelectionMode.
+     *
+     * @memberof TBodyArgs
+     */
+    onSelect?: () => void;
+
+    /**
+     * A flag that tells the table to render all of its rows at once.
+     *
+     * @type {boolean}
+     * @memberof TBodyArgs
+     */
+    renderAll?: boolean;
+
+    /**
+     * The row items that the table should display
+     *
+     * @type {T[]}
+     * @memberof TBodyArgs
+     */
+    rows: T[];
+
+    /**
+     * Sets which checkbox selection behavior to follow. Possible values are 'none' (clicking on a row does nothing),
+     * 'single' (clicking on a row selects it and deselects other rows), and 'multiple' (multiple rows can be selected through ctrl/cmd-click or shift-click).
+     *
+     * @type {SelectionMode}
+     * @memberof TBodyArgs
+     */
+    rowSelectionMode?: SelectionMode;
+
+    /**
+     * When true, this option causes selecting all of a node's children to also select the node itself.
+     *
+     * @type {boolean}
+     * @memberof TBodyArgs
+     */
+    selectingChildrenSelectsParents?: boolean;
+
+    /**
+     * The currently selected rows. Can either be an array or an individual row.
+     *
+     * @type {(T[] | T | null)}
+     * @memberof TBodyArgs
+     */
+    selection: T[] | T | null;
+
+    /**
+     * A function that will override how selection is compared to row value.
+     *
+     * @memberof TBodyArgs
+     */
+    selectionMatchFunction?: () => void;
+
+    /**
+     * A flag that controls if all rows have same static height or not.
+     * By default it is set to false and row height is dependent on its internal content.
+     * If it is set to true, all rows have the same height equivalent to estimateRowHeight.
+     *
+     * @type {boolean}
+     * @memberof TBodyArgs
+     */
+    staticHeight?: boolean;
+}
+
+export interface THeadArgs {
+    /**
+     * The column definitions for the table
+     *
+     * @type {NativeArray<ColumnValue>}
+     * @memberof THeadArgs
+     */
+    columns: NativeArray<ColumnValue>;
+
+    /**
+     * An ordered array of the sorts applied to the table
+     *
+     * @memberof THeadArgs
+     */
+    compareFunction?: <T>(valueA: T, valueB: T, sortEmptyLast: boolean) => number;
+
+    /**
+     * A numeric adjustment to be applied to the constraint on the table's size.
+     *
+     * @type {number}
+     * @memberof THeadArgs
+     */
+    containerWidthAdjustment?: number;
+
+    /**
+     * Flag that toggles reordering in the table
+     *
+     * @type {boolean}
+     * @memberof THeadArgs
+     */
     enableReorder?: boolean;
-    enableSort?: boolean;
-    enableUserResize?: boolean;
-    renderAllRows: boolean;
-    resizeWidthSensitive: boolean;
-    stripedRows?: boolean;
-    showEmptyFooter: boolean;
-    showHeader?: boolean;
-    small?: boolean;
+
+    /**
+     * ember-table's resizing must be enabled in order for fill-mode auto column
+     * resizing to work, even if you don't want to allow user-invoked resizing
+     *
+     * @type {boolean}
+     * @memberof THeadArgs
+     */
+    readonly enableResize?: true;
+
+    /**
+     * A configuration that controls which column shrinks (or extends) when fillMode is 'nth-column'. This is zero indexed.
+     *
+     * @type {number}
+     * @memberof THeadArgs
+     */
+    fillColumnIndex?: number;
+
+    /**
+     * A configuration that controls how columns shrink (or extend) when total column width does not match table width. Behavior of column modification is as follows:
+
+        "equal-column": extra space is distributed equally among all columns
+
+        "first-column": extra space is added into the first column.
+
+        "last-column": extra space is added into the last column.
+
+        "nth-column": extra space is added into the column defined by fillColumnIndex.
+     *
+     * @type {FillMode}
+     * @memberof THeadArgs
+     */
+    fillMode?: FillMode;
+
+    /**
+     * Specifies how columns should be sized when the table is initialized.
+     * This only affects eq-container-slack and gte-container-slack width constraint modes. Permitted values are the same as fillMode.
+     *
+     * @type {FillMode}
+     * @memberof THeadArgs
+     */
+    initialFillMode?: FillMode;
+
+    /**
+     * An action that is sent when sorts is updated
+     *
+     * @memberof THeadArgs
+     */
+    onHeaderAction?: () => void;
+
+    /**
+     * An action that is sent when columns are reordered
+     *
+     * @memberof THeadArgs
+     */
+    onReorder?: () => void;
+
+    /**
+     * An action that is sent when columns are resized
+     *
+     * @memberof THeadArgs
+     */
+    onResize?: () => void;
+
+    /**
+     * An action that is sent when sorts is updated
+     *
+     * @memberof THeadArgs
+     */
+    onUpdateSorts?: (sorts: TableSort[]) => void;
+
+    /**
+     * Sets which column resizing behavior to use.
+     * Possible values are standard (resizing a column pushes or pulls all other columns) and fluid (resizing a column subtracts width from neighboring columns).
+     *
+     * @type {ResizeMode}
+     * @memberof THeadArgs
+     */
+    resizeMode?: ResizeMode;
+
+    /**
+     * Enables shadows at the edges of the table to show that the user can scroll to view more content.
+     * Possible string values are all, horizontal, vertical, and none. The boolean values true and false are aliased to all and none, respectively.
+     *
+     * @type {(boolean | string)}
+     * @memberof THeadArgs
+     */
+    scrollIndicators?: boolean | string;
+
+    /**
+     * Flag that allows to sort empty values after non empty ones
+     *
+     * @type {boolean}
+     * @memberof THeadArgs
+     */
     sortEmptyLast?: boolean;
 
-    //attributes
-    bufferSize: number;
-    columns: NativeArray<ColumnValue>;
-    containerSelector?: string;
-    estimateRowHeight: number;
-    fillColumnIndex?: number | null;
-    fillMode?: string;
-    footerRows?: NativeArray<{
-        [valuePath: string]: any;
-    }>;
-    idForFirstItem?: string;
-    key?: string;
-    noResultsText?: string;
-    panButtonClass?: string;
-    resizeDebounce?: number;
-    resizeMode?: string;
-    rows: NativeArray<any>;
-    tableClass?: string;
-    tableHeight?: string;
-    widthConstraint?: string;
-    headerStickyOffset?: number;
-    footerStickyOffset?: number;
-    isMobile: boolean;
-
-    //methods
-    loadPreviousRows?: () => Promise<any[]>;
-    loadMoreRows?: () => Promise<any[]>;
-    updateSorts?: (sorts: TableSort[]) => void;
-    onRowClick?: <T>(rowClickEvent: RowClickEvent<T>) => any;
-    onRowDoubleClick?: () => any;
     /**
-     * An action that is triggered when @sorts is updated.
+     * An optional sort. If not specified, defaults to , which sorts by each sort in sorts, in order.
      *
+     * @memberof THeadArgs
      */
-    onHeaderAction?: () => any;
-    /**
-     * An action that is triggered when @columns are reordered.
-     *
-     */
-    onReorder?: () => any;
-    /**
-     * An action that is triggered when columns are resized.
-     *
-     */
-    onResize?: () => any;
     sortFunction?: (
         itemA: ColumnValue,
         itemB: ColumnValue,
@@ -175,10 +419,200 @@ export interface TableArgs {
         compare: <T>(valueA: T, valueB: T, sortEmptyLast: boolean) => number,
         sortEmptyLast: boolean
     ) => number;
-    compareFunction?: <T>(valueA: T, valueB: T, sortEmptyLast: boolean) => number;
+
+    /**
+     * An ordered array of the sorts applied to the table
+     *
+     * @type {TableSort[]}
+     * @memberof THeadArgs
+     */
+    sorts: TableSort[];
+
+    /**
+     * Sets a constraint on the table's size, such that it must be greater than, less than, or equal to the size of the containing element.
+     *
+     * @type {WidthConstraint}
+     * @memberof THeadArgs
+     */
+    widthConstraint: WidthConstraint;
 }
 
-class TableComponent extends Component<TableArgs> {
+export interface TableArgs<R, F> extends TBodyArgs<R>, THeadArgs {
+    /**
+     * Load previous rows of items
+     *
+     * @memberof TableArgs
+     */
+    loadPreviousRows?: () => Promise<R[]>;
+
+    /**
+     * Load more rows of items
+     *
+     * @memberof TableArgs
+     */
+    loadMoreRows?: () => Promise<R[]>;
+
+    /**
+     * Event to handle click on row
+     *
+     * @memberof TableArgs
+     */
+    onRowClick?: <T>(rowClickEvent: RowClickEvent<T>) => void;
+
+    /**
+     * Event to handle double click on row
+     *
+     * @memberof TableArgs
+     */
+    onRowDoubleClick?: () => void;
+
+    /**
+     * Used to correct the layout on mobile when showing the table
+     *
+     * @type {boolean}
+     * @memberof TableArgs
+     */
+    isMobile?: boolean;
+
+    /**
+     * Enable/Disable row sorting
+     *
+     * @type {boolean}
+     * @memberof TableArgs
+     */
+    enableSort?: boolean;
+
+    /**
+     * Forces the columns to fit within the table container on any column visibility update.
+     *
+     * @type {boolean}
+     * @memberof TableArgs
+     */
+    constrainColumnsToFit?: boolean;
+
+    /**
+     * Enable/disable hover on rows
+     *
+     * @type {boolean}
+     * @memberof TableArgs
+     */
+    hoverableRows?: boolean;
+
+    /**
+     * Enable/disable column re-sizing. Note: Column objects with max/min widths will not be resizable.
+     *
+     * @type {boolean}
+     * @memberof TableArgs
+     */
+    enableUserResize?: boolean;
+
+    /**
+     * Enable/disable column visibility updates on width resizing
+     *
+     * @type {boolean}
+     * @memberof TableArgs
+     */
+    resizeWidthSensitive?: boolean;
+
+    /**
+     * Enable/disabled striped rows
+     *
+     * @type {boolean}
+     * @memberof TableArgs
+     */
+    stripedRows?: boolean;
+
+    /**
+     * Enable/disable the footer when empty
+     *
+     * @type {boolean}
+     * @memberof TableArgs
+     */
+    showEmptyFooter?: boolean;
+
+    /**
+     * Enable/disable the table header
+     *
+     * @type {boolean}
+     * @memberof TableArgs
+     */
+    showHeader?: boolean;
+
+    /**
+     * Appends 'table-sm' to the table class when true.
+     *
+     * @type {boolean}
+     * @memberof TableArgs
+     */
+    small?: boolean;
+
+    /**
+     * The footer rows to be displayed. i.e. for a table with a 'subtotal' column:
+        `[{ subtotal:500 }]`
+     *
+     * @type {NativeArray<F>}
+     * @memberof TableArgs
+     */
+    footerRows?: NativeArray<F>;
+
+    /**
+     * Displayed when there are no rows
+     *
+     * @type {string}
+     * @memberof TableArgs
+     */
+    noResultsText?: string;
+
+    /**
+     * The class given to the pan-buttons when there are hidden columns
+     *
+     * @type {string}
+     * @memberof TableArgs
+     */
+    panButtonClass?: string;
+
+    /**
+     * The debounce time used by the resize listener to update column visibility.
+     *
+     * @type {number}
+     * @memberof TableArgs
+     */
+    resizeDebounce?: number;
+
+    /**
+     * The class for the EmberTable
+     *
+     * @type {string}
+     * @memberof TableArgs
+     */
+    tableClass?: string;
+
+    /**
+     * The height style given to the table. i.e. '300px'
+     *
+     * @type {string}
+     * @memberof TableArgs
+     */
+    tableHeight?: string;
+
+    /**
+     * When column headers are "sticky", this sets their offset (in pixels) from the top of the scrollable container
+     *
+     * @type {number}
+     * @memberof TableArgs
+     */
+    headerStickyOffset?: number;
+
+    /**
+     * When column footers are "sticky", this sets their offset (in pixels) from the bottom of the scrollable container
+     *
+     * @type {number}
+     * @memberof TableArgs
+     */
+    footerStickyOffset?: number;
+}
+
+class TableComponent<R, F> extends Component<TableArgs<R, F>> {
     //ember-table's resizing must be enabled in order for fill-mode auto column
     //resizing to work, even if you don't want to allow user-invoked resizing
     readonly enableResize: boolean = true;
@@ -207,11 +641,7 @@ class TableComponent extends Component<TableArgs> {
         return htmlSafe(this.tableHeight ? `height: ${this.tableHeight};` : '');
     }
 
-    //configuration options
-
     @argDefault bufferSize: number = 0;
-    //the selector used by <VerticalCollection> to calculate occulsion rendering
-    //set this to `null` for fixed height/scrollable tables
     @argDefault containerSelector: string = 'body';
     @argDefault constrainColumnsToFit: boolean = true;
     @argDefault enableReorder: boolean = false;
@@ -219,30 +649,31 @@ class TableComponent extends Component<TableArgs> {
     @argDefault enableUserResize: boolean = false;
     @argDefault estimateRowHeight: number = 30;
     @argDefault fillColumnIndex: number | null = null;
-    @argDefault fillMode: string = 'first-column';
-    @argDefault footerRows: Array<any> = [];
+    @argDefault fillMode: string = FillMode.FIRST;
+    @argDefault footerRows: Array<F> = [];
     @argDefault hasMoreRows: boolean = false;
     @argDefault hoverableRows: boolean = true;
     @argDefault isLoading: boolean = false;
     @argDefault noResultsText: string = 'No results found';
     @argDefault panButtonClass: string = 'btn btn-secondary';
-    @argDefault renderAllRows: boolean = false;
+    @argDefault renderAll: boolean = false;
     @argDefault resizeDebounce: number = 250;
     @argDefault resizeMode: string = 'standard';
     @argDefault resizeWidthSensitive: boolean = true;
     @argDefault rowComponent: string = 'ember-tr';
     @argDefault showEmptyFooter: boolean = false;
     @argDefault showHeader: boolean = true;
-    @argDefault small: boolean = true;
+    @argDefault small: boolean = false;
     @argDefault sortEmptyLast: boolean = false;
     @argDefault stripedRows: boolean = false;
-    @argDefault tableClass: string = 'table';
+    @argDefault tableClass: string = 'ember-table-overflow';
     @argDefault tableHeight: string = '';
     @argDefault widthConstraint: string = 'lte-container';
     @argDefault headerStickyOffset: number = 0;
     @argDefault footerStickyOffset: number = 0;
     @argDefault sorts: TableSort[] = [];
     @argDefault key: string = '@identity';
+    @argDefault isMobile: boolean = false;
 
     //component state
     @tracked columnPanPosition: number = 0;
@@ -467,11 +898,12 @@ class TableComponent extends Component<TableArgs> {
      *
      * @memberof TableComponent
      */
-    constructor(owner: unknown, args: TableArgs) {
+    constructor(owner: unknown, args: TableArgs<R, F>) {
         super(owner, args);
+
         assert('@rows is not an instanceof Array.', args.rows instanceof Array);
         assert('@columns is not an instanceof Array', args.columns instanceof Array);
-        this.visibleColumns = this.args.columns; // pre-ETWA
+        this.visibleColumns = this.args.columns;
     }
 
     /**
@@ -517,10 +949,10 @@ class TableComponent extends Component<TableArgs> {
         let newTableWidth = 0;
 
         for (const [i, col] of columns.entries()) {
-            let colIndex = allowFixedCols ? this.nonFixedColumns.indexOf(col) : i;
+            const colIndex = allowFixedCols ? this.nonFixedColumns.indexOf(col) : i;
             if ((col && col.isFixedLeft && allowFixedCols) || colIndex >= panPosition) {
-                let colWidth = col.staticWidth || 0;
-                let isVisible = (col.isFixedLeft && allowFixedCols) || newTableWidth + colWidth <= containerWidth;
+                const colWidth = col.staticWidth || 0;
+                const isVisible = (col.isFixedLeft && allowFixedCols) || newTableWidth + colWidth <= containerWidth;
                 if (isVisible) {
                     newTableWidth += colWidth;
                     visibleColumns.pushObject(col);
@@ -570,9 +1002,9 @@ class TableComponent extends Component<TableArgs> {
         let width = 0;
 
         if (el) {
-            let rects = el.getClientRects();
-            let paddingLeft = parseFloat(window.getComputedStyle(el, null).getPropertyValue('padding-left'));
-            let paddingRight = parseFloat(window.getComputedStyle(el, null).getPropertyValue('padding-right'));
+            const rects = el.getClientRects();
+            const paddingLeft = parseFloat(window.getComputedStyle(el, null).getPropertyValue('padding-left'));
+            const paddingRight = parseFloat(window.getComputedStyle(el, null).getPropertyValue('padding-right'));
             if (rects) {
                 width = paddingLeft && paddingRight ? rects[0].width - (paddingLeft + paddingRight) : rects[0].width;
             }
@@ -654,8 +1086,8 @@ class TableComponent extends Component<TableArgs> {
      */
     @action
     onUpdateSorts(sorts: TableSort[]) {
-        if (this.args.updateSorts) {
-            this.args.updateSorts(sorts);
+        if (this.args.onUpdateSorts) {
+            this.args.onUpdateSorts(sorts);
         }
     }
 }
