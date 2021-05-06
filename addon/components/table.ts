@@ -1,22 +1,18 @@
 import { A } from '@ember/array';
 import NativeArray from '@ember/array/-private/native-array';
 import { assert } from '@ember/debug';
-import { action, set } from '@ember/object';
+import { action } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
 import { scheduleOnce } from '@ember/runloop';
-import { inject as service } from '@ember/service';
 import { htmlSafe } from '@ember/string';
 import { SafeString } from '@ember/template/-private/handlebars';
 import { isEmpty } from '@ember/utils';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
-import Media from 'ember-responsive/services/media';
-
 import { argDefault } from '@gavant/ember-table/decorators/table';
 
 export interface ColumnValue {
-    [index: string]: any;
     id?: string;
     valuePath?: string;
     name: string;
@@ -43,8 +39,6 @@ export interface TableSort {
 }
 
 export interface ColumnMeta {
-    [index: string]: any;
-    //attributes
     readonly isLeaf: boolean;
     readonly isFixed: boolean;
     readonly isReorderable: boolean;
@@ -63,7 +57,6 @@ export interface ColumnMeta {
 }
 
 export interface RowMeta<T> {
-    [index: string]: any;
     //attributes
     readonly index: number;
     readonly canCollapse: boolean;
@@ -116,8 +109,6 @@ export interface TableMeta {
 }
 
 export interface TableArgs {
-    [index: string]: any;
-
     //booleans
     constrainColumnsToFit: boolean;
     hoverableRows?: boolean;
@@ -154,6 +145,7 @@ export interface TableArgs {
     widthConstraint?: string;
     headerStickyOffset?: number;
     footerStickyOffset?: number;
+    isMobile: boolean;
 
     //methods
     loadPreviousRows?: () => Promise<any[]>;
@@ -187,10 +179,6 @@ export interface TableArgs {
 }
 
 class TableComponent extends Component<TableArgs> {
-    @service media!: Media;
-
-    //readonly attributes
-
     //ember-table's resizing must be enabled in order for fill-mode auto column
     //resizing to work, even if you don't want to allow user-invoked resizing
     readonly enableResize: boolean = true;
@@ -259,7 +247,6 @@ class TableComponent extends Component<TableArgs> {
     //component state
     @tracked columnPanPosition: number = 0;
     @tracked containerWidth: number | null = null;
-    @tracked hasHiddenOverflow: boolean = false;
     @tracked visibleColumns: NativeArray<ColumnValue> = A();
     @tracked containerElement: HTMLElement | null = null;
 
@@ -326,7 +313,7 @@ class TableComponent extends Component<TableArgs> {
      * @type {boolean}
      */
     get allowFixedCols(): boolean {
-        return (this.containerWidth || 0) >= this.minFixedColTableWidth;
+        return (this.containerWidth ?? 0) >= this.minFixedColTableWidth;
     }
 
     /**
@@ -484,16 +471,7 @@ class TableComponent extends Component<TableArgs> {
         super(owner, args);
         assert('@rows is not an instanceof Array.', args.rows instanceof Array);
         assert('@columns is not an instanceof Array', args.columns instanceof Array);
-        // this.visibleColumns = this.args.columns; // pre-ETWA
-        this.args.columns.forEach((col) => {
-            // ETWA
-            set(col, 'isVisible', true);
-            if (col.subcolumns) {
-                col.subcolumns.forEach((subColumn) => {
-                    set(subColumn, 'isVisible', true);
-                });
-            }
-        });
+        this.visibleColumns = this.args.columns; // pre-ETWA
     }
 
     /**
@@ -537,34 +515,22 @@ class TableComponent extends Component<TableArgs> {
         const allowFixedCols = containerWidth >= this.minFixedColTableWidth;
         const panPosition = this.columnPanPosition;
         let newTableWidth = 0;
-        let hasAllVisibleColumns = false; // ETWA
 
         for (const [i, col] of columns.entries()) {
             let colIndex = allowFixedCols ? this.nonFixedColumns.indexOf(col) : i;
             if ((col && col.isFixedLeft && allowFixedCols) || colIndex >= panPosition) {
                 let colWidth = col.staticWidth || 0;
                 let isVisible = (col.isFixedLeft && allowFixedCols) || newTableWidth + colWidth <= containerWidth;
-                if (isVisible && !hasAllVisibleColumns) {
+                if (isVisible) {
                     newTableWidth += colWidth;
-                    set(col, 'isVisible', true); // ETWA
-                    set(col, 'width', colWidth); // ETWA
                     visibleColumns.pushObject(col);
-                    // Prevent unwanted panning behavior on mobile that occurs with more than 2 columns
-                    const isMobile = this.media.isMobile;
+                    const isMobile = this.args.isMobile;
                     if (isMobile && visibleColumns.length === 2) {
-                        hasAllVisibleColumns = true; // ETWA
-                        // break; // pre-ETWA
+                        break;
                     }
                 } else {
-                    set(col, 'isVisible', false); // ETWA
-                    set(col, 'width', 0); // ETWA
-                    // Once you find a column that wont fit, don't try and make anymore visible
-                    hasAllVisibleColumns = true; // ETWA
-                    // break; // pre-ETWA
+                    break;
                 }
-            } else {
-                set(col, 'isVisible', false); // ETWA
-                set(col, 'width', 0); // ETWA
             }
         }
 

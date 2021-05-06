@@ -29,11 +29,11 @@
         "ember-cli-htmlbars": "^4.2.0",
         "ember-cli-sass": "^10.0.1",
         "ember-cli-string-helpers": "^4.0.6",
-        "ember-cli-typescript": "^3.1.2",
+        "ember-cli-typescript": "^4.1.0",
         "ember-did-resize-modifier": "^1.0.0",
         "ember-responsive": "^3.0.5",
-        "ember-table": "2.2.3",
-        "ember-truth-helpers": "^2.1.0",
+        "ember-table": "^3.0.1",
+        "ember-truth-helpers": "^3.0.0",
         "ember-useragent": "0.9.1"
     },
     "devDependencies": {

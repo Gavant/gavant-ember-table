@@ -27,7 +27,7 @@
     >
         {{#if this.showHeader}}
             <T.head
-                @columns={{@columns}}
+                @columns={{this.visibleColumns}}
                 @enableResize={{this.enableResize}}
                 @enableReorder={{this.enableReorder}}
                 @widthConstraint={{this.widthConstraint}}
@@ -47,14 +47,13 @@
                             Row.columnValue.headerClassNames
                             (if Row.columnValue.isFixedLeft " data-table-col-fixed-left")
                             (if (eq Row.columnValue this.firstVisibleNonFixedColumn) " data-table-col-first-nonfixed")
-                            (if (not Row.columnValue.isVisible) " is-hidden")
                             (if
                                 (and this.canPanRight (eq Row.columnValue this.visibleColumns.lastObject))
                                 " data-table-col-has-pan-btn"
                             )
                         }} as |columnValue columnMeta|
                     >
-                        {{#if (and columnValue.headerComponent columnValue.isVisible)}}
+                        {{#if columnValue.headerComponent}}
                             {{#component
                                 columnValue.headerComponent
                                 columnValue=columnValue
@@ -67,7 +66,7 @@
                                     <EmberTh::ResizeHandle @columnMeta={{columnMeta}} />
                                 {{/if}}
                             {{/component}}
-                        {{else if columnValue.isVisible}}
+                        {{else}}
                             {{or columnValue.name (html-safe "&nbsp;")}}
                             <EmberTh::SortIndicator @columnMeta={{columnMeta}} />
                             {{#if this.enableUserResize}}
@@ -132,7 +131,7 @@
                     @onDoubleClick={{@onCellDoubleClick
                     }} as |cellValue columnValue rowValue cellMeta columnMeta rowMeta|
                 >
-                    {{#if (and columnValue.cellComponent columnValue.isVisible)}}
+                    {{#if columnValue.cellComponent}}
                         {{#component
                             columnValue.cellComponent
                             cellValue=cellValue
@@ -145,7 +144,7 @@
                         }}
                             {{cellValue}}
                         {{/component}}
-                    {{else if columnValue.isVisible}}
+                    {{else}}
                         {{cellValue}}
                     {{/if}}
                 </Row.cell>
@@ -160,7 +159,7 @@
                         (if (eq Row.columnValue this.firstVisibleNonFixedColumn) " data-table-col-first-nonfixed")
                     }} as |cellValue columnValue rowValue cellMeta columnMeta rowMeta|
                 >
-                    {{#if (and columnValue.footerComponent columnValue.isVisible)}}
+                    {{#if columnValue.footerComponent}}
                         {{#component
                             columnValue.footerComponent
                             cellValue=(or (get rowValue columnValue.footerValuePath) cellValue)
@@ -173,7 +172,7 @@
                         }}
                             {{cellValue}}
                         {{/component}}
-                    {{else if columnValue.isVisible}}
+                    {{else}}
                         {{cellValue}}
                     {{/if}}
                 </Row.cell>
