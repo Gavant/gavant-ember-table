@@ -1705,10 +1705,10 @@
   resolved "https://registry.yarnpkg.com/@types/ember__template/-/ember__template-3.0.0.tgz#d499ebf000faa371c1c98124633b9864be69b968"
   integrity sha512-aWNg/kL2QToE0fwI8MVgAr2upWyAUwqRv2sp3CpypsMTOC1lZizIehz8QI6w1m1+Eh1WYs/89gvuM3mTc4OyIw==
 
-"@types/ember__test-helpers@^0.7.9":
-  version "0.7.9"
-  resolved "https://registry.yarnpkg.com/@types/ember__test-helpers/-/ember__test-helpers-0.7.9.tgz#d35b8fce419acc1e279c331fdb28a2341ee2956c"
-  integrity sha512-E94qkM9zS0qvJ0pXyN0moYEtrCfPAq8mhvuQNCPsXiZMUhFhNfpYTbldn7esBmgqhrA0CInCtNemmdvfkcL6zw==
+"@types/ember__test-helpers@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@types/ember__test-helpers/-/ember__test-helpers-2.0.0.tgz#b4b8323693789670720f55a51b1f8e6cd6bfbe29"
+  integrity sha512-2FyfVCb0W2OJ2OeZmg5QxLk0K7n5BCsEU8D481y7XNEVkzyQGR3U64umVf0eME/tpW3papAZ+JwS01HtGOSbgA==
   dependencies:
     "@types/ember" "*"
     "@types/ember__application" "*"
@@ -1758,6 +1758,11 @@
     "@types/express-serve-static-core" "^4.17.18"
     "@types/qs" "*"
     "@types/serve-static" "*"
+
+"@types/faker@^5.5.4":
+  version "5.5.4"
+  resolved "https://registry.yarnpkg.com/@types/faker/-/faker-5.5.4.tgz#0dd8fb8ece85db3a35f5d5dae4531e7e4d92beef"
+  integrity sha512-1XxsrH9DjjjhLdi0J4MoGXcrjAmbTn1HR4Jyxs0MQVyESo9p7+AkHIl3Nd3jsUnoNzRCB8iFX/V9PLIPo73IeA==
 
 "@types/fs-extra@^5.0.5":
   version "5.1.0"
@@ -6866,6 +6871,11 @@ expand-tilde@^2.0.0, expand-tilde@^2.0.2:
   dependencies:
     homedir-polyfill "^1.0.1"
 
+expect-type@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/expect-type/-/expect-type-0.11.0.tgz#bce1a3e283f0334eedb39699b57dd27be7009cc1"
+  integrity sha512-hkObxepDKhTYloH/UZoxYTT2uUzdhvDEwAi0oqdk29XEkHF8p+5ZRpX/BZES2PtGN9YgyEqutIjXfnL9iMflMw==
+
 express@^4.10.7, express@^4.17.1:
   version "4.17.1"
   resolved "https://registry.yarnpkg.com/express/-/express-4.17.1.tgz#4491fc38605cf51f8629d39c2b5d026f98a4c134"
@@ -6959,6 +6969,11 @@ extsprintf@^1.2.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.4.0.tgz#e2689f8f356fad62cca65a3a91c5df5f9551692f"
   integrity sha1-4mifjzVvrWLMplo6kcXfX5VRaS8=
+
+faker@^5.5.3:
+  version "5.5.3"
+  resolved "https://registry.yarnpkg.com/faker/-/faker-5.5.3.tgz#c57974ee484431b25205c2c8dc09fda861e51e0e"
+  integrity sha512-wLTv2a28wjUyWkbnX7u/ABZBkUkIF2fCd73V6P2oFqEGEktDfzWx4UxrSqtPRw0xPRAcjeAOIiJWqZm3pP4u3g==
 
 fast-deep-equal@^3.1.1:
   version "3.1.1"

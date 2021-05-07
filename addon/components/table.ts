@@ -259,7 +259,7 @@ export interface TBodyArgs<T> {
      * @type {(T[] | T | null)}
      * @memberof TBodyArgs
      */
-    selection: T[] | T | null;
+    selection?: T[] | T | null;
 
     /**
      * A function that will override how selection is compared to row value.
@@ -426,7 +426,7 @@ export interface THeadArgs {
      * @type {TableSort[]}
      * @memberof THeadArgs
      */
-    sorts: TableSort[];
+    sorts?: TableSort[];
 
     /**
      * Sets a constraint on the table's size, such that it must be greater than, less than, or equal to the size of the containing element.
@@ -434,7 +434,7 @@ export interface THeadArgs {
      * @type {WidthConstraint}
      * @memberof THeadArgs
      */
-    widthConstraint: WidthConstraint;
+    widthConstraint?: WidthConstraint;
 }
 
 export interface TableArgs<R, F> extends TBodyArgs<R>, THeadArgs {

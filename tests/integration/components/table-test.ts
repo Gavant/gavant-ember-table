@@ -1,24 +1,47 @@
-import { render } from '@ember/test-helpers';
+import { click, render, scrollTo, settled, setupOnerror } from '@ember/test-helpers';
 
 import { setupRenderingTest } from 'ember-qunit';
+import { TablePage } from 'ember-table/test-support';
 
+import { ColumnValue } from '@gavant/ember-table/components/table';
+
+import { generateRows } from 'dummy/tests/helpers/generate-rows';
 import hbs from 'htmlbars-inline-precompile';
 import { module, test } from 'qunit';
 
 module('Integration | Component | table', function (hooks) {
     setupRenderingTest(hooks);
 
-    hooks.beforeEach(function (this: any, assert) {
+    hooks.beforeEach(function (this: any) {
         this.set('rows', [{ id: 1, name: 'One' }]);
-        this.set('columns', [{ valuePath: 'id' }, { valuePath: 'name' }]);
+        const columns: ColumnValue[] = [
+            { valuePath: 'id', name: 'ID', width: 300, staticWidth: 300 },
+            { valuePath: 'name', name: 'Name', width: 300, staticWidth: 300 },
+            { valuePath: 'date', name: 'Date', width: 300, staticWidth: 300 },
+            { valuePath: 'test', name: 'Test', width: 300, staticWidth: 300 },
+            { valuePath: 'test1', name: 'Test1', width: 300, staticWidth: 300 },
+            { valuePath: 'test2', name: 'Test2', width: 300, staticWidth: 300 }
+        ];
+        this.set('columns', columns);
     });
 
     test('No results message when no rows passed in', async function (assert) {
+        setupOnerror(function (err) {
+            assert.ok(err);
+        });
         this.set('rows', []);
         this.set('columns', []);
         await render(hbs`<Table @rows={{this.rows}} @columns={{this.columns}}/>`);
 
         assert.equal(this.element.textContent?.trim(), 'No results found');
+    });
+
+    test('Rows are rendered correctly', async function (assert) {
+        await render(hbs`<Table @rows={{this.rows}} @columns={{this.columns}} />`);
+
+        const table = new TablePage();
+        assert.equal(table.headers.length, 2, 'renders the correct number of columns');
+        assert.equal(table.rows.length, 1, 'renders the correct number of rows');
     });
 
     test('Table striping class applied correctly', async function (assert) {
@@ -54,9 +77,60 @@ module('Integration | Component | table', function (hooks) {
         assert.dom('.ember-table-overflow').hasClass('table-sm');
     });
 
-    test('Small table class applied correctly', async function (assert) {
-        await render(hbs`<Table @rows={{this.rows}} @columns={{this.columns}} @small={{true}} />`);
+    test('Not all columns are shown if in small screen', async function (assert) {
+        await render(hbs`<Table @rows={{this.rows}} @columns={{this.columns}} />`);
 
-        assert.dom('.ember-table-overflow').hasClass('table-sm');
+        assert.dom('th').exists({ count: 2 });
+    });
+
+    test('Different columns are shown if column arrow is clicked', async function (this: any, assert) {
+        const columns = this.columns;
+        await render(hbs`<Table @rows={{this.rows}} @columns={{this.columns}} />`);
+
+        assert.dom('.data-table-col-pan-btn-right').exists();
+        const thElements = document.querySelectorAll('th');
+        thElements.forEach((th, index) => {
+            assert.dom(th).containsText(columns[index].name);
+        });
+
+        await click('.data-table-col-pan-btn-right');
+        const newThElements = document.querySelectorAll('th');
+        newThElements.forEach((th, index) => {
+            assert.dom(th).containsText(columns[index + 1].name);
+        });
+        assert.dom('.data-table-col-pan-btn-right').exists();
+        assert.dom('.data-table-col-pan-btn-left').exists();
+    });
+
+    test('Pages down correctly', async function (this: any, assert) {
+        const rowCount = 10;
+        this.set('loadMoreRows', () => {
+            return new Promise((resolve) => {
+                const items = [{ id: 'test', name: 'Test' }];
+                this.set('rows', [...this.rows, ...items]);
+                this.set('hasMoreRows', false);
+                resolve(this.rows);
+            });
+        });
+        this.set('hasMoreRows', true);
+        this.set('rows', generateRows(rowCount));
+        await render(
+            hbs`<Table @rows={{this.rows}} @columns={{this.columns}} @loadMoreRows={{this.loadMoreRows}} @hasMoreRows={{this.hasMoreRows}} />`
+        );
+
+        const table = new TablePage();
+        table.setContext(this);
+
+        assert.equal(table.rows.length, 10);
+        const container = document.querySelector('#ember-testing-container');
+        if (container) {
+            await scrollTo(container, 0, 1000);
+        }
+
+        await settled();
+
+        assert.equal(table.rows.length, 11);
+
+        assert.equal(table.getCell(table.rows.length - 1, 0).text.trim(), 'test', 'correct last row rendered');
     });
 });
