@@ -43,6 +43,9 @@
       "ember-table/test-support": [
         "node_modules/ember-table/addon-test-support"
       ],
+      "ember-table/test-support/*": [
+        "node_modules/ember-table/addon-test-support/*"
+      ],
       "@glimmer/tracking": [
         "node_modules/ember-cached-decorator-polyfill",
         "node_modules/@glimmer/tracking/dist/types"

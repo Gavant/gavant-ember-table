@@ -5,6 +5,8 @@ import { TablePage } from 'ember-table/test-support';
 
 import { ColumnValue } from '@gavant/ember-table/components/table';
 
+import 'qunit-dom';
+
 import { generateRows } from 'dummy/tests/helpers/generate-rows';
 import hbs from 'htmlbars-inline-precompile';
 import { module, test } from 'qunit';
