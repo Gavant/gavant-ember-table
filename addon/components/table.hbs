@@ -1,16 +1,8 @@
 {{! template-lint-disable no-inline-styles }}
 <div
     class="data-table
-
-
         {{if this.hasHiddenColumns " has-hidden-columns"}}
-
-
-
         {{if @isServerRendered " is-server-rendered"}}
-
-
-
         {{if this.isColumnsPanned " is-columns-panned"}}"
     id={{this.elementId}}
     ...attributes
@@ -23,11 +15,12 @@
         @tableId={{this.tableId}}
         @tableClasses={{this.tableClassNames}}
         @headerStickyOffset={{this.headerStickyOffset}}
-        @footerStickyOffset={{this.footerStickyOffset}} as |T|
+        @footerStickyOffset={{this.footerStickyOffset}}
+        as |T|
     >
         {{#if this.showHeader}}
             <T.head
-                @columns={{@columns}}
+                @columns={{this.visibleColumns}}
                 @enableResize={{this.enableResize}}
                 @enableReorder={{this.enableReorder}}
                 @widthConstraint={{this.widthConstraint}}
@@ -39,7 +32,8 @@
                 @onUpdateSorts={{if this.enableSort this.onUpdateSorts}}
                 @onReorder={{@onReorder}}
                 @onResize={{@onResize}}
-                @sorts={{this.sorts}} as |Head|
+                @sorts={{this.sorts}}
+                as |Head|
             >
                 <Head.row as |Row|>
                     <Row.cell
@@ -47,14 +41,14 @@
                             Row.columnValue.headerClassNames
                             (if Row.columnValue.isFixedLeft " data-table-col-fixed-left")
                             (if (eq Row.columnValue this.firstVisibleNonFixedColumn) " data-table-col-first-nonfixed")
-                            (if (not Row.columnValue.isVisible) " is-hidden")
                             (if
                                 (and this.canPanRight (eq Row.columnValue this.visibleColumns.lastObject))
-                                " data-table-col-has-pan-btn"
+                                "data-table-col-has-pan-btn"
                             )
-                        }} as |columnValue columnMeta|
+                        }}
+                        as |columnValue columnMeta|
                     >
-                        {{#if (and columnValue.headerComponent columnValue.isVisible)}}
+                        {{#if columnValue.headerComponent}}
                             {{#component
                                 columnValue.headerComponent
                                 columnValue=columnValue
@@ -67,7 +61,7 @@
                                     <EmberTh::ResizeHandle @columnMeta={{columnMeta}} />
                                 {{/if}}
                             {{/component}}
-                        {{else if columnValue.isVisible}}
+                        {{else}}
                             {{or columnValue.name (html-safe "&nbsp;")}}
                             <EmberTh::SortIndicator @columnMeta={{columnMeta}} />
                             {{#if this.enableUserResize}}
@@ -108,18 +102,21 @@
             @estimateRowHeight={{this.estimateRowHeight}}
             @idForFirstItem={{@idForFirstItem}}
             @key={{this.key}}
-            @renderAll={{this.renderAllRows}}
+            @renderAll={{this.renderAll}}
             @containerSelector={{this.containerSelector}}
             @firstReached={{this.onFirstReached}}
             @lastReached={{this.onLastReached}}
             @tableMeta={{@tableMeta}}
             @rowComponent={{this.rowComponent}}
-            @staticHeight={{@staticHeight}} as |Body|
+            @checkboxSelectionMode={{this.checkboxSelectionMode}}
+            @staticHeight={{@staticHeight}}
+            as |Body|
         >
             <Body.row
                 class={{Body.rowValue.rowClassNames}}
                 @onClick={{@onRowClick}}
-                @onDoubleClick={{@onRowDoubleClick}} as |Row|
+                @onDoubleClick={{@onRowDoubleClick}}
+                as |Row|
             >
                 <Row.cell
                     class={{concat
@@ -129,10 +126,10 @@
                     }}
                     @tableMeta={{@tableMeta}}
                     @onClick={{@onCellClick}}
-                    @onDoubleClick={{@onCellDoubleClick
-                    }} as |cellValue columnValue rowValue cellMeta columnMeta rowMeta|
+                    @onDoubleClick={{@onCellDoubleClick}}
+                    as |cellValue columnValue rowValue cellMeta columnMeta rowMeta|
                 >
-                    {{#if (and columnValue.cellComponent columnValue.isVisible)}}
+                    {{#if columnValue.cellComponent}}
                         {{#component
                             columnValue.cellComponent
                             cellValue=cellValue
@@ -145,7 +142,7 @@
                         }}
                             {{cellValue}}
                         {{/component}}
-                    {{else if columnValue.isVisible}}
+                    {{else}}
                         {{cellValue}}
                     {{/if}}
                 </Row.cell>
@@ -158,9 +155,10 @@
                         Row.columnValue.footerClassNames
                         (if Row.columnValue.isFixedLeft " data-table-col-fixed-left")
                         (if (eq Row.columnValue this.firstVisibleNonFixedColumn) " data-table-col-first-nonfixed")
-                    }} as |cellValue columnValue rowValue cellMeta columnMeta rowMeta|
+                    }}
+                    as |cellValue columnValue rowValue cellMeta columnMeta rowMeta|
                 >
-                    {{#if (and columnValue.footerComponent columnValue.isVisible)}}
+                    {{#if columnValue.footerComponent}}
                         {{#component
                             columnValue.footerComponent
                             cellValue=(or (get rowValue columnValue.footerValuePath) cellValue)
@@ -173,7 +171,7 @@
                         }}
                             {{cellValue}}
                         {{/component}}
-                    {{else if columnValue.isVisible}}
+                    {{else}}
                         {{cellValue}}
                     {{/if}}
                 </Row.cell>

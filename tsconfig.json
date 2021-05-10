@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2017",
+    "target": "es2020",
     "allowJs": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
@@ -40,6 +40,13 @@
       "@gavant/ember-table/test-support/*": [
         "addon-test-support/*"
       ],
+      "ember-table/test-support": [
+        "node_modules/ember-table/addon-test-support"
+      ],
+      "@glimmer/tracking": [
+        "node_modules/ember-cached-decorator-polyfill",
+        "node_modules/@glimmer/tracking/dist/types"
+      ],
       "*": [
         "types/*"
       ]
@@ -51,6 +58,7 @@
     "tests/**/*",
     "types/**/*",
     "test-support/**/*",
-    "addon-test-support/**/*"
+    "addon-test-support/**/*",
+    "node_modules/ember-table/addon-test-support"
   ]
 }

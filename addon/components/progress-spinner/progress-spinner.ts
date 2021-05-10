@@ -1,4 +1,5 @@
 import Component from '@ember/component';
+
 // @ts-ignore: Ignore import of compiled template
 import layout from '@gavant/ember-table/templates/components/progress-spinner/progress-spinner';
 

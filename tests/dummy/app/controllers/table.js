@@ -4,8 +4,11 @@ import { action } from '@ember/object';
 import { later } from '@ember/runloop';
 import { tracked } from '@glimmer/tracking';
 import rsvp from 'rsvp';
+import { inject as service } from '@ember/service';
 
 class TableController extends Controller {
+    @service media;
+
     @tracked foobar = 'bar';
     @tracked expandedRows = A([]);
     @tracked hasMore = true;

@@ -12,7 +12,6 @@
         {
             "files": "*.hbs",
             "options": {
-                "parser": "glimmer",
                 "singleQuote": false
             }
         }
