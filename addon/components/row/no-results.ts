@@ -1,9 +1,11 @@
-import Component from '@ember/component';
-import { readOnly } from '@ember/object/computed';
-// @ts-ignore: Ignore import of compiled template
+import Component from '@glimmer/component';
+
 import layout from '@gavant/ember-table/templates/components/row/no-results';
 
-export default class RowNoResultsComponent extends Component {
+interface RowNoResultsArgs {
+    columns: any[];
+}
+export default class RowNoResultsComponent extends Component<RowNoResultsArgs> {
     layout = layout;
     tagName: string = 'tr';
     classNames: string[] = ['et-tr', 'data-table-row-no-results'];
@@ -11,5 +13,7 @@ export default class RowNoResultsComponent extends Component {
 
     //readonly attributes
 
-    @readOnly('columns.length') colspan?: number;
+    get colspan() {
+        return this.args.columns.length;
+    }
 }
