@@ -1,6 +1,6 @@
 # gavant-ember-table
 
-![CI](https://img.shields.io/github/workflow/status/Gavant/gavant-ember-table/ci.yml/badge.svg)
+![CI](https://github.com/gavant/gavant-ember-table/actions/workflows/ci.yml/badge.svg)
 
 Data tables built using [ember-table](https://github.com/Addepar/ember-table)
 
