@@ -1,16 +1,8 @@
 {{! template-lint-disable no-inline-styles }}
 <div
     class="data-table
-
-
         {{if this.hasHiddenColumns " has-hidden-columns"}}
-
-
-
         {{if @isServerRendered " is-server-rendered"}}
-
-
-
         {{if this.isColumnsPanned " is-columns-panned"}}"
     id={{this.elementId}}
     ...attributes
@@ -23,7 +15,8 @@
         @tableId={{this.tableId}}
         @tableClasses={{this.tableClassNames}}
         @headerStickyOffset={{this.headerStickyOffset}}
-        @footerStickyOffset={{this.footerStickyOffset}} as |T|
+        @footerStickyOffset={{this.footerStickyOffset}}
+        as |T|
     >
         {{#if this.showHeader}}
             <T.head
@@ -39,7 +32,8 @@
                 @onUpdateSorts={{if this.enableSort this.onUpdateSorts}}
                 @onReorder={{@onReorder}}
                 @onResize={{@onResize}}
-                @sorts={{this.sorts}} as |Head|
+                @sorts={{this.sorts}}
+                as |Head|
             >
                 <Head.row as |Row|>
                     <Row.cell
@@ -49,9 +43,10 @@
                             (if (eq Row.columnValue this.firstVisibleNonFixedColumn) " data-table-col-first-nonfixed")
                             (if
                                 (and this.canPanRight (eq Row.columnValue this.visibleColumns.lastObject))
-                                " data-table-col-has-pan-btn"
+                                "data-table-col-has-pan-btn"
                             )
-                        }} as |columnValue columnMeta|
+                        }}
+                        as |columnValue columnMeta|
                     >
                         {{#if columnValue.headerComponent}}
                             {{#component
@@ -114,12 +109,14 @@
             @tableMeta={{@tableMeta}}
             @rowComponent={{this.rowComponent}}
             @checkboxSelectionMode={{this.checkboxSelectionMode}}
-            @staticHeight={{@staticHeight}} as |Body|
+            @staticHeight={{@staticHeight}}
+            as |Body|
         >
             <Body.row
                 class={{Body.rowValue.rowClassNames}}
                 @onClick={{@onRowClick}}
-                @onDoubleClick={{@onRowDoubleClick}} as |Row|
+                @onDoubleClick={{@onRowDoubleClick}}
+                as |Row|
             >
                 <Row.cell
                     class={{concat
@@ -129,8 +126,8 @@
                     }}
                     @tableMeta={{@tableMeta}}
                     @onClick={{@onCellClick}}
-                    @onDoubleClick={{@onCellDoubleClick
-                    }} as |cellValue columnValue rowValue cellMeta columnMeta rowMeta|
+                    @onDoubleClick={{@onCellDoubleClick}}
+                    as |cellValue columnValue rowValue cellMeta columnMeta rowMeta|
                 >
                     {{#if columnValue.cellComponent}}
                         {{#component
@@ -158,7 +155,8 @@
                         Row.columnValue.footerClassNames
                         (if Row.columnValue.isFixedLeft " data-table-col-fixed-left")
                         (if (eq Row.columnValue this.firstVisibleNonFixedColumn) " data-table-col-first-nonfixed")
-                    }} as |cellValue columnValue rowValue cellMeta columnMeta rowMeta|
+                    }}
+                    as |cellValue columnValue rowValue cellMeta columnMeta rowMeta|
                 >
                     {{#if columnValue.footerComponent}}
                         {{#component

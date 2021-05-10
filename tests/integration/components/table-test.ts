@@ -94,6 +94,7 @@ module('Integration | Component | table', function (hooks) {
         });
 
         await click('.data-table-col-pan-btn-right');
+
         const newThElements = document.querySelectorAll('th');
         newThElements.forEach((th, index) => {
             assert.dom(th).containsText(columns[index + 1].name);
@@ -132,5 +133,44 @@ module('Integration | Component | table', function (hooks) {
         assert.equal(table.rows.length, 11);
 
         assert.equal(table.getCell(table.rows.length - 1, 0).text.trim(), 'test', 'correct last row rendered');
+    });
+
+    test('Pages up correctly', async function (this: any, assert) {
+        const rowCount = 10;
+        this.set('loadPreviousRows', () => {
+            return new Promise((resolve) => {
+                const items = [{ id: 'test', name: 'Test' }];
+                this.set('rows', [...items, ...this.rows]);
+                this.set('hasMoreRows', false);
+                resolve(this.rows);
+            });
+        });
+        this.set('hasMoreRows', true);
+        this.set('rows', generateRows(rowCount));
+        this.set('idForFirstItem', this.rows[5].id);
+
+        await render(
+            hbs`<Table @rows={{this.rows}} @columns={{this.columns}} @loadPreviousRows={{this.loadPreviousRows}} @hasMoreRows={{this.hasMoreRows}} @idForFirstItem={{this.idForFirstItem}} @key="id" />`
+        );
+
+        const table = new TablePage();
+        table.setContext(this);
+
+        assert.equal(table.rows.length, 5);
+        const container = document.querySelector('#ember-testing-container');
+        if (container) {
+            await scrollTo(container, 0, -1000);
+        }
+
+        await settled();
+
+        assert.equal(table.rows.length, 11);
+        assert.equal(table.getCell(0, 0).text.trim(), 'test', 'correct first row rendered');
+    });
+
+    test('headerStickyOffset works', async function (assert) {
+        await render(hbs`<Table @rows={{this.rows}} @columns={{this.columns}} @headerStickyOffset={{50}}/>`);
+
+        assert.equal(this.element.textContent?.trim(), 'No results found');
     });
 });
