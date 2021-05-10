@@ -588,12 +588,13 @@ export interface TableArgs<R, F> extends TBodyArgs<R>, THeadArgs {
     tableClass?: string;
 
     /**
-     * The height style given to the table. i.e. '300px'
+     * The height style given to the table. i.e. '50vh' or `200`
+     * if a number is passed in, we automatically assume its in pixels
      *
      * @type {string}
      * @memberof TableArgs
      */
-    tableHeight?: string;
+    tableHeight?: string | number;
 
     /**
      * When column headers are "sticky", this sets their offset (in pixels) from the top of the scrollable container
@@ -638,7 +639,8 @@ class TableComponent<R, F> extends Component<TableArgs<R, F>> {
      * @memberof TableComponent
      */
     get height(): SafeString {
-        return htmlSafe(this.tableHeight ? `height: ${this.tableHeight};` : '');
+        const isNumber = typeof this.tableHeight === 'number';
+        return htmlSafe(this.tableHeight ? `height: ${this.tableHeight}${isNumber ? 'px' : ''};` : '');
     }
 
     @argDefault bufferSize: number = 0;
@@ -666,8 +668,8 @@ class TableComponent<R, F> extends Component<TableArgs<R, F>> {
     @argDefault small: boolean = false;
     @argDefault sortEmptyLast: boolean = false;
     @argDefault stripedRows: boolean = false;
-    @argDefault tableClass: string = 'ember-table-overflow';
-    @argDefault tableHeight: string = '';
+    @argDefault tableClass: string = '';
+    @argDefault tableHeight: string | number = '';
     @argDefault widthConstraint: string = 'lte-container';
     @argDefault headerStickyOffset: number = 0;
     @argDefault footerStickyOffset: number = 0;
@@ -850,7 +852,7 @@ class TableComponent<R, F> extends Component<TableArgs<R, F>> {
      * @memberof TableComponent
      */
     get tableClassNames(): string {
-        const classNames = A([this.tableClass]);
+        const classNames = A(['ember-table-overflow', this.tableClass]);
 
         if (!this.showHeader) {
             classNames.pushObject('table-no-header');

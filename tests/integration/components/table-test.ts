@@ -1,4 +1,4 @@
-import { click, render, scrollTo, settled, setupOnerror } from '@ember/test-helpers';
+import { click, render, scrollTo, settled } from '@ember/test-helpers';
 
 import { setupRenderingTest } from 'ember-qunit';
 import { TablePage } from 'ember-table/test-support';
@@ -26,14 +26,21 @@ module('Integration | Component | table', function (hooks) {
     });
 
     test('No results message when no rows passed in', async function (assert) {
-        setupOnerror(function (err) {
-            assert.ok(err);
-        });
         this.set('rows', []);
         this.set('columns', []);
         await render(hbs`<Table @rows={{this.rows}} @columns={{this.columns}}/>`);
 
         assert.equal(this.element.textContent?.trim(), 'No results found');
+    });
+
+    test('Custom no results message visible', async function (assert) {
+        const noResultsText = 'No results fooooool';
+        this.set('rows', []);
+        this.set('columns', []);
+        this.set('noResultsText', noResultsText);
+        await render(hbs`<Table @rows={{this.rows}} @columns={{this.columns}} @noResultsText={{this.noResultsText}}/>`);
+
+        assert.equal(this.element.textContent?.trim(), noResultsText);
     });
 
     test('Rows are rendered correctly', async function (assert) {
@@ -169,8 +176,67 @@ module('Integration | Component | table', function (hooks) {
     });
 
     test('headerStickyOffset works', async function (assert) {
-        await render(hbs`<Table @rows={{this.rows}} @columns={{this.columns}} @headerStickyOffset={{50}}/>`);
+        const offset = 50;
+        this.set('offset', offset);
+        await render(hbs`<Table @rows={{this.rows}} @columns={{this.columns}} @headerStickyOffset={{this.offset}}/>`);
 
-        assert.equal(this.element.textContent?.trim(), 'No results found');
+        const thElements = document.querySelectorAll('th');
+        thElements.forEach((th) => {
+            assert.dom(th).hasStyle({
+                top: `${offset}px`,
+                position: 'sticky'
+            });
+        });
+    });
+
+    test('footerStickyOffset works', async function (assert) {
+        const offset = 50;
+        this.set('offset', offset);
+        this.set('footerRows', [{ name: 500 }]);
+        await render(
+            hbs`<Table @rows={{this.rows}} @columns={{this.columns}}  @footerRows={{this.footerRows}} @footerStickyOffset={{this.offset}} />`
+        );
+
+        const footer = document.querySelector('tfoot');
+        const footerElements = footer?.querySelectorAll('td') ?? [];
+        footerElements.forEach((td: Element) => {
+            assert.dom(td).hasStyle({
+                bottom: `${offset}px`,
+                position: 'sticky'
+            });
+        });
+    });
+
+    test('tableHeight works with string', async function (assert) {
+        const height = '200px';
+        this.set('height', height);
+        await render(hbs`<Table @rows={{this.rows}} @columns={{this.columns}} @tableHeight={{this.height}} />`);
+
+        const table = document.querySelector('[data-test-ember-table]');
+        assert.dom(table).hasStyle({
+            height: height
+        });
+    });
+
+    test('tableHeight works with number', async function (assert) {
+        const height = 200;
+        this.set('height', height);
+        await render(hbs`<Table @rows={{this.rows}} @columns={{this.columns}} @tableHeight={{this.height}} />`);
+
+        const table = document.querySelector('[data-test-ember-table]');
+        assert.dom(table).hasStyle({
+            height: `${height}px`
+        });
+    });
+
+    test('custom table class works', async function (assert) {
+        const customTableClass = 'my-custom-table-class';
+        this.set('customTableClass', customTableClass);
+        await render(
+            hbs`<Table @rows={{this.rows}} @columns={{this.columns}} @tableClass={{this.customTableClass}} />`
+        );
+
+        const tableContainer = document.querySelector('[data-test-ember-table-overflow]');
+        assert.dom(tableContainer).hasClass(customTableClass);
     });
 });

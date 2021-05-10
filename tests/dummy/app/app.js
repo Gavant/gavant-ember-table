@@ -10,9 +10,3 @@ export default class App extends Application {
 }
 
 loadInitializers(App, config.modulePrefix);
-
-Ember.onerror = function (error) {
-    if (Ember.testing) {
-        throw error;
-    }
-};
