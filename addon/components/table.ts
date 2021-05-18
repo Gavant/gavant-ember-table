@@ -852,7 +852,7 @@ class TableComponent<R, F> extends Component<TableArgs<R, F>> {
      * @memberof TableComponent
      */
     get tableClassNames(): string {
-        const classNames = A(['ember-table-overflow', this.tableClass]);
+        const classNames = A(['table', this.tableClass]);
 
         if (!this.showHeader) {
             classNames.pushObject('table-no-header');

@@ -56,20 +56,20 @@ module('Integration | Component | table', function (hooks) {
     test('Table striping class applied correctly', async function (assert) {
         await render(hbs`<Table @rows={{this.rows}} @columns={{this.columns}} @stripedRows={{true}} />`);
 
-        assert.dom('.ember-table-overflow').hasClass('table-striped');
+        assert.dom('table').hasClass('table-striped');
     });
 
     test('Hoverable rows class applied correctly', async function (assert) {
         await render(hbs`<Table @rows={{this.rows}} @columns={{this.columns}} @hoverableRows={{true}} />`);
 
-        assert.dom('.ember-table-overflow').hasClass('table-hover');
+        assert.dom('table').hasClass('table-hover');
     });
 
     test('Clickable rows class applied correctly via onRowClick', async function (assert) {
         this.set('onRowClick', () => {});
         await render(hbs`<Table @rows={{this.rows}} @columns={{this.columns}} @onRowClick={{this.onRowClick}} />`);
 
-        assert.dom('.ember-table-overflow').hasClass('table-clickable-rows');
+        assert.dom('table').hasClass('table-clickable-rows');
     });
 
     test('Clickable rows class applied correctly via onRowDoubleClick', async function (assert) {
@@ -77,13 +77,13 @@ module('Integration | Component | table', function (hooks) {
         await render(
             hbs`<Table @rows={{this.rows}} @columns={{this.columns}} @onRowDoubleClick={{this.onRowDoubleClick}} />`
         );
-        assert.dom('.ember-table-overflow').hasClass('table-clickable-rows');
+        assert.dom('table').hasClass('table-clickable-rows');
     });
 
     test('Small table class applied correctly', async function (assert) {
         await render(hbs`<Table @rows={{this.rows}} @columns={{this.columns}} @small={{true}} />`);
 
-        assert.dom('.ember-table-overflow').hasClass('table-sm');
+        assert.dom('table').hasClass('table-sm');
     });
 
     test('Not all columns are shown if in small screen', async function (assert) {
@@ -238,7 +238,7 @@ module('Integration | Component | table', function (hooks) {
             hbs`<Table @rows={{this.rows}} @columns={{this.columns}} @tableClass={{this.customTableClass}} />`
         );
 
-        const tableContainer = document.querySelector('[data-test-ember-table-overflow]');
+        const tableContainer = document.querySelector('table');
         assert.dom(tableContainer).hasClass(customTableClass);
     });
 });
