@@ -668,7 +668,7 @@ class TableComponent<R, F> extends Component<TableArgs<R, F>> {
     @argDefault small: boolean = false;
     @argDefault sortEmptyLast: boolean = false;
     @argDefault stripedRows: boolean = false;
-    @argDefault tableClass: string = '';
+    @argDefault tableClass: string = 'table';
     @argDefault tableHeight: string | number = '';
     @argDefault widthConstraint: string = 'lte-container';
     @argDefault headerStickyOffset: number = 0;
@@ -852,7 +852,7 @@ class TableComponent<R, F> extends Component<TableArgs<R, F>> {
      * @memberof TableComponent
      */
     get tableClassNames(): string {
-        const classNames = A(['table', this.tableClass]);
+        const classNames = A([this.tableClass]);
 
         if (!this.showHeader) {
             classNames.pushObject('table-no-header');
