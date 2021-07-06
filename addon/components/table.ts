@@ -62,11 +62,9 @@ export interface TableSort {
     valuePath: string;
     isAscending: boolean;
 }
-// export interface TableMeta {
-//     [index: string]: any;
-// }
 
 type TableMeta<M> = { [P in keyof M]: M[P] };
+
 export interface ColumnMeta {
     readonly isLeaf: boolean;
     readonly isFixed: boolean;
