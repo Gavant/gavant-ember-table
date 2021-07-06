@@ -4,8 +4,8 @@ import Component from '@glimmer/component';
 import { SelectionMode, TableAPI, TableMeta } from '@gavant/ember-table/components/table';
 
 export interface TableRowArgs {
-    api: TableAPI<any>;
-    tableMeta?: TableMeta;
+    api: TableAPI<any, any>;
+    tableMeta?: TableMeta<any>;
     rowSelectionMode: SelectionMode;
     onClick?(...args: any[]): void;
     onDoubleClick?(...args: any[]): void;
