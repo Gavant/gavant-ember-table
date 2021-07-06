@@ -62,9 +62,11 @@ export interface TableSort {
     valuePath: string;
     isAscending: boolean;
 }
-export interface TableMeta {
-    [index: string]: any;
-}
+// export interface TableMeta {
+//     [index: string]: any;
+// }
+
+type TableMeta<M> = { [P in keyof M]: M[P] };
 export interface ColumnMeta {
     readonly isLeaf: boolean;
     readonly isFixed: boolean;
@@ -106,30 +108,39 @@ interface RowMetaSelect {
     single?: boolean;
 }
 
-export interface RowClickEvent<T> {
+export interface RowClickEvent<T, TM> {
     event: MouseEvent;
     rowValue: T;
     rowMeta: RowMeta<T>;
-    tableMeta?: TableMeta;
+    tableMeta?: TableMeta<TM>;
 }
 
-export interface TableAPI<T> {
-    cells: TableCell<T>[];
+export interface TableAPI<T, TM> {
+    cells: TableCell<T, TM>[];
     rowMeta: RowMeta<T>;
     rowValue: T;
     isHeader: boolean;
 }
 
-export interface TableCell<T> {
+export interface TableCell<T, TM> {
     columnMeta: ColumnMeta;
     columnValue: ColumnValue;
     rowMeta: RowMeta<T>;
     rowValue: T;
     cellValue: any;
-    tableMeta?: TableMeta;
+    tableMeta?: TableMeta<TM>;
 }
 
-export interface TBodyArgs<T> {
+/**
+ * T - Table rows
+ * TM - Table Meta
+ *
+ * @export
+ * @interface TBodyArgs
+ * @template T
+ * @template TM
+ */
+export interface TBodyArgs<T, TM> {
     /**
      * The number of extra rows to render on either side of the table's viewport
      *
@@ -284,10 +295,10 @@ export interface TBodyArgs<T> {
      * @type {TableMeta}
      * @memberof TBodyArgs
      */
-    tableMeta?: TableMeta;
+    tableMeta?: TableMeta<TM>;
 }
 
-export interface THeadArgs {
+export interface THeadArgs<TM> {
     /**
      * The column definitions for the table
      *
@@ -442,7 +453,7 @@ export interface THeadArgs {
      * @type {TableMeta}
      * @memberof TBodyArgs
      */
-    tableMeta?: TableMeta;
+    tableMeta?: TableMeta<TM>;
 
     /**
      * Sets a constraint on the table's size, such that it must be greater than, less than, or equal to the size of the containing element.
@@ -453,7 +464,7 @@ export interface THeadArgs {
     widthConstraint?: WidthConstraint;
 }
 
-export interface TableArgs<R, F> extends TBodyArgs<R>, THeadArgs {
+export interface TableArgs<R, F, TM> extends TBodyArgs<R, TM>, THeadArgs<TM> {
     /**
      * Load previous rows of items
      *
@@ -473,7 +484,7 @@ export interface TableArgs<R, F> extends TBodyArgs<R>, THeadArgs {
      *
      * @memberof TableArgs
      */
-    onRowClick?: <T>(rowClickEvent: RowClickEvent<T>) => void;
+    onRowClick?: <T>(rowClickEvent: RowClickEvent<T, TM>) => void;
 
     /**
      * Event to handle double click on row
@@ -568,7 +579,7 @@ export interface TableArgs<R, F> extends TBodyArgs<R>, THeadArgs {
      * @type {TableMeta}
      * @memberof TBodyArgs
      */
-    tableMeta?: TableMeta;
+    tableMeta?: TableMeta<TM>;
 
     /**
      * The footer rows to be displayed. i.e. for a table with a 'subtotal' column:
@@ -637,7 +648,7 @@ export interface TableArgs<R, F> extends TBodyArgs<R>, THeadArgs {
     footerStickyOffset?: number;
 }
 
-class TableComponent<R, F> extends Component<TableArgs<R, F>> {
+class TableComponent<R, F, TM> extends Component<TableArgs<R, F, TM>> {
     //ember-table's resizing must be enabled in order for fill-mode auto column
     //resizing to work, even if you don't want to allow user-invoked resizing
     readonly enableResize: boolean = true;
@@ -924,7 +935,7 @@ class TableComponent<R, F> extends Component<TableArgs<R, F>> {
      *
      * @memberof TableComponent
      */
-    constructor(owner: unknown, args: TableArgs<R, F>) {
+    constructor(owner: unknown, args: TableArgs<R, F, TM>) {
         super(owner, args);
 
         assert('@rows is not an instanceof Array.', args.rows instanceof Array);
