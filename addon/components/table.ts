@@ -63,7 +63,7 @@ export interface TableSort {
     isAscending: boolean;
 }
 
-type TableMeta<M> = { [P in keyof M]: M[P] };
+export type TableMeta<M> = { [P in keyof M]: M[P] };
 
 export interface ColumnMeta {
     readonly isLeaf: boolean;
