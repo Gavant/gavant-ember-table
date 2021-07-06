@@ -62,7 +62,9 @@ export interface TableSort {
     valuePath: string;
     isAscending: boolean;
 }
-
+export interface TableMeta {
+    [index: string]: any;
+}
 export interface ColumnMeta {
     readonly isLeaf: boolean;
     readonly isFixed: boolean;
@@ -124,11 +126,9 @@ export interface TableCell<T> {
     rowMeta: RowMeta<T>;
     rowValue: T;
     cellValue: any;
+    tableMeta?: TableMeta;
 }
 
-export interface TableMeta {
-    [index: string]: any;
-}
 export interface TBodyArgs<T> {
     /**
      * The number of extra rows to render on either side of the table's viewport
@@ -277,6 +277,14 @@ export interface TBodyArgs<T> {
      * @memberof TBodyArgs
      */
     staticHeight?: boolean;
+
+    /**
+     * Table meta object - this is used to pass actions and data to any part of the table from outside
+     *
+     * @type {TableMeta}
+     * @memberof TBodyArgs
+     */
+    tableMeta?: TableMeta;
 }
 
 export interface THeadArgs {
@@ -429,6 +437,14 @@ export interface THeadArgs {
     sorts?: TableSort[];
 
     /**
+     * Table meta object - this is used to pass actions and data to any part of the table from outside
+     *
+     * @type {TableMeta}
+     * @memberof TBodyArgs
+     */
+    tableMeta?: TableMeta;
+
+    /**
      * Sets a constraint on the table's size, such that it must be greater than, less than, or equal to the size of the containing element.
      *
      * @type {WidthConstraint}
@@ -545,6 +561,14 @@ export interface TableArgs<R, F> extends TBodyArgs<R>, THeadArgs {
      * @memberof TableArgs
      */
     small?: boolean;
+
+    /**
+     * Table meta object - this is used to pass actions and data to any part of the table from outside
+     *
+     * @type {TableMeta}
+     * @memberof TBodyArgs
+     */
+    tableMeta?: TableMeta;
 
     /**
      * The footer rows to be displayed. i.e. for a table with a 'subtotal' column:
