@@ -574,8 +574,8 @@ export interface TableArgs<R, F, TM> extends TBodyArgs<R, TM>, THeadArgs<TM> {
     /**
      * Table meta object - this is used to pass actions and data to any part of the table from outside
      *
-     * @type {TableMeta}
-     * @memberof TBodyArgs
+     * @type {TableMeta<TM>}
+     * @memberof TableArgs
      */
     tableMeta?: TableMeta<TM>;
 
