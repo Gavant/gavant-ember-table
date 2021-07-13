@@ -644,6 +644,14 @@ export interface TableArgs<R, F, TM> extends TBodyArgs<R, TM>, THeadArgs<TM> {
      * @memberof TableArgs
      */
     footerStickyOffset?: number;
+
+    /**
+     * Component name to render instead of the default row component
+     *
+     * @type {string}
+     * @memberof TableArgs
+     */
+    rowComponent?: string;
 }
 
 class TableComponent<R, F, TM> extends Component<TableArgs<R, F, TM>> {

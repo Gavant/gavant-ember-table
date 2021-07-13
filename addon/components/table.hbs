@@ -60,6 +60,27 @@
                                 {{#if this.enableUserResize}}
                                     <EmberTh::ResizeHandle @columnMeta={{columnMeta}} />
                                 {{/if}}
+                                {{#if (and this.canPanLeft (eq columnValue this.firstVisibleColumn))}}
+                                    <button
+                                        class="data-table-col-pan-btn data-table-col-pan-btn-left
+                                            {{this.panButtonClass}}"
+                                        type="button"
+                                        {{on "click" this.panColumnsLeft}}
+                                    >
+                                        &#8592;
+                                    </button>
+                                {{/if}}
+
+                                {{#if (and this.canPanRight (eq columnValue this.visibleColumns.lastObject))}}
+                                    <button
+                                        class="data-table-col-pan-btn data-table-col-pan-btn-right
+                                            {{this.panButtonClass}}"
+                                        type="button"
+                                        {{on "click" this.panColumnsRight}}
+                                    >
+                                        &#8594;
+                                    </button>
+                                {{/if}}
                             {{/component}}
                         {{else}}
                             {{or columnValue.name (html-safe "&nbsp;")}}
