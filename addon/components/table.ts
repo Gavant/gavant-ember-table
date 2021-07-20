@@ -971,9 +971,6 @@ class TableComponent<R, F, TM> extends Component<TableArgs<R, F, TM>> {
     @action
     debouncedRender() {
         if (this.constrainColumnsToFit && this.resizeWidthSensitive) {
-            //TODO maybe eventually improve this to maintain pan position
-            //and dynamically show/hide as needed?
-            this.columnPanPosition = 0;
             scheduleOnce('afterRender', this, 'updateColumnVisibility');
         }
     }
