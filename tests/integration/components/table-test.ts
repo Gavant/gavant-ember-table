@@ -254,12 +254,12 @@ module('Integration | Component | table', function (hooks) {
         table.setContext(this);
 
         const cols = document.querySelectorAll('th');
-        assert.equal(cols[0].textContent?.trim(), 'ID');
+        assert.dom(cols[0]).containsText('ID');
 
         this.set('panPosition', 1);
         await settled();
 
         const updatedCols = document.querySelectorAll('th');
-        assert.equal(updatedCols[0].textContent?.trim(), 'Name');
+        assert.dom(updatedCols[0]).containsText('Name');
     });
 });
