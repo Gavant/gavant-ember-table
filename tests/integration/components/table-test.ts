@@ -241,4 +241,25 @@ module('Integration | Component | table', function (hooks) {
         const tableContainer = document.querySelector('table');
         assert.dom(tableContainer).hasClass(customTableClass);
     });
+
+    test('Can manually control panning', async function (this: any, assert) {
+        const rowCount = 10;
+        this.set('rows', generateRows(rowCount));
+        this.set('panPosition', 0);
+        await render(
+            hbs`<Table @rows={{this.rows}} @columns={{this.columns}} @loadMoreRows={{this.loadMoreRows}} @hasMoreRows={{this.hasMoreRows}} @columnPanPosition={{this.panPosition}} />`
+        );
+
+        const table = new TablePage();
+        table.setContext(this);
+
+        const cols = document.querySelectorAll('th');
+        assert.dom(cols[0]).containsText('ID');
+
+        this.set('panPosition', 1);
+        await settled();
+
+        const updatedCols = document.querySelectorAll('th');
+        assert.dom(updatedCols[0]).containsText('Name');
+    });
 });

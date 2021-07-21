@@ -14,7 +14,7 @@ class TableController extends Controller {
     @tracked hasMore = true;
     @tracked isLoading = false;
     @tracked sorts = [{ valuePath: 'date', isAscending: false }];
-
+    @tracked panPosition = 0;
     @tracked columns = A([
         {
             valuePath: 'date',
@@ -133,6 +133,11 @@ class TableController extends Controller {
         this.showHeader = !this.showHeader;
         this.stripedRows = !this.stripedRows;
         this.enableSort = !this.enableSort;
+    }
+
+    @action
+    updatePanPosition() {
+        this.panPosition = this.panPosition + 1;
     }
 }
 
