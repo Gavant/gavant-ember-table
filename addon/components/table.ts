@@ -472,6 +472,13 @@ export interface TableArgs<R, F, TM> extends TBodyArgs<R, TM>, THeadArgs<TM> {
     columnPanPosition?: number;
 
     /**
+     * On visible columns change event
+     *
+     * @memberof TableArgs
+     */
+    onVisibleColumnsChange?: (columns: ColumnValue[]) => void;
+
+    /**
      * Load previous rows of items
      *
      * @memberof TableArgs
@@ -1027,6 +1034,8 @@ class TableComponent<R, F, TM> extends Component<TableArgs<R, F, TM>> {
 
         this.visibleColumns = visibleColumns;
         this.containerWidth = containerWidth;
+
+        this.args.onVisibleColumnsChange?.(visibleColumns.toArray());
     }
 
     /**
