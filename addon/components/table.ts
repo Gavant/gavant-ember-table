@@ -464,6 +464,14 @@ export interface THeadArgs<TM> {
 
 export interface TableArgs<R, F, TM> extends TBodyArgs<R, TM>, THeadArgs<TM> {
     /**
+     * Manually change the panning of the table
+     *
+     * @type {number}
+     * @memberof TableArgs
+     */
+    columnPanPosition?: number;
+
+    /**
      * Load previous rows of items
      *
      * @memberof TableArgs
@@ -719,7 +727,7 @@ class TableComponent<R, F, TM> extends Component<TableArgs<R, F, TM>> {
     @argDefault isMobile: boolean = false;
 
     //component state
-    @tracked columnPanPosition: number = 0;
+    @tracked columnPanPosition: number = this.args.columnPanPosition ?? 0;
     @tracked containerWidth: number | null = null;
     @tracked visibleColumns: NativeArray<ColumnValue> = A();
     @tracked containerElement: HTMLElement | null = null;
@@ -973,6 +981,17 @@ class TableComponent<R, F, TM> extends Component<TableArgs<R, F, TM>> {
         if (this.constrainColumnsToFit && this.resizeWidthSensitive) {
             scheduleOnce('afterRender', this, 'updateColumnVisibility');
         }
+    }
+
+    /**
+     * Manually update the pan position if the calling component tells us to
+     *
+     * @memberof TableComponent
+     */
+    @action
+    updatePanPosition() {
+        this.columnPanPosition = this.args.columnPanPosition ?? 0;
+        this.debouncedRender();
     }
 
     /**
