@@ -1,4 +1,4 @@
-{{!-- template-lint-disable  --}}
+{{! template-lint-disable  }}
 {{#if (and showTopLoading isLoading)}}
     <Row::Loading @columns={{columns}} />
 {{/if}}
@@ -15,7 +15,7 @@
     firstVisibleChanged=firstVisibleChanged
     lastVisibleChanged=lastVisibleChanged
     idForFirstItem=idForFirstItem
-as |rowValue|
+    as |rowValue|
 }}
     {{#-ember-table-private/row-wrapper
         rowValue=rowValue
@@ -26,7 +26,7 @@ as |rowValue|
         rowSelectionMode=rowSelectionMode
         checkboxSelectionMode=checkboxSelectionMode
         rowsCount=wrappedRows.length
-    as |api|
+        as |api|
     }}
         {{#if hasBlock}}
             {{yield
