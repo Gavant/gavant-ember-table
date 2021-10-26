@@ -667,6 +667,14 @@ export interface TableArgs<R, F, TM> extends TBodyArgs<R, TM>, THeadArgs<TM> {
      * @memberof TableArgs
      */
     rowComponent?: string;
+
+    /**
+     * Whether or not there are more rows to load
+     *
+     * @type {boolean}
+     * @memberof TableArgs
+     */
+    hasMoreRows?: boolean;
 }
 
 class TableComponent<R, F, TM> extends Component<TableArgs<R, F, TM>> {
