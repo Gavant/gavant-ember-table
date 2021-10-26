@@ -118,7 +118,7 @@ Other optional configurations:
 @isLoading {boolean: false} - Will display a progress spinner within the table when true.
 @noResultsText {string: 'No results found'} - Displayed when there are no rows.
 @panButtonClass {string: 'btn btn-secondary'} - The class given to the pan-buttons when there are hidden columns.
-@renderAllRows {boolean: false} - Used by <VerticalCollection> to determine if all rows should be rendered.
+@renderAll {boolean: false} - Used by <VerticalCollection> to determine if all rows should be rendered.
 @resizeDebounce {number: 250} - The debounce time used by the resize listener to update column visibility.
 @resizeMode {string: 'standard'} - The resize mode used by EmberTable when resizing columns. Note: @enableUserResize must be true.
 @resizeWidthSensitive {boolean: true} - Enable/disable column visibility updates on width resizing.
