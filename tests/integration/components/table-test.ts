@@ -32,7 +32,7 @@ module('Integration | Component | table', function (hooks) {
         this.set('columns', []);
         await render(hbs`<Table @rows={{this.rows}} @columns={{this.columns}}/>`);
 
-        assert.equal(this.element.textContent?.trim(), 'No results found');
+        assert.strictEqual(this.element.textContent?.trim(), 'No results found');
     });
 
     test('Custom no results message visible', async function (assert) {
@@ -42,15 +42,15 @@ module('Integration | Component | table', function (hooks) {
         this.set('noResultsText', noResultsText);
         await render(hbs`<Table @rows={{this.rows}} @columns={{this.columns}} @noResultsText={{this.noResultsText}}/>`);
 
-        assert.equal(this.element.textContent?.trim(), noResultsText);
+        assert.strictEqual(this.element.textContent?.trim(), noResultsText);
     });
 
     test('Rows are rendered correctly', async function (assert) {
         await render(hbs`<Table @rows={{this.rows}} @columns={{this.columns}} />`);
 
         const table = new TablePage();
-        assert.equal(table.headers.length, 2, 'renders the correct number of columns');
-        assert.equal(table.rows.length, 1, 'renders the correct number of rows');
+        assert.strictEqual(table.headers.length, 2, 'renders the correct number of columns');
+        assert.strictEqual(table.rows.length, 1, 'renders the correct number of rows');
     });
 
     test('Table striping class applied correctly', async function (assert) {
@@ -129,9 +129,8 @@ module('Integration | Component | table', function (hooks) {
         );
 
         const table = new TablePage();
-        table.setContext(this);
 
-        assert.equal(table.rows.length, 10);
+        assert.strictEqual(table.rows.length, 10);
         const container = document.querySelector('#ember-testing-container');
         if (container) {
             await scrollTo(container, 0, 1000);
@@ -139,9 +138,9 @@ module('Integration | Component | table', function (hooks) {
 
         await settled();
 
-        assert.equal(table.rows.length, 11);
+        assert.strictEqual(table.rows.length, 11);
 
-        assert.equal(table.getCell(table.rows.length - 1, 0).text.trim(), 'test', 'correct last row rendered');
+        assert.strictEqual(table.getCell(table.rows.length - 1, 0).text.trim(), 'test', 'correct last row rendered');
     });
 
     test('Pages up correctly', async function (this: any, assert) {
@@ -163,9 +162,8 @@ module('Integration | Component | table', function (hooks) {
         );
 
         const table = new TablePage();
-        table.setContext(this);
 
-        assert.equal(table.rows.length, 5);
+        assert.strictEqual(table.rows.length, 5);
         const container = document.querySelector('#ember-testing-container');
         if (container) {
             await scrollTo(container, 0, -1000);
@@ -173,8 +171,8 @@ module('Integration | Component | table', function (hooks) {
 
         await settled();
 
-        assert.equal(table.rows.length, 11);
-        assert.equal(table.getCell(0, 0).text.trim(), 'test', 'correct first row rendered');
+        assert.strictEqual(table.rows.length, 11);
+        assert.strictEqual(table.getCell(0, 0).text.trim(), 'test', 'correct first row rendered');
     });
 
     test('headerStickyOffset works', async function (assert) {
@@ -251,7 +249,6 @@ module('Integration | Component | table', function (hooks) {
         );
 
         const table = new TablePage();
-        table.setContext(this);
 
         const cols = document.querySelectorAll('th');
         assert.dom(cols[0]).containsText('ID');

@@ -5,7 +5,7 @@ module.exports = function (environment) {
         modulePrefix: 'dummy',
         environment,
         rootURL: '/',
-        locationType: 'auto',
+        locationType: 'history',
         EmberENV: {
             FEATURES: {
                 // Here you can enable experimental features on an ember canary build
@@ -44,8 +44,6 @@ module.exports = function (environment) {
     }
 
     if (environment === 'production') {
-        ENV.locationType = 'hash';
-        ENV.rootURL = '/@gavant/ember-table/';
         // here you can enable a production-specific feature
     }
 
