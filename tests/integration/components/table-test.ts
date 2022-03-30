@@ -129,7 +129,6 @@ module('Integration | Component | table', function (hooks) {
         );
 
         const table = new TablePage();
-        table.setContext(this);
 
         assert.strictEqual(table.rows.length, 10);
         const container = document.querySelector('#ember-testing-container');
@@ -163,7 +162,6 @@ module('Integration | Component | table', function (hooks) {
         );
 
         const table = new TablePage();
-        table.setContext(this);
 
         assert.strictEqual(table.rows.length, 5);
         const container = document.querySelector('#ember-testing-container');
@@ -251,7 +249,6 @@ module('Integration | Component | table', function (hooks) {
         );
 
         const table = new TablePage();
-        table.setContext(this);
 
         const cols = document.querySelectorAll('th');
         assert.dom(cols[0]).containsText('ID');
