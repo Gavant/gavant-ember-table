@@ -1,3 +1,4 @@
+{{! template-lint-disable require-presentational-children }}
 <tr role="button" class="et-tr" {{on "click" this.onClick}} {{on "dblclick" this.onDoubleClick}}>
     {{#each @api.cells as |api|}}
         {{#if (has-block)}}
