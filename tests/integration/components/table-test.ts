@@ -248,8 +248,6 @@ module('Integration | Component | table', function (hooks) {
             hbs`<Table @rows={{this.rows}} @columns={{this.columns}} @loadMoreRows={{this.loadMoreRows}} @hasMoreRows={{this.hasMoreRows}} @columnPanPosition={{this.panPosition}} />`
         );
 
-        const table = new TablePage();
-
         const cols = document.querySelectorAll('th');
         assert.dom(cols[0]).containsText('ID');
 
