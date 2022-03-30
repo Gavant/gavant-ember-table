@@ -10,7 +10,7 @@
     {{did-update this.updatePanPosition @columnPanPosition}}
     {{did-insert this.didInsertTable}}
 >
-    <div {{did-resize this.debouncedRender debounce=this.resizeDebounce}}></div>
+    <div {{on-resize this.debouncedRender debounce=this.resizeDebounce}}></div>
     <EmberTable
         style={{this.height}}
         @tableId={{this.tableId}}
@@ -114,7 +114,7 @@
             </T.head>
         {{/if}}
         <T.body
-            @isLoading={{this.isLoading}}
+            @isLoading={{@isLoading}}
             @showBottomLoading={{this.showBottomLoading}}
             @showTopLoading={{this.showTopLoading}}
             @isEmpty={{this.isEmpty}}
