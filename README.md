@@ -6,8 +6,8 @@ Data tables built using [ember-table](https://github.com/Addepar/ember-table)
 
 ## Compatibility
 
--   Ember.js v3.24 or above
--   Ember CLI v3.24 or above
+-   Ember.js v3.28 or above
+-   Ember CLI v3.28 or above
 -   Node.js v12 or above
 
 ```
