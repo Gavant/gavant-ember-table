@@ -764,7 +764,7 @@ class TableComponent<R, F, TM> extends Component<TableArgs<R, F, TM>> {
     //component state
     @tracked columnPanPosition: number = this.args.columnPanPosition ?? 0;
     @tracked containerWidth: number | null = null;
-    @tracked visibleColumns: NativeArray<ColumnValue> = A();
+    @tracked visibleColumns: ColumnValue[] = A([]);
     @tracked containerElement: HTMLElement | null = null;
 
     get noRows(): boolean {
@@ -1001,7 +1001,7 @@ class TableComponent<R, F, TM> extends Component<TableArgs<R, F, TM>> {
     didInsertTable() {
         this.containerElement = document.getElementById(this.elementId);
         if (this.constrainColumnsToFit) {
-            scheduleOnce('afterRender', this, 'updateColumnVisibility');
+            scheduleOnce('afterRender', this, this.updateColumnVisibility);
         }
     }
 
@@ -1014,7 +1014,7 @@ class TableComponent<R, F, TM> extends Component<TableArgs<R, F, TM>> {
     @action
     debouncedRender() {
         if (this.constrainColumnsToFit && this.resizeWidthSensitive) {
-            scheduleOnce('afterRender', this, 'updateColumnVisibility');
+            scheduleOnce('afterRender', this, this.updateColumnVisibility);
         }
     }
 
@@ -1036,7 +1036,7 @@ class TableComponent<R, F, TM> extends Component<TableArgs<R, F, TM>> {
      */
     updateColumnVisibility() {
         const columns = this.args.columns || A();
-        const visibleColumns: NativeArray<ColumnValue> = A();
+        const visibleColumns: ColumnValue[] = A([]);
         const containerWidth = this.getElementWidth(this.containerElement);
         const allowFixedCols = containerWidth >= this.minFixedColTableWidth;
         const panPosition = this.columnPanPosition;
