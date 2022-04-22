@@ -4,7 +4,7 @@ import { assert } from '@ember/debug';
 import { action } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
 import { scheduleOnce } from '@ember/runloop';
-import { htmlSafe } from '@ember/string';
+import { htmlSafe } from '@ember/template';
 import { SafeString } from '@ember/template/-private/handlebars';
 import { isEmpty } from '@ember/utils';
 import Component from '@glimmer/component';
@@ -721,6 +721,10 @@ class TableComponent<R, F, TM> extends Component<TableArgs<R, F, TM>> {
     get height(): SafeString {
         const isNumber = typeof this.tableHeight === 'number';
         return htmlSafe(this.tableHeight ? `height: ${this.tableHeight}${isNumber ? 'px' : ''};` : '');
+    }
+
+    get nonBreakingSpace() {
+        return htmlSafe('&nbsp;');
     }
 
     @argDefault bufferSize: number = 0;

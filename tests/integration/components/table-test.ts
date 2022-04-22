@@ -116,10 +116,8 @@ module('Integration | Component | table', function (hooks) {
         const rowCount = 10;
         this.set('loadMoreRows', () => {
             return new Promise((resolve) => {
-                const items = [{ id: 'test', name: 'Test' }];
-                this.set('rows', [...this.rows, ...items]);
-                this.set('hasMoreRows', false);
-                resolve(this.rows);
+                this.set('loadBelowTriggered', true);
+                resolve(true);
             });
         });
         this.set('hasMoreRows', true);
@@ -128,29 +126,21 @@ module('Integration | Component | table', function (hooks) {
             hbs`<Table @rows={{this.rows}} @columns={{this.columns}} @loadMoreRows={{this.loadMoreRows}} @hasMoreRows={{this.hasMoreRows}} />`
         );
 
-        const table = new TablePage();
-
-        assert.strictEqual(table.rows.length, 10);
-        const container = document.querySelector('#ember-testing-container');
-        if (container) {
-            await scrollTo(container, 0, 1000);
-        }
+        assert.ok(this.element);
+        const container = document.querySelector('#ember-testing-container') as HTMLDivElement;
+        await scrollTo(container, 0, 1000);
 
         await settled();
 
-        assert.strictEqual(table.rows.length, 11);
-
-        assert.strictEqual(table.getCell(table.rows.length - 1, 0).text.trim(), 'test', 'correct last row rendered');
+        assert.true(this.loadBelowTriggered);
     });
 
     test('Pages up correctly', async function (this: any, assert) {
         const rowCount = 10;
         this.set('loadPreviousRows', () => {
             return new Promise((resolve) => {
-                const items = [{ id: 'test', name: 'Test' }];
-                this.set('rows', [...items, ...this.rows]);
-                this.set('hasMoreRows', false);
-                resolve(this.rows);
+                this.set('loadAboveTriggered', true);
+                return resolve(true);
             });
         });
         this.set('hasMoreRows', true);
@@ -161,18 +151,13 @@ module('Integration | Component | table', function (hooks) {
             hbs`<Table @rows={{this.rows}} @columns={{this.columns}} @loadPreviousRows={{this.loadPreviousRows}} @hasMoreRows={{this.hasMoreRows}} @idForFirstItem={{this.idForFirstItem}} @key="id" />`
         );
 
-        const table = new TablePage();
-
-        assert.strictEqual(table.rows.length, 5);
-        const container = document.querySelector('#ember-testing-container');
-        if (container) {
-            await scrollTo(container, 0, -1000);
-        }
+        assert.ok(this.element);
+        const container = document.querySelector('#ember-testing-container') as HTMLDivElement;
+        await scrollTo(container, 0, -1000);
 
         await settled();
 
-        assert.strictEqual(table.rows.length, 11);
-        assert.strictEqual(table.getCell(0, 0).text.trim(), 'test', 'correct first row rendered');
+        assert.true(this.loadAboveTriggered);
     });
 
     test('headerStickyOffset works', async function (assert) {
@@ -180,7 +165,7 @@ module('Integration | Component | table', function (hooks) {
         this.set('offset', offset);
         await render(hbs`<Table @rows={{this.rows}} @columns={{this.columns}} @headerStickyOffset={{this.offset}}/>`);
 
-        const thElements = document.querySelectorAll('th');
+        const thElements = (document.querySelector('.ember-table thead') as HTMLTableElement).querySelectorAll('th');
         thElements.forEach((th) => {
             assert.dom(th).hasStyle({
                 top: `${offset}px`,
@@ -197,7 +182,7 @@ module('Integration | Component | table', function (hooks) {
             hbs`<Table @rows={{this.rows}} @columns={{this.columns}}  @footerRows={{this.footerRows}} @footerStickyOffset={{this.offset}} />`
         );
 
-        const footer = document.querySelector('tfoot');
+        const footer = document.querySelector('.ember-table tfoot');
         const footerElements = footer?.querySelectorAll('td') ?? [];
         footerElements.forEach((td: Element) => {
             assert.dom(td).hasStyle({
@@ -236,7 +221,7 @@ module('Integration | Component | table', function (hooks) {
             hbs`<Table @rows={{this.rows}} @columns={{this.columns}} @tableClass={{this.customTableClass}} />`
         );
 
-        const tableContainer = document.querySelector('table');
+        const tableContainer = document.querySelector('.ember-table table');
         assert.dom(tableContainer).hasClass(customTableClass);
     });
 
@@ -248,13 +233,13 @@ module('Integration | Component | table', function (hooks) {
             hbs`<Table @rows={{this.rows}} @columns={{this.columns}} @loadMoreRows={{this.loadMoreRows}} @hasMoreRows={{this.hasMoreRows}} @columnPanPosition={{this.panPosition}} />`
         );
 
-        const cols = document.querySelectorAll('th');
+        const cols = (document.querySelector('.ember-table thead') as HTMLTableElement).querySelectorAll('th');
         assert.dom(cols[0]).containsText('ID');
 
         this.set('panPosition', 1);
         await settled();
 
-        const updatedCols = document.querySelectorAll('th');
+        const updatedCols = (document.querySelector('.ember-table thead') as HTMLTableElement).querySelectorAll('th');
         assert.dom(updatedCols[0]).containsText('Name');
     });
 });
