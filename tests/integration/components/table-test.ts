@@ -132,7 +132,7 @@ module('Integration | Component | table', function (hooks) {
 
         await settled();
 
-        assert.strictEqual(this.loadBelowTriggered, true);
+        assert.true(this.loadBelowTriggered);
     });
 
     test('Pages up correctly', async function (this: any, assert) {
@@ -157,7 +157,7 @@ module('Integration | Component | table', function (hooks) {
 
         await settled();
 
-        assert.strictEqual(this.loadAboveTriggered, true);
+        assert.true(this.loadAboveTriggered);
     });
 
     test('headerStickyOffset works', async function (assert) {
