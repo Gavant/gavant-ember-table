@@ -764,7 +764,7 @@ class TableComponent<R, F, TM> extends Component<TableArgs<R, F, TM>> {
     //component state
     @tracked columnPanPosition: number = this.args.columnPanPosition ?? 0;
     @tracked containerWidth: number | null = null;
-    @tracked visibleColumns: ColumnValue[] = [];
+    @tracked visibleColumns: ColumnValue[] = A([]);
     @tracked containerElement: HTMLElement | null = null;
 
     get noRows(): boolean {
@@ -1036,7 +1036,7 @@ class TableComponent<R, F, TM> extends Component<TableArgs<R, F, TM>> {
      */
     updateColumnVisibility() {
         const columns = this.args.columns || A();
-        const visibleColumns: ColumnValue[] = [];
+        const visibleColumns: ColumnValue[] = A([]);
         const containerWidth = this.getElementWidth(this.containerElement);
         const allowFixedCols = containerWidth >= this.minFixedColTableWidth;
         const panPosition = this.columnPanPosition;
