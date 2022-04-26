@@ -1036,7 +1036,7 @@ class TableComponent<R, F, TM> extends Component<TableArgs<R, F, TM>> {
      */
     updateColumnVisibility() {
         const columns = this.args.columns || A();
-        const visibleColumns: ColumnValue[] = A([]);
+        const visibleColumns = A<ColumnValue>([]);
         const containerWidth = this.getElementWidth(this.containerElement);
         const allowFixedCols = containerWidth >= this.minFixedColTableWidth;
         const panPosition = this.columnPanPosition;
