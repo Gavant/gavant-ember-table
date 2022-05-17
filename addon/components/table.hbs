@@ -1,9 +1,9 @@
 {{! template-lint-disable no-inline-styles }}
 <div
     class="data-table
-        {{if this.hasHiddenColumns " has-hidden-columns"}}
-        {{if @isServerRendered " is-server-rendered"}}
-        {{if this.isColumnsPanned " is-columns-panned"}}"
+        {{if this.hasHiddenColumns ' has-hidden-columns'}}
+        {{if @isServerRendered ' is-server-rendered'}}
+        {{if this.isColumnsPanned ' is-columns-panned'}}"
     id={{this.elementId}}
     ...attributes
     {{did-update this.debouncedRender @columns}}
@@ -132,6 +132,7 @@
             @rowComponent={{this.rowComponent}}
             @checkboxSelectionMode={{this.checkboxSelectionMode}}
             @staticHeight={{@staticHeight}}
+            @renderFromLast={{@renderFromLast}}
             as |Body|
         >
             <Body.row
