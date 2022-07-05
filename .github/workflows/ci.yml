@@ -24,7 +24,7 @@ jobs:
             - name: Install Dependencies
               run: yarn install --frozen-lockfile --non-interactive
             - name: Lint Addon
-              run: yarn workspace @gavant/ember-button-spinner run lint
+              run: yarn workspace @gavant/ember-table run lint
             - name: Lint Test App
               run: yarn workspace test-app run lint
             - name: Run Tests
