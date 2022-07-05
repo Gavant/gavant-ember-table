@@ -1,4 +1,3 @@
-//@ts-ignore
 import Table, { ColumnValue } from '@gavant/ember-table';
 
 import { expectTypeOf } from 'expect-type';
