@@ -1,11 +1,11 @@
 {
-  "name": "ember-table",
-  "version": "0.0.0",
+  "name": "@gavant/ember-table",
+  "version": "2.0.4",
   "description": "The default blueprint for Embroider v2 addons.",
   "keywords": [
     "ember-addon"
   ],
-  "repository": "",
+  "repository": "https://github.com/Gavant/ember-table",
   "license": "MIT",
   "author": "",
   "files": [
@@ -16,39 +16,56 @@
     "build": "rollup --config",
     "lint": "npm-run-all --aggregate-output --continue-on-error --parallel \"lint:!(fix)\"",
     "lint:fix": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*:fix",
-    "lint:hbs": "ember-template-lint .",
-    "lint:hbs:fix": "ember-template-lint . --fix",
     "lint:js": "eslint . --cache",
     "lint:js:fix": "eslint . --fix",
     "start": "rollup --config --watch",
     "test": "echo 'A v2 addon does not have tests, run tests in test-app'",
-    "prepare": "yarn build"
+    "prepare": "yarn build",
+    "prepublishOnly": "rollup --config"
   },
   "dependencies": {
-    "@embroider/addon-shim": "^1.0.0"
+    "@ember/render-modifiers": "^2.0.4",
+    "@embroider/addon-shim": "^1.6.0",
+    "ember-on-resize-modifier": "^1.0.0",
+    "ember-table": "^4.0.0",
+    "ember-truth-helpers": "^3.0.0"
+  },
+  "peerDependencies": {
+    "ember-responsive": "^5.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.17.0",
-    "@babel/eslint-parser": "^7.18.2",
+    "@apollo/client": "^3.0.0",
+    "@babel/core": "^7.18.2",
     "@babel/plugin-proposal-class-properties": "^7.16.7",
     "@babel/plugin-proposal-decorators": "^7.17.0",
     "@babel/plugin-syntax-decorators": "^7.17.0",
+    "@babel/plugin-transform-typescript": "^7.16.8",
+    "@babel/preset-typescript": "^7.17.12",
     "@embroider/addon-dev": "^1.0.0",
     "@rollup/plugin-babel": "^5.3.0",
+    "@typescript-eslint/eslint-plugin": "^5.18.0",
+    "@typescript-eslint/parser": "^5.18.0",
+    "ember-responsive": "^5.0.0",
+    "ember-source": "~4.4.0",
+    "ember-simple-auth": "^4.2.2",
     "ember-template-lint": "^4.0.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-ember": "^10.5.8",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "glimmer-apollo": "^0.5.1",
     "npm-run-all": "^4.1.5",
-    "rollup": "^2.67.0"
+    "rollup": "^2.67.0",
+    "rollup-plugin-ts": "^3.0.1",
+    "typescript": "^4.6.3"
   },
   "engines": {
     "node": "14.* || 16.* || >= 18"
   },
   "publishConfig": {
-    "registry": "https://registry.npmjs.org"
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
   },
   "ember": {
     "edition": "octane"
@@ -56,11 +73,25 @@
   "ember-addon": {
     "version": 2,
     "type": "addon",
-    "main": "addon-main.js"
+    "main": "addon-main.js",
+    "app-js": {
+      "./components/ember-table.js": "./dist/_app_/components/ember-table.js",
+      "./components/ember-tbody.js": "./dist/_app_/components/ember-tbody.js",
+      "./components/progress-spinner.js": "./dist/_app_/components/progress-spinner.js",
+      "./components/row/expandable-row.js": "./dist/_app_/components/row/expandable-row.js",
+      "./components/row/loading.js": "./dist/_app_/components/row/loading.js",
+      "./components/row/no-results.js": "./dist/_app_/components/row/no-results.js",
+      "./components/row/table-row.js": "./dist/_app_/components/row/table-row.js",
+      "./components/table.js": "./dist/_app_/components/table.js"
+    }
   },
   "exports": {
     ".": "./dist/index.js",
     "./*": "./dist/*",
     "./addon-main.js": "./addon-main.js"
+  },
+  "typings": "dist/index.d.ts",
+  "volta": {
+    "extends": "../../package.json"
   }
 }

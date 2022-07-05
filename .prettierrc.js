@@ -1,5 +1,21 @@
 'use strict';
 
 module.exports = {
-  singleQuote: true,
+    arrowParens: 'always',
+    bracketSpacing: true,
+    printWidth: 120,
+    proseWrap: 'preserve',
+    semi: true,
+    singleQuote: true,
+    tabWidth: 4,
+    trailingComma: 'none',
+    useTabs: false,
+    overrides: [
+        {
+            files: '*.hbs',
+            options: {
+                singleQuote: false,
+            },
+        },
+    ],
 };

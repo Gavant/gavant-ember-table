@@ -1,0 +1,232 @@
+{{! template-lint-disable no-inline-styles }}
+<div
+    class="data-table
+        {{if this.hasHiddenColumns ' has-hidden-columns'}}
+        {{if @isServerRendered ' is-server-rendered'}}
+        {{if this.isColumnsPanned ' is-columns-panned'}}"
+    id={{this.elementId}}
+    ...attributes
+    {{did-update this.debouncedRender @columns}}
+    {{did-update this.updatePanPosition @columnPanPosition}}
+    {{did-insert this.didInsertTable}}
+>
+    <div {{on-resize this.debouncedRender}}></div>
+    <EmberTable
+        style={{this.height}}
+        @tableId={{this.tableId}}
+        @tableClasses={{this.tableClassNames}}
+        @headerStickyOffset={{this.headerStickyOffset}}
+        @footerStickyOffset={{this.footerStickyOffset}}
+        as |T|
+    >
+        {{#if this.showHeader}}
+            <T.head
+                @columns={{this.visibleColumns}}
+                @enableResize={{this.enableResize}}
+                @enableReorder={{this.enableReorder}}
+                @widthConstraint={{this.widthConstraint}}
+                @fillMode={{this.fillMode}}
+                @fillColumnIndex={{this.adjustedFillColumnIndex}}
+                @resizeMode={{this.resizeMode}}
+                @sortFunction={{@sortFunction}}
+                @onHeaderAction={{@onHeaderAction}}
+                @onUpdateSorts={{if this.enableSort this.onUpdateSorts}}
+                @onReorder={{@onReorder}}
+                @onResize={{@onResize}}
+                @sorts={{this.sorts}}
+                as |Head|
+            >
+                <Head.row as |Row|>
+                    <Row.cell
+                        class={{concat
+                            Row.columnValue.headerClassNames
+                            (if Row.columnValue.isFixedLeft " data-table-col-fixed-left")
+                            (if (eq Row.columnValue this.firstVisibleNonFixedColumn) " data-table-col-first-nonfixed")
+                            (if
+                                (and this.canPanRight (eq Row.columnValue this.visibleColumns.lastObject))
+                                "data-table-col-has-pan-btn"
+                            )
+                        }}
+                        as |columnValue columnMeta|
+                    >
+                        {{#if columnValue.headerComponent}}
+                            {{#component
+                                (ensure-safe-component columnValue.headerComponent)
+                                columnValue=columnValue
+                                columnMeta=columnMeta
+                                tableMeta=@tableMeta
+                            }}
+                                {{!-- <columnValue.headerComponent
+                                @columnValue={{columnValue}}
+                                @columnMeta={{columnMeta}}
+                                @tableMeta={{@tableMeta}}
+                            > --}}
+                                {{columnValue.name}}
+                                <EmberTh::SortIndicator @columnMeta={{columnMeta}} />
+                                {{#if this.enableUserResize}}
+                                    <EmberTh::ResizeHandle @columnMeta={{columnMeta}} />
+                                {{/if}}
+                                {{#if (and this.canPanLeft (eq columnValue this.firstVisibleColumn))}}
+                                    <button
+                                        class="data-table-col-pan-btn data-table-col-pan-btn-left
+                                            {{this.panButtonClass}}"
+                                        type="button"
+                                        {{on "click" this.panColumnsLeft}}
+                                    >
+                                        &#8592;
+                                    </button>
+                                {{/if}}
+
+                                {{#if (and this.canPanRight (eq columnValue this.visibleColumns.lastObject))}}
+                                    <button
+                                        class="data-table-col-pan-btn data-table-col-pan-btn-right
+                                            {{this.panButtonClass}}"
+                                        type="button"
+                                        {{on "click" this.panColumnsRight}}
+                                    >
+                                        &#8594;
+                                    </button>
+                                {{/if}}
+                                {{! </columnValue.headerComponent> }}
+                            {{/component}}
+                        {{else}}
+                            {{or columnValue.name this.nonBreakingSpace}}
+                            <EmberTh::SortIndicator @columnMeta={{columnMeta}} />
+                            {{#if this.enableUserResize}}
+                                <EmberTh::ResizeHandle @columnMeta={{columnMeta}} />
+                            {{/if}}
+                            {{#if (and this.canPanLeft (eq columnValue this.firstVisibleColumn))}}
+                                <button
+                                    class="data-table-col-pan-btn data-table-col-pan-btn-left {{this.panButtonClass}}"
+                                    type="button"
+                                    {{on "click" this.panColumnsLeft}}
+                                >
+                                    &#8592;
+                                </button>
+                            {{/if}}
+
+                            {{#if (and this.canPanRight (eq columnValue this.visibleColumns.lastObject))}}
+                                <button
+                                    class="data-table-col-pan-btn data-table-col-pan-btn-right {{this.panButtonClass}}"
+                                    type="button"
+                                    {{on "click" this.panColumnsRight}}
+                                >
+                                    &#8594;
+                                </button>
+                            {{/if}}
+                        {{/if}}
+                    </Row.cell>
+                </Head.row>
+            </T.head>
+        {{/if}}
+        <T.body
+            @isLoading={{@isLoading}}
+            @showBottomLoading={{this.showBottomLoading}}
+            @showTopLoading={{this.showTopLoading}}
+            @isEmpty={{this.isEmpty}}
+            @noResultsText={{this.noResultsText}}
+            @rows={{@rows}}
+            @bufferSize={{this.bufferSize}}
+            @estimateRowHeight={{this.estimateRowHeight}}
+            @idForFirstItem={{@idForFirstItem}}
+            @key={{this.key}}
+            @renderAll={{this.renderAll}}
+            @containerSelector={{this.containerSelector}}
+            @firstReached={{this.onFirstReached}}
+            @lastReached={{this.onLastReached}}
+            @tableMeta={{@tableMeta}}
+            @rowComponent={{this.rowComponent}}
+            @checkboxSelectionMode={{this.checkboxSelectionMode}}
+            @staticHeight={{@staticHeight}}
+            as |Body|
+        >
+            <Body.row
+                class={{Body.rowValue.rowClassNames}}
+                @onClick={{@onRowClick}}
+                @onDoubleClick={{@onRowDoubleClick}}
+                as |Row|
+            >
+                <Row.cell
+                    class={{concat
+                        Row.columnValue.cellClassNames
+                        (if Row.columnValue.isFixedLeft " data-table-col-fixed-left")
+                        (if (eq Row.columnValue this.firstVisibleNonFixedColumn) " data-table-col-first-nonfixed")
+                    }}
+                    @tableMeta={{@tableMeta}}
+                    @onClick={{@onCellClick}}
+                    @onDoubleClick={{@onCellDoubleClick}}
+                    as |cellValue columnValue rowValue cellMeta columnMeta rowMeta|
+                >
+                    {{#if columnValue.cellComponent}}
+                        {{#component
+                            (ensure-safe-component columnValue.cellComponent)
+                            cellValue=cellValue
+                            columnValue=columnValue
+                            rowValue=rowValue
+                            cellMeta=cellMeta
+                            columnMeta=columnMeta
+                            rowMeta=rowMeta
+                            tableMeta=@tableMeta
+                        }}
+                            {{cellValue}}
+                        {{/component}}
+
+                        {{!-- <columnValue.cellComponent
+                            @cellValue={{cellValue}}
+                            @columnValue={{columnValue}}
+                            @rowValue={{rowValue}}
+                            @cellMeta={{cellMeta}}
+                            @columnMeta={{columnMeta}}
+                            @rowMeta={{rowMeta}}
+                            @tableMeta={{@tableMeta}}
+                        >
+                            {{cellValue}}
+                        </columnValue.cellComponent> --}}
+                    {{else}}
+                        {{cellValue}}
+                    {{/if}}
+                </Row.cell>
+            </Body.row>
+        </T.body>
+        <T.foot @rows={{if (and (or this.showEmptyFooter @rows) this.footerRows) this.footerRows}} as |Foot|>
+            <Foot.row as |Row|>
+                <Row.cell
+                    class={{concat
+                        Row.columnValue.footerClassNames
+                        (if Row.columnValue.isFixedLeft " data-table-col-fixed-left")
+                        (if (eq Row.columnValue this.firstVisibleNonFixedColumn) " data-table-col-first-nonfixed")
+                    }}
+                    as |cellValue columnValue rowValue cellMeta columnMeta rowMeta|
+                >
+                    {{#if columnValue.footerComponent}}
+                        {{#component
+                            (ensure-safe-component columnValue.footerComponent)
+                            cellValue=(or (get rowValue columnValue.footerValuePath) cellValue)
+                            columnValue=columnValue
+                            rowValue=rowValue
+                            cellMeta=cellMeta
+                            columnMeta=columnMeta
+                            rowMeta=rowMeta
+                            tableMeta=@tableMeta
+                        }}
+                            {{cellValue}}
+                        {{/component}}
+                        {{!-- <columnValue.footerComponent
+                            @cellValue={{(or (get rowValue columnValue.footerValuePath) cellValue)}}
+                            @columnValue={{columnValue}}
+                            @rowValue={{rowValue}}
+                            @cellMeta={{cellMeta}}
+                            @columnMeta={{columnMeta}}
+                            @rowMeta={{rowMeta}}
+                            @tableMeta={{@tableMeta}}
+                        >
+                            {{cellValue}}
+                        </columnValue.footerComponent> --}}
+                    {{else}}
+                        {{cellValue}}
+                    {{/if}}
+                </Row.cell>
+            </Foot.row>
+        </T.foot>
+    </EmberTable>
+</div>

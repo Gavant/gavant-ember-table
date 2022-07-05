@@ -1,0 +1,53 @@
+{{! template-lint-disable require-presentational-children }}
+<tr role="button" class="et-tr" {{on "click" this.onClick}} {{on "dblclick" this.onDoubleClick}}>
+    {{#each @api.cells as |api|}}
+        {{#if (has-block)}}
+            {{#if this.isHeader}}
+                {{yield
+                    (hash
+                        columnValue=api.columnValue
+                        columnMeta=api.columnMeta
+                        sorts=api.sorts
+                        sendUpdateSort=api.sendUpdateSort
+                        cell=(component "ember-th" api=api tableMeta=@tableMeta)
+                    )
+                }}
+            {{else}}
+                {{yield
+                    (hash
+                        api=api
+                        cellValue=api.cellValue
+                        cellMeta=api.cellMeta
+                        columnValue=api.columnValue
+                        columnMeta=api.columnMeta
+                        rowValue=api.rowValue
+                        rowMeta=api.rowMeta
+                        cell=(component "ember-td" api=api tableMeta=@tableMeta)
+                    )
+                }}
+            {{/if}}
+        {{else if this.isHeader}}
+            <EmberTh
+                @api={{api}}
+                @cellValue={{api.cellValue}}
+                @cellMeta={{api.cellMeta}}
+                @columnValue={{api.columnValue}}
+                @columnMeta={{api.columnMeta}}
+                @rowValue={{api.rowValue}}
+                @rowMeta={{api.rowMeta}}
+                @tableMeta={{@tableMeta}}
+            />
+        {{else}}
+            <EmberTd
+                @api={{api}}
+                @cellValue={{api.cellValue}}
+                @cellMeta={{api.cellMeta}}
+                @columnValue={{api.columnValue}}
+                @columnMeta={{api.columnMeta}}
+                @rowValue={{api.rowValue}}
+                @rowMeta={{api.rowMeta}}
+                @tableMeta={{@tableMeta}}
+            />
+        {{/if}}
+    {{/each}}
+</tr>
