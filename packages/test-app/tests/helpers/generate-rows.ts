@@ -1,5 +1,4 @@
-//@ts-ignore
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 
 export function generateRows(number: number) {
     return [...Array(number)].map(() => {
