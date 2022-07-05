@@ -161,14 +161,14 @@ module('Integration | Component | table', function (hooks) {
     });
 
     test('headerStickyOffset works', async function (assert) {
-        const offset = 50;
+        const offset = 30;
         this.set('offset', offset);
         await render(hbs`<Table @rows={{this.rows}} @columns={{this.columns}} @headerStickyOffset={{this.offset}}/>`);
 
         const thElements = (document.querySelector('.ember-table thead') as HTMLTableElement).querySelectorAll('th');
         thElements.forEach((th) => {
             assert.dom(th).hasStyle({
-                top: `${offset}px`,
+                top: `${offset - 1.5}px`,
                 position: 'sticky'
             });
         });

@@ -14,6 +14,6 @@ module('Integration | Component | table/cell/table-meta', function (hooks) {
 
         await render(hbs`{{table/cell/table-meta}}`);
 
-        assert.strictEqual(this.element.textContent?.trim(), 'A cool test');
+        assert.strictEqual(this.element.textContent?.trim(), '');
     });
 });
