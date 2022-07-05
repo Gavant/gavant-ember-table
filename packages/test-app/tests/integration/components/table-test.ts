@@ -3,7 +3,6 @@ import { click, render, scrollTo, settled } from '@ember/test-helpers';
 import { setupRenderingTest } from 'ember-qunit';
 import { TablePage } from 'ember-table/test-support';
 
-//@ts-ignore
 import { ColumnValue } from '@gavant/ember-table';
 
 import 'qunit-dom';

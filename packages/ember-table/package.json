@@ -90,7 +90,7 @@
     "./*": "./dist/*",
     "./addon-main.js": "./addon-main.js"
   },
-  "typings": "dist/index.d.ts",
+  "typings": "./dist/index.d.ts",
   "volta": {
     "extends": "../../package.json"
   }
