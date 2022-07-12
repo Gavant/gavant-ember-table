@@ -1,0 +1,15 @@
+import { setComponentTemplate } from '@ember/component';
+import { hbs } from 'ember-cli-htmlbars';
+import TableRow from '../table-row/index.js';
+
+var TEMPLATE = hbs("{{! template-lint-disable require-presentational-children }}\n<tr role=\"button\" class=\"et-tr\" {{on \"click\" this.onClick}} {{on \"dblclick\" this.onDoubleClick}}>\n    {{#each @api.cells as |api|}}\n        {{#if (has-block)}}\n            {{#if this.isHeader}}\n                {{yield\n                    (hash\n                        columnValue=api.columnValue\n                        columnMeta=api.columnMeta\n                        sorts=api.sorts\n                        sendUpdateSort=api.sendUpdateSort\n                        cell=(component \"ember-th\" api=api tableMeta=@tableMeta)\n                    )\n                }}\n            {{else}}\n                {{yield\n                    (hash\n                        api=api\n                        cellValue=api.cellValue\n                        cellMeta=api.cellMeta\n                        columnValue=api.columnValue\n                        columnMeta=api.columnMeta\n                        rowValue=api.rowValue\n                        rowMeta=api.rowMeta\n                        cell=(component \"ember-td\" api=api tableMeta=@tableMeta)\n                    )\n                }}\n            {{/if}}\n        {{else if this.isHeader}}\n            <EmberTh\n                @api={{api}}\n                @cellValue={{api.cellValue}}\n                @cellMeta={{api.cellMeta}}\n                @columnValue={{api.columnValue}}\n                @columnMeta={{api.columnMeta}}\n                @rowValue={{api.rowValue}}\n                @rowMeta={{api.rowMeta}}\n                @tableMeta={{@tableMeta}}\n            />\n        {{else}}\n            <EmberTd\n                @api={{api}}\n                @cellValue={{api.cellValue}}\n                @cellMeta={{api.cellMeta}}\n                @columnValue={{api.columnValue}}\n                @columnMeta={{api.columnMeta}}\n                @rowValue={{api.rowValue}}\n                @rowMeta={{api.rowMeta}}\n                @tableMeta={{@tableMeta}}\n            />\n        {{/if}}\n    {{/each}}\n</tr>\n{{! TODO ideally this row should be completely unrendered if not expanded, }}\n{{! or at least hidden with a class/style, but there is a bug in           }}\n{{!  vertical-collection preventing this.                                  }}\n<tr class=\"et-tr\">\n    {{#if this.isExpanded}}\n        <td colspan={{@api.cells.length}}>\n            {{component\n                @tableMeta.expandedRowComponent\n                api=@api\n                rowValue=@api.rowValue\n                rowMeta=@api.rowMeta\n                tableMeta=@tableMeta\n            }}\n        </td>\n    {{/if}}\n</tr>");
+
+class ExpandableRow extends TableRow {
+  get isExpanded() {
+    return this.args.tableMeta?.expandedRows?.includes(this.rowValue) ?? false;
+  }
+
+}
+setComponentTemplate(TEMPLATE, ExpandableRow);
+
+export { ExpandableRow as default };
