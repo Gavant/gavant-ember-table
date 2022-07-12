@@ -22,7 +22,9 @@
         "test": "npm-run-all lint test:*",
         "test:ember": "ember test"
     },
-    "dependencies": {},
+    "dependencies": {
+        "@gavant/ember-table": "2.0.3"
+    },
     "devDependencies": {
         "@ember/optional-features": "^2.0.0",
         "@ember/render-modifiers": "^2.0.4",
