@@ -1,12 +1,13 @@
 {{! template-lint-disable  }}
-<div data-test-ember-table-overflow id="{{this.elementId}}-overflow" class="ember-table-overflow">
+<div data-test-ember-table-overflow id="{{this.elementId}}-overflow" class="ember-table-overflow testtesttest">
     <table class={{@tableClasses}}>
         {{yield
             (hash
                 api=this.api
                 head=(component "ember-thead" api=this.api)
-                body=(component "ember-tbody" api=this.api)
+                body=(component "ember-tbody-override" api=this.api)
                 foot=(component "ember-tfoot" api=this.api)
+                loadingMore=(component "ember-table-loading-more" api=this.api)
             )
         }}
     </table>

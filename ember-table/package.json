@@ -28,7 +28,8 @@
     "prepublishOnly": "rollup --config"
   },
   "dependencies": {
-    "@embroider/addon-shim": "^1.0.0"
+    "@embroider/addon-shim": "^1.0.0",
+    "@embroider/util": "^1.0.0"
   },
   "peerDependencies": {
     "@ember/render-modifiers": "^2.0.4",
@@ -41,13 +42,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.18.2",
-    "@ember/render-modifiers": "^2.0.4",
-    "ember-on-resize-modifier": "^1.0.0",
-    "ember-responsive": "^4.0.2",
-    "ember-table": "^4.0.0-beta.5",
-    "ember-truth-helpers": "^3.0.0",
-    "ember-source": ">= 3.24.0",
-    "ember-useragent": "^0.12.0",
     "@babel/plugin-proposal-class-properties": "^7.17.12",
     "@babel/plugin-proposal-decorators": "^7.18.2",
     "@babel/plugin-proposal-private-methods": "^7.16.11",
@@ -117,8 +111,8 @@
     "type": "addon",
     "main": "addon-main.js",
     "app-js": {
-      "./components/ember-table/index.js": "./dist/_app_/components/ember-table/index.js",
-      "./components/ember-tbody/index.js": "./dist/_app_/components/ember-tbody/index.js",
+      "./components/ember-table-override/index.js": "./dist/_app_/components/ember-table-override/index.js",
+      "./components/ember-tbody-override/index.js": "./dist/_app_/components/ember-tbody-override/index.js",
       "./components/progress-spinner/index.js": "./dist/_app_/components/progress-spinner/index.js",
       "./components/row/expandable-row/index.js": "./dist/_app_/components/row/expandable-row/index.js",
       "./components/row/loading/index.js": "./dist/_app_/components/row/loading/index.js",

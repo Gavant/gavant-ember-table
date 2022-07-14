@@ -26,6 +26,7 @@
         "@gavant/ember-table": "2.0.3"
     },
     "devDependencies": {
+        "@embroider/macros": "1.5.0",
         "@ember/optional-features": "^2.0.0",
         "@ember/render-modifiers": "^2.0.4",
         "@ember/test-helpers": "^2.7.0",

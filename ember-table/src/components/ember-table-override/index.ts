@@ -1,8 +1,12 @@
 import EmberTable from 'ember-table/components/ember-table/component';
 
 import { setupTableStickyPolyfill, teardownTableStickyPolyfill } from '../../-private/sticky/table-sticky-polyfill';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore: Ignore import of compiled template
+import layout from './index.hbs';
 
 export default class EmberTableComponent extends EmberTable {
+    layout = layout;
     headerStickyOffset = 0;
     footerStickyOffset = 0;
 

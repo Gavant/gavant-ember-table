@@ -7,6 +7,7 @@
         Toggle Columns
     </button>
     <Table
+        @stripedRows={{true}}
         @columns={{this.columns}}
         @rows={{this.model}}
         @footerRows={{this.footerData}}
@@ -15,7 +16,6 @@
         @loadMoreRows={{this.loadMoreModels}}
         @enableSort={{true}}
         @onRowClick={{this.alertData}}
-        @stripedRows={{true}}
         @panButtonClass="btn-primary"
         @rowComponent="row/expandable-row"
         @tableMeta={{hash expandedRowComponent="custom-row" expandedRows=this.expandedRows}}

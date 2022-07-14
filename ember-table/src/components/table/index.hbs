@@ -11,7 +11,7 @@
     {{did-insert this.didInsertTable}}
 >
     <div {{on-resize this.debouncedRender debounce=this.resizeDebounce}}></div>
-    <EmberTable
+    <EmberTableOverride
         style={{this.height}}
         @tableId={{this.tableId}}
         @tableClasses={{this.tableClassNames}}
@@ -199,5 +199,5 @@
                 </Row.cell>
             </Foot.row>
         </T.foot>
-    </EmberTable>
+    </EmberTableOverride>
 </div>
