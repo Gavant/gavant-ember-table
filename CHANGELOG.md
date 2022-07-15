@@ -1,3 +1,12 @@
+
+## v3.0.0 (2022-07-15)
+
+#### :boom: Breaking Change
+* [#39](https://github.com/Gavant/gavant-ember-table/pull/39) Addon v2 ([@bakerac4](https://github.com/bakerac4))
+
+#### Committers: 1
+- Adam Baker ([@bakerac4](https://github.com/bakerac4))
+
 #### [v2.0.3](https://github.com/Gavant/gavant-ember-table/compare/v2.0.2...v2.0.3)
 
 -   Bump node-fetch from 2.6.1 to 2.6.7 [`#32`](https://github.com/Gavant/gavant-ember-table/pull/32)
