@@ -1,0 +1,28 @@
+<div class="pannable-table">
+    <button type="button" {{on "click" this.toggleColumns}}>
+        Toggle Columns
+    </button>
+
+    <button type="button" {{on "click" this.updatePanPosition}}>
+        Toggle Columns
+    </button>
+    <Table
+        @stripedRows={{true}}
+        @columns={{this.columns}}
+        @rows={{this.model}}
+        @footerRows={{this.footerData}}
+        @hasMoreRows={{this.hasMore}}
+        @isLoading={{this.isLoading}}
+        @loadMoreRows={{this.loadMoreModels}}
+        @enableSort={{true}}
+        @onRowClick={{this.alertData}}
+        @panButtonClass="btn-primary"
+        @rowComponent="row/expandable-row"
+        @tableMeta={{hash expandedRowComponent="custom-row" expandedRows=this.expandedRows}}
+        @staticHeight={{false}}
+        @sorts={{this.sorts}}
+        @updateSorts={{this.updateSorts}}
+        @isMobile={{this.media.isMobile}}
+        @columnPanPosition={{this.panPosition}}
+    />
+</div>
