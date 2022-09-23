@@ -221,7 +221,17 @@ export function setupTableStickyPolyfill(element: HTMLElement, offset = 0) {
     TABLE_POLYFILL_MAP.set(element, new TableStickyPolyfill(element, offset));
 }
 
+/**
+ * We added the check to see if the element exists due to a bug we were seeing where we had a table inside of another table (I know ...gross...) and the element was already destroyed
+ *
+ * @export
+ * @param {HTMLElement} element
+ */
 export function teardownTableStickyPolyfill(element: HTMLElement) {
-    TABLE_POLYFILL_MAP.get(element).destroy();
+    const elementToDestroy = TABLE_POLYFILL_MAP.get(element);
+    if (elementToDestroy) {
+        elementToDestroy.destroy();
+    }
+
     TABLE_POLYFILL_MAP.delete(element);
 }
