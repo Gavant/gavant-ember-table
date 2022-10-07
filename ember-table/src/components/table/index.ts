@@ -669,7 +669,12 @@ export interface TableArgs<R, F, TM> extends TBodyArgs<R, TM>, THeadArgs<TM> {
     renderAll?: boolean;
 }
 
-class TableComponent<R, F, TM> extends Component<TableArgs<R, F, TM>> {
+interface TableSignature<R, F, TM> {
+    Args: TableArgs<R, F, TM>;
+    Element: HTMLDivElement;
+}
+
+export default class TableComponent<R, F, TM> extends Component<TableSignature<R, F, TM>> {
     //ember-table's resizing must be enabled in order for fill-mode auto column
     //resizing to work, even if you don't want to allow user-invoked resizing
     readonly enableResize: boolean = true;
@@ -1163,5 +1168,3 @@ class TableComponent<R, F, TM> extends Component<TableArgs<R, F, TM>> {
         }
     }
 }
-
-export default TableComponent;
