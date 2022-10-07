@@ -114,7 +114,7 @@ export interface TableCell<T, TM> {
  * @template T
  * @template TM
  */
-export type TBodyArgs<T, TM> = {
+export interface TBodyArgs<T, TM> {
     /**
      * The number of extra rows to render on either side of the table's viewport
      *
@@ -270,9 +270,9 @@ export type TBodyArgs<T, TM> = {
      * @memberof TBodyArgs
      */
     tableMeta?: TableMeta<TM>;
-};
+}
 
-export type THeadArgs<TM> = {
+export interface THeadArgs<TM> {
     /**
      * The column definitions for the table
      *
@@ -436,7 +436,7 @@ export type THeadArgs<TM> = {
      * @memberof THeadArgs
      */
     widthConstraint?: WidthConstraint;
-};
+}
 
 export interface TableArgs<R, F, TM> extends TBodyArgs<R, TM>, THeadArgs<TM> {
     /**
