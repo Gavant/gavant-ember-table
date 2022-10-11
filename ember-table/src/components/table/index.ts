@@ -82,10 +82,10 @@ interface RowMetaSelect {
     single?: boolean;
 }
 
-export interface RowClickEvent<T, TM> {
+export interface RowClickEvent<R, TM> {
     event: MouseEvent;
-    rowValue: T;
-    rowMeta: RowMeta<T>;
+    rowValue: R;
+    rowMeta: RowMeta<R>;
     tableMeta?: TableMeta<TM>;
 }
 
@@ -473,7 +473,7 @@ export interface TableArgs<R, F, TM> extends TBodyArgs<R, TM>, THeadArgs<TM> {
      *
      * @memberof TableArgs
      */
-    onRowClick?: <T>(rowClickEvent: RowClickEvent<T, TM>) => void;
+    onRowClick?: (rowClickEvent: RowClickEvent<R, TM>) => void;
 
     /**
      * Event to handle double click on row
