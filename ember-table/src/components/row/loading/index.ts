@@ -10,3 +10,9 @@ export default class RowLoadingComponent extends Component<RowLoadingArgs> {
         return this.args.columns.length;
     }
 }
+
+declare module '@glint/environment-ember-loose/registry' {
+    export default interface Registry {
+        'Row::Loading': typeof RowLoadingComponent;
+    }
+}

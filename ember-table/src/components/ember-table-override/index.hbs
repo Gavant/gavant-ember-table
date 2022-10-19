@@ -1,5 +1,4 @@
-{{! template-lint-disable  }}
-<div data-test-ember-table-overflow id="{{this.elementId}}-overflow" class="ember-table-overflow testtesttest">
+<div data-test-ember-table-overflow id="{{this.elementId}}-overflow" class="ember-table-overflow">
     <table class={{@tableClasses}}>
         {{yield
             (hash
@@ -12,4 +11,4 @@
         }}
     </table>
 </div>
-{{-ember-table-private/scroll-indicators api=this.api}}
+<EmberTablePrivate::ScrollIndicators @api={{this.api}} />

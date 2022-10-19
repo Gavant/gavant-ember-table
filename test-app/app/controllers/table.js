@@ -115,7 +115,8 @@ class TableController extends Controller {
     }
 
     @action
-    toggleRow(rowValue) {
+    toggleRow(event) {
+        const rowValue = event.rowValue;
         const expandedRows = this.expandedRows.concat([]);
         const rowExpanded = expandedRows.includes(rowValue);
         if (rowExpanded) {
