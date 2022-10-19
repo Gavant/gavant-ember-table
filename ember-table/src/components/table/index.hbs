@@ -19,7 +19,7 @@
     >
         {{#if this.showHeader}}
             <T.head
-                @columns={{@columns}}
+                @columns={{this.visibleColumns}}
                 @enableResize={{this.enableResize}}
                 @enableReorder={{this.enableReorder}}
                 @widthConstraint={{this.widthConstraint}}
@@ -45,14 +45,14 @@
                                 "data-table-col-has-pan-btn"
                             )
                         }}
-                        {{!@glint-ignore this is just how ember-table defines items, and we need columnMeta so we have to use "unused" items }}
-                        as |cellValue columnValue rowValue cellMeta columnMeta rowMeta rowsCount|
+                        as |columnValue columnMeta rowMeta|
                     >
                         {{#if columnValue.headerComponent}}
                             {{#let (component columnValue.headerComponent) as |HeaderCell|}}
                                 <HeaderCell
                                     @columnValue={{columnValue}}
                                     @columnMeta={{columnMeta}}
+                                    @rowMeta={{rowMeta}}
                                     @tableMeta={{@tableMeta}}
                                 >
                                     {{columnValue.name}}
@@ -89,6 +89,7 @@
                             {{#if this.enableUserResize}}
                                 <EmberTh::ResizeHandle @columnMeta={{columnMeta}} />
                             {{/if}}
+
                             {{#if (and this.canPanLeft (eq columnValue this.firstVisibleColumn))}}
                                 <button
                                     class="data-table-col-pan-btn data-table-col-pan-btn-left {{this.panButtonClass}}"

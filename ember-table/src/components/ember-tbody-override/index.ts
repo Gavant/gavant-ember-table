@@ -13,6 +13,5 @@ interface OverridenSignature {
     Blocks: EmberTableBodySignature['Blocks'];
     Element: EmberTableBodySignature['Element'];
 }
-export default interface EmberTbodyComponent extends OverridenArgs {}
 
 export default class EmberTbodyComponent extends EmberTbody<OverridenSignature> {}

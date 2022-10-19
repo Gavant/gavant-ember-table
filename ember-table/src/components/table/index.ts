@@ -10,7 +10,6 @@ import { isEmpty } from '@ember/utils';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
-import { Column as EmberTableColumn } from 'ember-table/components/ember-table/component';
 import { EmberTableBodySignature } from 'ember-table/components/ember-tbody/component';
 import { EmberTableHeaderSignature } from 'ember-table/components/ember-thead/component';
 
@@ -19,6 +18,7 @@ import { ComponentLike } from '@glint/template';
 import { FillMode, ResizeMode, SelectionMode, WidthConstraint } from '../../constants/table';
 import { argDefault } from '../../decorators/table';
 
+import type { Column as EmberTableColumn } from 'ember-table/components/ember-table/component';
 type FooterCellComponent = ComponentLike<{
     Args: {
         cellValue: any;
@@ -81,25 +81,6 @@ export interface RowClickEvent<R, TM> {
     rowMeta: RowMeta<R>;
     tableMeta?: TableMeta<TM>;
 }
-
-// export interface TableAPI<T, TM> {
-//     cells: TableCell<T, TM>[];
-//     rowMeta: RowMeta<T>;
-//     rowValue: T;
-//     isHeader: boolean;
-// }
-
-// export interface TableCell<T, TM> {
-//     columnMeta: ColumnMeta;
-//     columnValue: ColumnValue;
-//     rowMeta: RowMeta<T>;
-//     rowValue: T;
-//     cellValue: any;
-//     cellMeta: any;
-//     tableMeta?: TableMeta<TM>;
-//     sorts?: any[];
-//     sendUpdateSort?: (arg0: TableSort) => void;
-// }
 
 export type BodyArgs<R, TM> = EmberTableBodySignature['Args'] & {
     rows: R[];

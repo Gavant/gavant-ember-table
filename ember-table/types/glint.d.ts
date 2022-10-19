@@ -14,7 +14,7 @@ import Eq from '@gavant/glint-template-types/types/ember-truth-helpers/eq';
 import Not from '@gavant/glint-template-types/types/ember-truth-helpers/not';
 import Or from '@gavant/glint-template-types/types/ember-truth-helpers/or';
 
-import { OnResizeModifier } from '../types/helpers/on-resize';
+import { OnResizeModifier } from '../src/types/helpers/on-resize';
 
 declare module '@glint/environment-ember-loose/registry' {
     export default interface Registry {

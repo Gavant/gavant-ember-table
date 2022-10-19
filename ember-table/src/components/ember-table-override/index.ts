@@ -10,26 +10,6 @@ import { WithBoundArgs } from '@glint/template';
 
 import { setupTableStickyPolyfill, teardownTableStickyPolyfill } from '../../-private/sticky/table-sticky-polyfill';
 
-// interface EmberTableFooterSignature {
-//     Args: {
-//         tableClasses?: string;
-//         api: any;
-//         rows: any[];
-//     };
-//     Blocks: {
-//         default: [
-//             {
-//                 cells: EmberTableCell[];
-//                 isHeader: boolean;
-//                 rowsCount: number;
-//                 row: WithBoundArgs<typeof EmberTableRow, 'api'>;
-//             }
-//         ];
-//     };
-
-//     Element: HTMLDivElement;
-// }
-
 interface OverridenFooterSignature {
     Args: EmberTableFooterSignature['Args'];
     Blocks: {
@@ -66,8 +46,7 @@ interface OverrideSignature {
     };
     Element: EmberTableSignature['Element'];
 }
-type OverrideArgs = OverrideSignature['Args'];
-export default interface EmberTableOverrideComponent extends OverrideArgs {}
+
 export default class EmberTableOverrideComponent extends EmberTable<OverrideSignature> {
     headerStickyOffset = 0;
     footerStickyOffset = 0;

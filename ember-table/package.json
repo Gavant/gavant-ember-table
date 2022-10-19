@@ -101,6 +101,9 @@
       ],
       "components/row/expandable-row": [
         "dist/components/row/expandable-row/index.d.ts"
+      ],
+      "ember-table/components/ember-table/component": [
+        "dist/types/ember-table/index.d.ts"
       ]
     }
   },
