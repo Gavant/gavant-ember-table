@@ -3,10 +3,10 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 
-import { RowApi } from 'ember-table/components/ember-tr/component';
-
 import { SelectionMode } from '../../../constants/table';
 import { TableMeta } from '../../table';
+
+import type { RowApi } from '@gavant/glint-template-types/types/ember-table/row';
 
 export interface TableExpandedRowArgs {
     api: RowApi;

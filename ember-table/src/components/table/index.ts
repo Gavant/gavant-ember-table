@@ -15,10 +15,11 @@ import { ComponentLike } from '@glint/template';
 import { FillMode, ResizeMode, SelectionMode, WidthConstraint } from '../../constants/table';
 import { argDefault } from '../../decorators/table';
 
-import type { EmberTableBodySignature } from 'ember-table/components/ember-tbody/component';
-import type { EmberTableHeaderSignature } from 'ember-table/components/ember-thead/component';
+import type { EmberTableBodySignature } from '@gavant/glint-template-types/types/ember-table/body';
+import type { EmberTableHeaderSignature } from '@gavant/glint-template-types/types/ember-table/header';
 
-import type { Column as EmberTableColumn } from 'ember-table/components/ember-table/component';
+import type { Column as EmberTableColumn } from '@gavant/glint-template-types/types/ember-table/table';
+
 type FooterCellComponent = ComponentLike<{
     Args: {
         cellValue: any;
