@@ -28,9 +28,13 @@
     },
     "include": [
         "src/**/*",
-        "types/**/*"
-, "addon/-private/sticky"    ],
+        "types/**/*",
+        "addon/-private/sticky"
+    ],
     "exclude": [
         "dist/**/*"
-    ]
+    ],
+    "glint": {
+        "environment": "ember-loose",
+    }
 }

@@ -1,3 +1,17 @@
-import EmberTbody from 'ember-table/components/ember-tbody/component';
+import EmberTbody, { EmberTableBodySignature } from 'ember-table/components/ember-tbody/component';
 
-export default class EmberTbodyComponent extends EmberTbody {}
+type OverridenArgs = EmberTableBodySignature['Args'] & {
+    isLoading?: boolean;
+    showBottomLoading?: boolean;
+    showTopLoading?: boolean;
+    isEmpty?: boolean;
+    noResultsText?: string;
+};
+
+interface OverridenSignature {
+    Args: OverridenArgs;
+    Blocks: EmberTableBodySignature['Blocks'];
+    Element: EmberTableBodySignature['Element'];
+}
+
+export default class EmberTbodyComponent extends EmberTbody<OverridenSignature> {}

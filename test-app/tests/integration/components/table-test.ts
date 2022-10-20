@@ -3,7 +3,7 @@ import { click, render, scrollTo, settled } from '@ember/test-helpers';
 import { setupRenderingTest } from 'ember-qunit';
 import { TablePage } from 'ember-table/test-support';
 
-import { ColumnValue } from '@gavant/ember-table/components/table';
+import { Column } from '@gavant/ember-table/components/table';
 
 import 'qunit-dom';
 
@@ -16,7 +16,7 @@ module('Integration | Component | table', function (hooks) {
 
     hooks.beforeEach(function (this: any) {
         this.set('rows', [{ id: 1, name: 'One' }]);
-        const columns: ColumnValue[] = [
+        const columns: Column[] = [
             { valuePath: 'id', name: 'ID', width: 300, staticWidth: 300 },
             { valuePath: 'name', name: 'Name', width: 300, staticWidth: 300 },
             { valuePath: 'date', name: 'Date', width: 300, staticWidth: 300 },

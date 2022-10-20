@@ -1,12 +1,53 @@
-import EmberTable from 'ember-table/components/ember-table/component';
+import EmberTbodyComponent from 'components/ember-tbody-override';
+import EmberTableLoadingMore from 'ember-table/components/ember-table-loading-more/component';
+import EmberTable, { EmberTableSignature } from 'ember-table/components/ember-table/component';
+import EmberTableCell from 'ember-table/components/ember-td/component';
+import EmberTableFooter, { EmberTableFooterSignature } from 'ember-table/components/ember-tfoot/component';
+import EmberTableHeader from 'ember-table/components/ember-thead/component';
+import EmberTableRow from 'ember-table/components/ember-tr/component';
+
+import { WithBoundArgs } from '@glint/template';
 
 import { setupTableStickyPolyfill, teardownTableStickyPolyfill } from '../../-private/sticky/table-sticky-polyfill';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore: Ignore import of compiled template
-import layout from './index.hbs';
 
-export default class EmberTableComponent extends EmberTable {
-    layout = layout;
+interface OverridenFooterSignature {
+    Args: EmberTableFooterSignature['Args'];
+    Blocks: {
+        default: [
+            {
+                cells: EmberTableCell[];
+                isHeader: boolean;
+                rowsCount: number;
+                row: WithBoundArgs<typeof EmberTableRow, 'api'>;
+            }
+        ];
+    };
+    Element: EmberTableFooterSignature['Element'];
+}
+
+interface OverrideSignature {
+    Args: {
+        tableClasses?: string;
+        tableId?: string;
+        headerStickyOffset?: number;
+        footerStickyOffset?: number;
+    };
+
+    Blocks: {
+        default: [
+            {
+                api: any;
+                head: WithBoundArgs<typeof EmberTableHeader, 'api'>;
+                body: WithBoundArgs<typeof EmberTbodyComponent, 'api'>;
+                foot: WithBoundArgs<typeof EmberTableFooter<OverridenFooterSignature>, 'api'>;
+                loadingMore: WithBoundArgs<typeof EmberTableLoadingMore, 'api'>;
+            }
+        ];
+    };
+    Element: EmberTableSignature['Element'];
+}
+
+export default class EmberTableOverrideComponent extends EmberTable<OverrideSignature> {
     headerStickyOffset = 0;
     footerStickyOffset = 0;
 
@@ -15,6 +56,8 @@ export default class EmberTableComponent extends EmberTable {
      * @see https://github.com/Addepar/ember-table/blob/v2.2.3/addon/components/ember-table/component.js#L45
      */
     didInsertElement() {
+        // eslint-disable-next-line prefer-rest-params
+        super.didInsertElement();
         const thead = this.element.querySelector('thead');
         const tfoot = this.element.querySelector('tfoot');
 
@@ -35,11 +78,13 @@ export default class EmberTableComponent extends EmberTable {
         const tfoot = this.element.querySelector('tfoot');
 
         if (thead) {
-            teardownTableStickyPolyfill(this.element.querySelector('thead'));
+            teardownTableStickyPolyfill(thead);
         }
 
         if (tfoot) {
-            teardownTableStickyPolyfill(this.element.querySelector('tfoot'));
+            teardownTableStickyPolyfill(tfoot);
         }
+        // eslint-disable-next-line prefer-rest-params
+        super.willDestroyElement();
     }
 }

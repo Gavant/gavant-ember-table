@@ -5,7 +5,14 @@ interface ProgressSpinnerArgs {
     light?: boolean;
     size?: 'small' | 'medium' | 'large';
 }
-export default class ProgressSpinnerComponent extends Component<ProgressSpinnerArgs> {
+
+interface ProgressSpinnerSignature {
+    Args: ProgressSpinnerArgs;
+    Blocks: {
+        default: [];
+    };
+}
+export default class ProgressSpinnerComponent extends Component<ProgressSpinnerSignature> {
     classNameBindings: string[] = ['active', 'light', 'size'];
 
     get active() {
@@ -18,5 +25,11 @@ export default class ProgressSpinnerComponent extends Component<ProgressSpinnerA
 
     get size() {
         return this.args.size ?? null;
+    }
+}
+
+declare module '@glint/environment-ember-loose/registry' {
+    export default interface Registry {
+        ProgressSpinner: typeof ProgressSpinnerComponent;
     }
 }

@@ -35,6 +35,7 @@
         "@embroider/test-setup": "^1.7.1",
         "@embroider/webpack": "^1.8.3",
         "@faker-js/faker": "^7.3.0",
+        "@gavant/glint-template-types": "^0.1.7",
         "@glimmer/component": "^1.1.2",
         "@glimmer/tracking": "^1.1.2",
         "@glint/core": "^0.9.4",
@@ -93,7 +94,7 @@
         "ember-responsive": "^4.0.2",
         "ember-source": "~4.4.0",
         "ember-source-channel-url": "^3.0.0",
-        "ember-table": "^4.0.0-beta.5",
+        "ember-table": "^5.0.0",
         "ember-template-lint": "^4.8.0",
         "ember-truth-helpers": "^3.0.0",
         "ember-try": "^2.0.0",
@@ -111,7 +112,7 @@
         "qunit": "^2.19.1",
         "qunit-dom": "^2.0.0",
         "sass": "^1.53.0",
-        "typescript": "^4.7.4",
+        "typescript": "^4.8.4",
         "webpack": "^5.73.0"
     },
     "engines": {

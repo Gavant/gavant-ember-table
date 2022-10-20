@@ -1,9 +1,10 @@
-{{! template-lint-disable  }}
+{{! @glint-nocheck }}
+
 {{#if (and @showTopLoading @isLoading)}}
     <Row::Loading @columns={{this.columns}} />
 {{/if}}
 {{#vertical-collection
-    this.wrappedRows
+    items=this.wrappedRows
     containerSelector=this._containerSelector
     estimateHeight=this.estimateRowHeight
     key=this.key
@@ -17,18 +18,18 @@
     idForFirstItem=this.idForFirstItem
     as |rowValue|
 }}
-    {{#-ember-table-private/row-wrapper
-        rowValue=rowValue
-        columns=this.columns
-        columnMetaCache=this.columnMetaCache
-        rowMetaCache=this.rowMetaCache
-        canSelect=this.canSelect
-        rowSelectionMode=this.rowSelectionMode
-        checkboxSelectionMode=this.checkboxSelectionMode
-        rowToggleMode=this.rowToggleMode
-        rowsCount=this.wrappedRows.length
+    <EmberTablePrivate::RowWrapper
+        @rowValue={{rowValue}}
+        @columns={{this.columns}}
+        @columnMetaCache={{this.columnMetaCache}}
+        @rowMetaCache={{this.rowMetaCache}}
+        @canSelect={{this.canSelect}}
+        @checkboxSelectionMode={{this.checkboxSelectionMode}}
+        @rowSelectionMode={{this.rowSelectionMode}}
+        @rowToggleMode={{this.rowToggleMode}}
+        @rowsCount={{this.wrappedRows.length}}
         as |api|
-    }}
+    >
         {{#if (has-block)}}
             {{yield
                 (hash
@@ -36,14 +37,15 @@
                     rowMeta=api.rowMeta
                     cells=api.cells
                     rowSelectionMode=api.rowSelectionMode
+                    rowToggleMode=api.rowToggleMode
                     rowsCount=api.rowsCount
                     row=(component @rowComponent api=api tableMeta=@tableMeta)
                 )
             }}
         {{else}}
-            {{ember-tr api=api}}
+            <EmberTr @api={{api}} @tableMeta={{@tableMeta}} />
         {{/if}}
-    {{/-ember-table-private/row-wrapper}}
+    </EmberTablePrivate::RowWrapper>
 {{else if this.shouldYieldToInverse}}
     {{yield to="inverse"}}
 {{/vertical-collection}}
