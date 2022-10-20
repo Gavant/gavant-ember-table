@@ -1,25 +1,33 @@
-import Controller from '@ember/controller';
 import { A } from '@ember/array';
+import NativeArray from '@ember/array/-private/native-array';
+import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { later } from '@ember/runloop';
-import { tracked } from '@glimmer/tracking';
-import rsvp from 'rsvp';
 import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
+
+import MediaService from 'ember-responsive/services/media';
+
+import { Column } from '@gavant/ember-table/components/table';
+
+import rsvp from 'rsvp';
+import TableCellButtonComponent from 'test-app/components/table/cell/button';
+import TableCellTableMetaComponent from 'test-app/components/table/cell/table-meta';
 
 class TableController extends Controller {
-    @service media;
+    @service declare media: MediaService;
 
     @tracked foobar = 'bar';
-    @tracked expandedRows = A([]);
+    @tracked expandedRows: NativeArray<any> = A([]);
     @tracked hasMore = true;
     @tracked isLoading = false;
     @tracked sorts = [{ valuePath: 'date', isAscending: false }];
     @tracked panPosition = 0;
-    @tracked columns = A([
+    @tracked columns: Column[] = [
         {
             valuePath: 'date',
             name: 'Date',
-            cellComponent: 'table/cell/table-meta',
+            cellComponent: TableCellTableMetaComponent,
             isFixedLeft: true,
             width: 200,
             staticWidth: 200,
@@ -61,18 +69,18 @@ class TableController extends Controller {
         },
         {
             valuePath: 'id',
-            cellComponent: 'table/cell/button',
+            cellComponent: TableCellButtonComponent,
             width: 225,
             staticWidth: 225,
             maxWidth: 225,
             minWidth: 225,
             toggleRow: this.toggleRow
         }
-    ]);
+    ];
 
     @tracked otherColumns = false;
 
-    @tracked model = [];
+    @tracked model: NativeArray<any> = A([]);
 
     footerData = [{ age: 295 }];
 
@@ -82,8 +90,8 @@ class TableController extends Controller {
     @tracked enableSort = true;
 
     @action
-    updateFoobar(event) {
-        this.foobar = event.target.value;
+    updateFoobar(event: any) {
+        this.foobar = event.target?.value;
     }
 
     @action
@@ -91,7 +99,7 @@ class TableController extends Controller {
         this.isLoading = true;
         return new rsvp.Promise((resolve) => {
             later(() => {
-                const newRows = [];
+                const newRows: any[] = [];
                 for (let i = 0; i <= 10; i++) {
                     newRows.push({
                         date: new Date().toISOString(),
@@ -102,6 +110,8 @@ class TableController extends Controller {
                         id: `${Date.now() + i}`
                     });
                 }
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 this.model.pushObjects(newRows);
                 this.isLoading = false;
                 return resolve(newRows);
@@ -110,13 +120,13 @@ class TableController extends Controller {
     }
 
     @action
-    updateSorts(newSorts) {
+    updateSorts(newSorts: any) {
         this.sorts = newSorts;
     }
 
     @action
-    toggleRow(event) {
-        const rowValue = event.rowValue;
+    toggleRow(event: any) {
+        const rowValue = event.rowValue as any;
         const expandedRows = this.expandedRows.concat([]);
         const rowExpanded = expandedRows.includes(rowValue);
         if (rowExpanded) {
@@ -125,6 +135,8 @@ class TableController extends Controller {
         } else {
             expandedRows.push(rowValue);
         }
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         this.expandedRows = expandedRows;
     }
 

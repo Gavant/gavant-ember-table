@@ -35,8 +35,7 @@
     "include": [
       "app/**/*",
       "tests/**/*",
-      "types/**/*",
-      "node_modules/@gavant/ember-table/dist/types/**/*"
+      "types/**/*"
    ],
    "glint": {
     "environment": "ember-loose",
