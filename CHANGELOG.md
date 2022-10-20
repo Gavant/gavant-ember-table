@@ -1,4 +1,13 @@
 
+
+## v3.2.0 (2022-10-20)
+
+#### :rocket: Enhancement
+* [#45](https://github.com/Gavant/gavant-ember-table/pull/45) Ember table types ([@bakerac4](https://github.com/bakerac4))
+
+#### Committers: 1
+- Adam Baker ([@bakerac4](https://github.com/bakerac4))
+
 ## v3.1.4 (2022-10-11)
 
 ## v3.1.3 (2022-10-11)
