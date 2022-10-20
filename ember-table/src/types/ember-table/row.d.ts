@@ -1,15 +1,15 @@
 declare module 'ember-table/components/ember-tr/component' {
-// eslint-disable-next-line ember/no-classic-components
-import Component from '@ember/component';
+    // eslint-disable-next-line ember/no-classic-components
+    import Component from '@ember/component';
 
-import { Column, TableApi } from 'ember-table/components/ember-table/component';
-import EmberTableCell, { CellMeta } from 'ember-table/components/ember-td/component';
+    import { Column, TableApi } from 'ember-table/components/ember-table/component';
+    import EmberTableCell, { CellMeta } from 'ember-table/components/ember-td/component';
 
-import { RowClickEvent } from 'components/table';
+    import { RowClickEvent } from 'components/table';
 
-import { WithBoundArgs } from '@glint/template';
+    import { WithBoundArgs } from '@glint/template';
 
-        interface RowMetaSelect {
+    interface RowMetaSelect {
         toggle?: boolean;
         range?: boolean;
         single?: boolean;
