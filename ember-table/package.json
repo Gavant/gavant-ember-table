@@ -104,6 +104,30 @@
       ],
       "ember-table/components/ember-table/component": [
         "dist/types/ember-table/index.d.ts"
+      ],
+      "ember-table/components/ember-thead/component": [
+        "dist/types/ember-table/head.d.ts"
+      ],
+      "ember-table/components/ember-tfoot/component": [
+        "dist/types/ember-table/footer.d.ts"
+      ],
+      "ember-table/components/ember-tr/component": [
+        "dist/types/ember-table/row.d.ts"
+      ],
+      "ember-table/components/ember-table-loading-more/component": [
+        "dist/types/ember-table/loading-more.d.ts"
+      ],
+      "ember-table/components/ember-td/component": [
+        "dist/types/ember-table/cell.d.ts"
+      ],
+      "ember-table/components/ember-tbody/component": [
+        "dist/types/ember-table/body.d.ts"
+      ],
+      "ember-table/components/ember-th/resize-handle/component": [
+        "dist/types/ember-table/th/resize-handle.d.ts"
+      ],
+      "ember-table/components/ember-th/sort-indicator/component": [
+        "dist/types/ember-table/th/sort-indicator.d.ts"
       ]
     }
   },
@@ -132,8 +156,11 @@
   },
   "exports": {
     ".": "./dist/index.js",
-    "./*": "./dist/*",
-    "./addon-main.js": "./addon-main.js"
+    "./*": {
+      "default": "./dist/*.js"
+    },
+    "./addon-main.js": "./addon-main.js",
+    "./ember-table/components/ember-thead/component": "./dist/types/ember-table/head.d.ts"
   },
   "volta": {
     "extends": "../package.json"

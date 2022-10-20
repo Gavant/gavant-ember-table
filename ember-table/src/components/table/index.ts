@@ -10,13 +10,13 @@ import { isEmpty } from '@ember/utils';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
-import { EmberTableBodySignature } from 'ember-table/components/ember-tbody/component';
-import { EmberTableHeaderSignature } from 'ember-table/components/ember-thead/component';
-
 import { ComponentLike } from '@glint/template';
 
 import { FillMode, ResizeMode, SelectionMode, WidthConstraint } from '../../constants/table';
 import { argDefault } from '../../decorators/table';
+
+import type { EmberTableBodySignature } from 'ember-table/components/ember-tbody/component';
+import type { EmberTableHeaderSignature } from 'ember-table/components/ember-thead/component';
 
 import type { Column as EmberTableColumn } from 'ember-table/components/ember-table/component';
 type FooterCellComponent = ComponentLike<{
