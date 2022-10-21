@@ -83,13 +83,13 @@ export interface RowClickEvent<R, TM> {
     tableMeta?: TableMeta<TM>;
 }
 
-export type BodyArgs<R, TM> = Exclude<EmberTableBodySignature['Args'], 'api'> & {
+export type BodyArgs<R, TM> = Omit<EmberTableBodySignature['Args'], 'api'> & {
     rows: R[];
     selection?: R[] | R | null;
     tableMeta?: TableMeta<TM>;
 };
 
-export type HeadArgs<TM> = Exclude<EmberTableHeaderSignature['Args'], 'api'> & {
+export type HeadArgs<TM> = Omit<EmberTableHeaderSignature['Args'], 'api'> & {
     tableMeta?: TableMeta<TM>;
 };
 
