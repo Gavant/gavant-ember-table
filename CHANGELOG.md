@@ -1,5 +1,14 @@
 
 
+
+## v3.2.1 (2022-10-21)
+
+#### :bug: Bug Fix
+* [#46](https://github.com/Gavant/gavant-ember-table/pull/46) Fixing types for projects using this addon ([@bakerac4](https://github.com/bakerac4))
+
+#### Committers: 1
+- Adam Baker ([@bakerac4](https://github.com/bakerac4))
+
 ## v3.2.0 (2022-10-20)
 
 #### :rocket: Enhancement
