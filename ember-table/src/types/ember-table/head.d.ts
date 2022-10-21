@@ -79,7 +79,7 @@ declare module 'ember-table/components/ember-thead/component' {
          * @type {FillMode}
          * @memberof THeadArgs
          */
-        fillMode: FillMode;
+        fillMode?: FillMode;
 
         /**
          * Specifies how columns should be sized when the table is initialized.
