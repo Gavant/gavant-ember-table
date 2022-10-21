@@ -83,13 +83,13 @@ export interface RowClickEvent<R, TM> {
     tableMeta?: TableMeta<TM>;
 }
 
-export type BodyArgs<R, TM> = EmberTableBodySignature['Args'] & {
+export type BodyArgs<R, TM> = Exclude<EmberTableBodySignature['Args'], 'api'> & {
     rows: R[];
     selection?: R[] | R | null;
     tableMeta?: TableMeta<TM>;
 };
 
-export type HeadArgs<TM> = EmberTableHeaderSignature['Args'] & {
+export type HeadArgs<TM> = Exclude<EmberTableHeaderSignature['Args'], 'api'> & {
     tableMeta?: TableMeta<TM>;
 };
 
@@ -247,7 +247,7 @@ export interface TableArgs<R, F, TM> extends BodyArgs<R, TM>, HeadArgs<TM> {
      * @type {NativeArray<F>}
      * @memberof TableArgs
      */
-    footerRows?: NativeArray<F>;
+    footerRows?: NativeArray<F> | F[];
 
     /**
      * Displayed when there are no rows
