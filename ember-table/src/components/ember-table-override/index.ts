@@ -1,53 +1,64 @@
-import EmberTbodyComponent from 'components/ember-tbody-override';
-import EmberTableLoadingMore from 'ember-table/components/ember-table-loading-more/component';
-import EmberTable, { EmberTableSignature } from 'ember-table/components/ember-table/component';
-import EmberTableCell from 'ember-table/components/ember-td/component';
-import EmberTableFooter, { EmberTableFooterSignature } from 'ember-table/components/ember-tfoot/component';
-import EmberTableHeader from 'ember-table/components/ember-thead/component';
-import EmberTableRow from 'ember-table/components/ember-tr/component';
+// import EmberTbodyComponent from 'components/ember-tbody-override';
+// import EmberTableLoadingMore from 'ember-table/components/ember-table-loading-more/component';
+import EmberTable, { Column, ColumnMeta } from 'ember-table/components/ember-table/component';
 
-import { WithBoundArgs } from '@glint/template';
-
+// // import EmberTableCell from 'ember-table/components/ember-td/component';
+// // import EmberTableFooter, { EmberTableFooterSignature } from 'ember-table/components/ember-tfoot/component';
+// import EmberTableHeader from 'ember-table/components/ember-thead/component';
+// // import EmberTableRow from 'ember-table/components/ember-tr/component';
+// import { WithBoundArgs } from '@glint/template';
 import { setupTableStickyPolyfill, teardownTableStickyPolyfill } from '../../-private/sticky/table-sticky-polyfill';
 
-interface OverridenFooterSignature {
-    Args: EmberTableFooterSignature['Args'];
-    Blocks: {
-        default: [
-            {
-                cells: EmberTableCell[];
-                isHeader: boolean;
-                rowsCount: number;
-                row: WithBoundArgs<typeof EmberTableRow, 'api'>;
-            }
-        ];
-    };
-    Element: EmberTableFooterSignature['Element'];
-}
+// interface OverridenFooterSignature<CV extends Column<CV, RV, M, CM, RM, TM>, RV, M, CM extends ColumnMeta, RM, TM> {
+//     Args: EmberTableFooterSignature<CV, RV, M, CM, RM, TM>['Args'];
+//     Blocks: {
+//         default: [
+//             {
+//                 cells: EmberTableCell<CV, RV, M, CM, RM, TM>[];
+//                 isHeader: boolean;
+//                 rowsCount: number;
+//                 row: WithBoundArgs<typeof EmberTableRow, 'api'>;
 
-interface OverrideSignature {
-    Args: {
-        tableClasses?: string;
-        tableId?: string;
-        headerStickyOffset?: number;
-        footerStickyOffset?: number;
-    };
+//                 cells: EmberTableCell<CV, RV, M, CM, RM, TM>[];
+//                 isHeader: boolean;
+//                 rowsCount: number;
+//                 row: WithBoundArgs<typeof EmberTableRow, 'api'>;
+//             }
+//         ];
+//     };
+//     Element: EmberTableFooterSignature<CV, RV, M, CM, RM, TM>['Element'];
+// }
 
-    Blocks: {
-        default: [
-            {
-                api: any;
-                head: WithBoundArgs<typeof EmberTableHeader, 'api'>;
-                body: WithBoundArgs<typeof EmberTbodyComponent, 'api'>;
-                foot: WithBoundArgs<typeof EmberTableFooter<OverridenFooterSignature>, 'api'>;
-                loadingMore: WithBoundArgs<typeof EmberTableLoadingMore, 'api'>;
-            }
-        ];
-    };
-    Element: EmberTableSignature['Element'];
-}
+// interface OverrideSignature<CV extends Column<CV, RV, M, CM, RM, TM>, RV, M, CM extends ColumnMeta, RM, TM> {
+//     Args: {
+//         tableClasses?: string;
+//         tableId?: string;
+//         headerStickyOffset?: number;
+//         footerStickyOffset?: number;
+//     };
 
-export default class EmberTableOverrideComponent extends EmberTable<OverrideSignature> {
+//     Blocks: {
+//         default: [
+//             {
+//                 api: any;
+//                 head: WithBoundArgs<typeof EmberTableHeader, 'api'>;
+//                 body: WithBoundArgs<typeof EmberTbodyComponent, 'api'>;
+//                 foot: any;
+//                 loadingMore: WithBoundArgs<typeof EmberTableLoadingMore, 'api'>;
+//             }
+//         ];
+//     };
+//     Element: EmberTableSignature<CV, RV, M, CM, RM, TM>['Element'];
+// }
+
+export default class EmberTableOverrideComponent<
+    CV extends Column<RV, M, CM, RM, TM>,
+    RV,
+    M,
+    CM extends ColumnMeta,
+    RM,
+    TM
+> extends EmberTable<CV, RV, M, CM, RM, TM> {
     headerStickyOffset = 0;
     footerStickyOffset = 0;
 

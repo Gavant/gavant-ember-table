@@ -17,7 +17,7 @@
         @enableSort={{true}}
         @onRowClick={{this.toggleRow}}
         @panButtonClass="btn-primary"
-        @rowComponent="row/expandable-row"
+        @rowComponent="custom-expanded-row"
         @tableMeta={{hash expandedRowComponent="custom-row" expandedRows=this.expandedRows}}
         @staticHeight={{false}}
         @sorts={{this.sorts}}
@@ -25,4 +25,5 @@
         @isMobile={{this.media.isMobile}}
         @columnPanPosition={{this.panPosition}}
     />
+
 </div>

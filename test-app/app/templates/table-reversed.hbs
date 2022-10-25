@@ -1,11 +1,8 @@
 <div class="pannable-table">
     <div>
-      <button
-        type="button"
-        {{on "click" this.toggleColumns}}
-      >
-        Toggle Columns
-      </button>
+        <button type="button" {{on "click" this.toggleColumns}}>
+            Toggle Columns
+        </button>
     </div>
     <Table
         @columns={{this.columns}}
@@ -17,11 +14,8 @@
         @enableSort={{false}}
         @onRowClick={{this.alertData}}
         @panButtonClass="btn-primary"
-        @rowComponent="row/expandable-row"
-        @tableMeta={{hash
-          expandedRowComponent="custom-row"
-          expandedRows=this.expandedRows
-        }}
+        @rowComponent="custom-expanded-row"
+        @tableMeta={{hash expandedRowComponent="custom-row" expandedRows=this.expandedRows}}
         @staticHeight={{false}}
         @headerStickyOffset={{60}}
     />

@@ -415,7 +415,7 @@ export default class TableComponent<R, F, TM> extends Component<TableSignature<R
     //component state
     @tracked columnPanPosition: number = this.args.columnPanPosition ?? 0;
     @tracked containerWidth: number | null = null;
-    @tracked visibleColumns: NativeArray<Column> = A([]);
+    @tracked visibleColumns: Column[] = [];
     @tracked containerElement: HTMLElement | null = null;
 
     get noRows(): boolean {
@@ -840,5 +840,33 @@ export default class TableComponent<R, F, TM> extends Component<TableSignature<R
         if (this.args.onUpdateSorts) {
             this.args.onUpdateSorts(sorts);
         }
+    }
+
+    get columns() {
+        return [
+            { name: 'A', valuePath: 'A', testName: 'wow' },
+            { name: 'B', valuePath: 'B', testName: 'wow' },
+            { name: 'C', valuePath: 'C', testName: 'wow' },
+            { name: 'D', valuePath: 'D', testName: 'wow' },
+            { name: 'E', valuePath: 'E', testName: 'wow' },
+            { name: 'F', valuePath: 'F', testName: 'wow' },
+            { name: 'G', valuePath: 'G', testName: 'wow' }
+        ];
+    }
+
+    get rows() {
+        return [
+            { A: 'A', B: 'B', C: 'C', D: 'D' },
+            { A: 'A', B: 'B', C: 'C', D: 'D' },
+            { A: 'A', B: 'B', C: 'C', D: 'D' },
+            { A: 'A', B: 'B', C: 'C', D: 'D' },
+            { A: 'A', B: 'B', C: 'C', D: 'D' },
+            { A: 'A', B: 'B', C: 'C', D: 'D' },
+            { A: 'A', B: 'B', C: 'C', D: 'D' },
+            { A: 'A', B: 'B', C: 'C', D: 'D' },
+            { A: 'A', B: 'B', C: 'C', D: 'D' },
+            { A: 'A', B: 'B', C: 'C', D: 'D' },
+            { A: 'A', B: 'B', C: 'C', D: 'D' }
+        ];
     }
 }

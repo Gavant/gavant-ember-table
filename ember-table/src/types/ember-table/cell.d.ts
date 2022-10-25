@@ -2,18 +2,26 @@ declare module 'ember-table/components/ember-td/component' {
     // eslint-disable-next-line ember/no-classic-components
     import Component from '@ember/component';
 
-    import { Column } from 'ember-table/components/ember-table/component';
+    import { Column, ColumnMeta, RowValue, TableApi } from 'ember-table/components/ember-table/component';
 
-    import { RowClickEvent, TableMeta } from 'components/table';
+    import { RowClickEvent } from 'components/table';
+    import { GetOrElse } from 'types/private';
 
     export interface CellMeta {
         selected: boolean;
     }
 
-    export interface EmberTableCellSignature {
+    export interface EmberTableCellSignature<
+        CV extends Column<RV, M, CM, RM, TM>,
+        RV extends RowValue,
+        M,
+        CM extends ColumnMeta,
+        RM,
+        TM
+    > {
         Args: {
-            api: string;
-            tableMeta?: TableMeta<unknown>;
+            api: TableApi<CV, RV, M, CM, RM, TM>;
+            tableMeta?: TM;
             /**
              * An action that is called when a row is clicked. Will be called with the row and the event.
              *
@@ -25,20 +33,52 @@ declare module 'ember-table/components/ember-td/component' {
         };
         Blocks: {
             default: [
-                cellValue: any,
-                columnValue: Column,
-                rowValue: any,
-                cellMeta: CellMeta,
-                columnMeta: any,
-                rowMeta: any,
+                cellValue: GetOrElse<RV, CV['valuePath'], never>,
+                columnValue: CV,
+                rowValue: RV,
+                cellMeta: M,
+                columnMeta: CM,
+                rowMeta: RM,
                 rowsCount: number
             ];
         };
         Element: HTMLTableCellElement;
     }
 
-    type TableCellArgs = EmberTableCellSignature['Args'];
-    export default interface EmberTableCell extends TableCellArgs {}
-    // eslint-disable-next-line ember/no-empty-glimmer-component-classes, ember/require-tagless-components
-    export default class EmberTableCell extends Component<EmberTableCellSignature> {}
+    type TableCellArgs<
+        CV extends Column<RV, M, CM, RM, TM>,
+        RV extends RowValue,
+        M,
+        CM extends ColumnMeta,
+        RM,
+        TM
+    > = EmberTableCellSignature<CV, RV, M, CM, RM, TM>['Args'];
+    export default interface EmberTableCell<
+        CV extends Column<RV, M, CM, RM, TM>,
+        RV extends RowValue,
+        M,
+        CM extends ColumnMeta,
+        RM,
+        TM
+    > extends TableCellArgs<CV, RV, M, CM, RM, TM> {}
+
+    export default class EmberTableCell<
+        CV extends Column<RV, M, CM, RM, TM>,
+        RV extends RowValue,
+        M,
+        CM extends ColumnMeta,
+        RM,
+        TM
+    > extends Component<
+        EmberTableCellSignature<CV, RV, M, CM, RM, TM>
+        // eslint-disable-next-line ember/require-tagless-components
+    > {
+        checkboxSelectionMode: SelectionMode;
+        columnMeta: CM;
+        columnValue: CV;
+        rowMeta: RM;
+        rowSelectionMode: SelectionMode;
+        rowValue: RV;
+        rowsCount: number;
+    }
 }

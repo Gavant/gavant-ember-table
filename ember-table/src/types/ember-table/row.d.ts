@@ -2,10 +2,11 @@ declare module 'ember-table/components/ember-tr/component' {
     // eslint-disable-next-line ember/no-classic-components
     import Component from '@ember/component';
 
-    import { Column, TableApi } from 'ember-table/components/ember-table/component';
+    import { Column, ColumnMeta, RowValue, TableApi } from 'ember-table/components/ember-table/component';
     import EmberTableCell, { CellMeta } from 'ember-table/components/ember-td/component';
 
     import { RowClickEvent } from 'components/table';
+    import { GetOrElse } from 'types/private';
 
     import { WithBoundArgs } from '@glint/template';
 
@@ -32,20 +33,27 @@ declare module 'ember-table/components/ember-tr/component' {
         select(arg0: RowMetaSelect): void;
     }
 
-    interface RowApi extends TableApi {
-        cellValue: unknown;
-        cellMeta: CellMeta;
-        columnValue: Column;
-        columnMeta: unknown;
-        rowValue: unknown;
+    interface RowApi<CV extends Column<RV, M, CM, RM, TM>, RV extends RowValue, M, CM extends ColumnMeta, RM, TM> {
+        cellValue: GetOrElse<RV, CV['valuePath'], never>;
+        cellMeta: M;
+        columnValue: CV;
+        columnMeta: CM;
+        rowValue: RV;
         rowMeta: RowMeta<unknown>;
         rowsCount: number;
         cell: WithBoundArgs<typeof EmberTableCell, 'api'>;
     }
-    export interface TableRowSignature {
+    export interface TableRowSignature<
+        CV extends Column<RV, M, CM, RM, TM>,
+        RV extends RowValue,
+        M,
+        CM extends ColumnMeta,
+        RM,
+        TM
+    > {
         Args: {
             tableClasses?: string;
-            api: RowApi;
+            api: RowApi<CV, RV, M, CM, RM, TM>;
             /**
              * An action that is called when a row is clicked. Will be called with the row and the event.
              */
@@ -60,23 +68,47 @@ declare module 'ember-table/components/ember-tr/component' {
         Blocks: {
             default: [
                 {
-                    api: RowApi;
-                    cellValue: RowApi['cellValue'];
-                    cellMeta: RowApi['cellMeta'];
-                    columnValue: RowApi['columnValue'];
-                    columnMeta: RowApi['columnMeta'];
-                    rowValue: RowApi['rowValue'];
-                    rowMeta: RowApi['rowMeta'];
-                    rowsCount: RowApi['rowsCount'];
-                    cell: WithBoundArgs<typeof EmberTableCell, 'api'>;
+                    api: RowApi<CV, RV, M, CM, RM, TM>;
+                    cellValue: RowApi<CV, RV, M, CM, RM, TM>['cellValue'];
+                    cellMeta: RowApi<CV, RV, M, CM, RM, TM>['cellMeta'];
+                    columnValue: RowApi<CV, RV, M, CM, RM, TM>['columnValue'];
+                    columnMeta: RowApi<CV, RV, M, CM, RM, TM>['columnMeta'];
+                    rowValue: RowApi<CV, RV, M, CM, RM, TM>['rowValue'];
+                    rowMeta: RowApi<CV, RV, M, CM, RM, TM>['rowMeta'];
+                    rowsCount: RowApi<CV, RV, M, CM, RM, TM>['rowsCount'];
+                    cell: WithBoundArgs<typeof EmberTableCell<CV, RV, M, CM, RM, TM>, 'api'>;
                 }
             ];
         };
         Element: HTMLTableRowElement;
     }
 
-    type TableRowArgs = TableRowSignature['Args'];
-    export default interface EmberTableRow extends TableRowArgs {}
+    type TableRowArgs<
+        CV extends Column<RV, M, CM, RM, TM>,
+        RV extends RowValue,
+        M,
+        CM extends ColumnMeta,
+        RM,
+        TM
+    > = TableRowSignature<CV, RV, M, CM, RM, TM>['Args'];
+    export default interface EmberTableRow<
+        CV extends Column<RV, M, CM, RM, TM>,
+        RV extends RowValue,
+        M,
+        CM extends ColumnMeta,
+        RM,
+        TM
+    > extends TableRowArgs<CV, RV, M, CM, RM, TM> {}
     // eslint-disable-next-line ember/require-tagless-components
-    export default class EmberTableRow extends Component<TableRowSignature> {}
+    export default class EmberTableRow<
+        CV extends Column<RV, M, CM, RM, TM>,
+        RV extends RowValue,
+        M,
+        CM extends ColumnMeta,
+        RM,
+        TM
+    > extends Component<
+        TableRowSignature<CV, RV, M, CM, RM, TM>
+        // eslint-disable-next-line ember/require-tagless-components
+    > {}
 }
