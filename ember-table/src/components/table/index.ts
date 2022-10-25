@@ -19,6 +19,7 @@ import type { EmberTableBodySignature } from '@gavant/glint-template-types/types
 import type { EmberTableHeaderSignature } from '@gavant/glint-template-types/types/ember-table/header';
 
 import type { Column as EmberTableColumn } from '@gavant/glint-template-types/types/ember-table/table';
+import type { Column as ETColumn } from 'ember-table/components/ember-table/component';
 
 type FooterCellComponent = ComponentLike<{
     Args: {
@@ -870,3 +871,5 @@ export default class TableComponent<R, F, TM> extends Component<TableSignature<R
         ];
     }
 }
+
+type TestRow = { A: string; B: string; C: string; D: string };

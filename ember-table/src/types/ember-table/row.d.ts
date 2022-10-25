@@ -1,16 +1,16 @@
 declare module 'ember-table/components/ember-tr/component' {
-    // eslint-disable-next-line ember/no-classic-components
-    import Component from '@ember/component';
+// eslint-disable-next-line ember/no-classic-components
+import Component from '@ember/component';
 
-    import { Column, ColumnMeta, RowValue, TableApi } from 'ember-table/components/ember-table/component';
-    import EmberTableCell, { CellMeta } from 'ember-table/components/ember-td/component';
+import { Column, ColumnMeta, RowValue, TableApi } from 'ember-table/components/ember-table/component';
+import EmberTableCell, { CellMeta } from 'ember-table/components/ember-td/component';
 
-    import { RowClickEvent } from 'components/table';
-    import { GetOrElse } from 'types/private';
+import { RowClickEvent } from 'components/table';
+import { GetOrElse } from 'types/private';
 
-    import { WithBoundArgs } from '@glint/template';
+import { WithBoundArgs } from '@glint/template';
 
-    interface RowMetaSelect {
+        interface RowMetaSelect {
         toggle?: boolean;
         range?: boolean;
         single?: boolean;
@@ -69,13 +69,13 @@ declare module 'ember-table/components/ember-tr/component' {
             default: [
                 {
                     api: RowApi<CV, RV, M, CM, RM, TM>;
-                    cellValue: RowApi<CV, RV, M, CM, RM, TM>['cellValue'];
-                    cellMeta: RowApi<CV, RV, M, CM, RM, TM>['cellMeta'];
-                    columnValue: RowApi<CV, RV, M, CM, RM, TM>['columnValue'];
-                    columnMeta: RowApi<CV, RV, M, CM, RM, TM>['columnMeta'];
-                    rowValue: RowApi<CV, RV, M, CM, RM, TM>['rowValue'];
-                    rowMeta: RowApi<CV, RV, M, CM, RM, TM>['rowMeta'];
-                    rowsCount: RowApi<CV, RV, M, CM, RM, TM>['rowsCount'];
+                    cellValue: GetOrElse<RV, CV['valuePath'], never>;
+                    cellMeta: M;
+                    columnValue: CV;
+                    columnMeta: CM;
+                    rowValue: RV;
+                    rowMeta: RM;
+                    rowsCount: number;
                     cell: WithBoundArgs<typeof EmberTableCell<CV, RV, M, CM, RM, TM>, 'api'>;
                 }
             ];

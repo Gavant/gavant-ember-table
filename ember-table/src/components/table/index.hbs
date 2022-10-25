@@ -209,7 +209,7 @@
         </h.row>
     </t.head>
 
-    <t.body @rows={{this.rows}} as |b|>
+    {{!-- <t.body @rows={{this.rows}} as |b|>
         <b.row class="{{if b.rowMeta.selected 'is-row-selected'}}" as |r|>
             <r.cell
                 class="{{if r.cellMeta.selected 'is-cell-selected'}} {{if r.columnMeta.selected 'is-column-selected'}}"
@@ -220,5 +220,5 @@
                 </div>
             </r.cell>
         </b.row>
-    </t.body>
+    </t.body> --}}
 </EmberTable>

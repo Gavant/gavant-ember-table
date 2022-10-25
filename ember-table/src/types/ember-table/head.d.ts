@@ -1,17 +1,17 @@
 declare module 'ember-table/components/ember-thead/component' {
-    // eslint-disable-next-line ember/no-classic-components
-    import Component from '@ember/component';
+// eslint-disable-next-line ember/no-classic-components
+import Component from '@ember/component';
 
-    import { Column, ColumnMeta, RowValue, TableApi } from 'ember-table/components/ember-table/component';
-    import EmberTableCell from 'ember-table/components/ember-td/component';
-    import EmberTableRow from 'ember-table/components/ember-tr/component';
+import { Column, ColumnMeta, RowValue, TableApi } from 'ember-table/components/ember-table/component';
+import EmberTableCell, { EmberTableCellSignature } from 'ember-table/components/ember-td/component';
+import EmberTableRow from 'ember-table/components/ember-tr/component';
 
-    import { TableMeta } from 'components/table';
-    import { FillMode, ResizeMode, WidthConstraint } from 'constants/table';
+import { TableMeta } from 'components/table';
+import { FillMode, ResizeMode, WidthConstraint } from 'constants/table';
 
-    import { WithBoundArgs } from '@glint/template';
+import { ComponentLike, WithBoundArgs } from '@glint/template';
 
-    export interface TableSort {
+        export interface TableSort {
         valuePath: string;
         isAscending: boolean;
     }
@@ -201,7 +201,7 @@ declare module 'ember-table/components/ember-thead/component' {
         Blocks: {
             default: [
                 {
-                    cells: typeof EmberTableCell<CV, RV, M, CM, RM, TM>[];
+                    cells: Array<typeof EmberTableCell<CV, RV, M, CM, RM, TM>>;
                     isHeader: boolean;
                     rowsCount: number;
                     row: WithBoundArgs<typeof EmberTableRow<CV, RV, M, CM, RM, TM>, 'api'>;

@@ -57,7 +57,7 @@ import { ComponentLike, WithBoundArgs } from '@glint/template';
     > = BodyCellComponent<CV, RV, M, CM, RM, TM>;
 
     export interface Column<RV extends RowValue, M, CM extends ColumnMeta, RM, TM> {
-        [key: string]: unknown;
+        [key: string]: any;
         valuePath?: string;
         name: string;
         width?: number;
@@ -65,9 +65,9 @@ import { ComponentLike, WithBoundArgs } from '@glint/template';
         maxWidth?: number;
         textAlign?: string;
         isSortable?: boolean;
-        // headerComponent?: HeaderCellComponent<CV, CM, TM>;
-        // cellComponent?: BodyCellComponent<CV, RV, M, CM, RM, TM>;
-        // footerComponent?: FooterCellComponent<CV, RV, M, CM, RM, TM>;
+        // headerComponent?: HeaderCellComponent<Column<RV, M, CM, RM, TM>, CM, TM>;
+        // cellComponent?: BodyCellComponent<Column<RV, M, CM, RM, TM>, RV, M, CM, RM, TM>;
+        // footerComponent?: FooterCellComponent<Column<RV, M, CM, RM, TM>, RV, M, CM, RM, TM>;
         subcolumns?: Column<RV, M, CM, RM, TM>[];
         footerValuePath?: string;
     }
@@ -109,7 +109,7 @@ import { ComponentLike, WithBoundArgs } from '@glint/template';
         readonly selected: boolean;
     }
 
-    type RowValue = Record<string, unknown>;
+    export type RowValue = { [foo: string]: any | never };
 
     export interface TableApi<
         CV extends Column<RV, M, CM, RM, TM>,
@@ -137,8 +137,8 @@ import { ComponentLike, WithBoundArgs } from '@glint/template';
             default: [
                 {
                     api: TableApi<CV, RV, M, CM, RM, TM>;
-                    head: WithBoundArgs<typeof EmberTableHeader, 'api'>;
-                    body: WithBoundArgs<typeof EmberTableBody, 'api'>;
+                    head: WithBoundArgs<typeof EmberTableHeader<CV, RV, M, CM, RM, TM>, 'api'>;
+                    body: WithBoundArgs<typeof EmberTableBody<CV, RV, M, CM, RM, TM>, 'api'>;
                     // foot: WithBoundArgs<typeof EmberTableFooter<CV, RV, M, CM, RM, TM>, 'api'>;
                     loadingMore: WithBoundArgs<typeof EmberTableLoadingMore, 'api'>;
                 }
