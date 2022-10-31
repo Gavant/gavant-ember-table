@@ -37,9 +37,9 @@ type FooterCellComponent<
 export interface BodyCellArgs<
     CV extends Column<string, RV, M, ColumnMeta, RM, TM>,
     RV extends RowValue,
-    RM = void,
-    TM = void,
-    M = void
+    RM = void, // void makes it optional
+    TM = void, // void makes it optional
+    M = void // void makes it optional
 > extends CellValue<RV, CV> {
     columnValue: CV;
     rowValue: RV;
@@ -79,12 +79,6 @@ export interface Column<VP extends string | undefined, RV extends RowValue, M, C
     footerClassNames?: string;
     footerComponent?: FooterCellComponent<VP, Column<VP, RV, M, CM, RM, TM>, RV, M, CM, RM, TM>;
     readonly valuePath?: VP;
-}
-
-export function declareColumns<T extends ReadonlyArray<Column<string, any, unknown, any, unknown, unknown>>>(
-    items: [...T]
-) {
-    return items;
 }
 
 export interface TableSort {

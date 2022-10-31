@@ -1,5 +1,4 @@
 import '@glint/environment-ember-loose';
-import EmberTableOverrideComponent from 'components/ember-table-override';
 import EmberTableLoadingMore from 'ember-table/components/ember-table-loading-more/component';
 import EmberTableBody from 'ember-table/components/ember-tbody/component';
 import EmberTableFooter from 'ember-table/components/ember-tfoot/component';
@@ -23,7 +22,7 @@ declare module '@glint/environment-ember-loose/registry' {
         'ember-tbody-override': typeof EmberTableBody;
         'ember-table-loading-more': typeof EmberTableLoadingMore;
         'EmberTablePrivate::ScrollIndicators': any;
-        EmberTableOverride: typeof EmberTableOverrideComponent;
+        // EmberTableOverride: typeof EmberTableOverrideComponent;
         'EmberTh::SortIndicator': typeof EmberTHSortIndicator;
         'EmberTh::ResizeHandle': typeof EmberTHResizeHandle;
         'did-insert': typeof DidInsertModifier;

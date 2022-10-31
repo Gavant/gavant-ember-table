@@ -26,14 +26,14 @@
         "@gavant/ember-table": "3.2.2"
     },
     "devDependencies": {
-        "@embroider/macros": "1.5.0",
+        "@embroider/macros": "1.9.0",
         "@ember/optional-features": "^2.0.0",
         "@ember/render-modifiers": "^2.0.4",
         "@ember/test-helpers": "^2.7.0",
-        "@embroider/compat": "^1.8.3",
-        "@embroider/core": "^1.8.3",
-        "@embroider/test-setup": "^1.7.1",
-        "@embroider/webpack": "^1.8.3",
+        "@embroider/compat": "^1.9.0",
+        "@embroider/core": "^1.9.0",
+        "@embroider/test-setup": "^1.8.3",
+        "@embroider/webpack": "^1.9.0",
         "@faker-js/faker": "^7.3.0",
         "@gavant/glint-template-types": "^0.2.3",
         "@glimmer/component": "^1.1.2",
@@ -113,7 +113,7 @@
         "qunit-dom": "^2.0.0",
         "sass": "^1.53.0",
         "typescript": "^4.8.4",
-        "webpack": "^5.73.0"
+        "webpack": "^5.74.0"
     },
     "engines": {
         "node": "14.* || >= 16"

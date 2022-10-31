@@ -6,10 +6,8 @@ import Component from '@glimmer/component';
 import { SelectionMode } from '../../../constants/table';
 import { TableMeta } from '../../table';
 
-import type { RowApi } from '@gavant/glint-template-types/types/ember-table/row';
-
 export interface TableExpandedRowArgs {
-    api: RowApi;
+    api: any;
     tableMeta?: TableMeta<{ expandedRowComponent: typeof Component; expandedRows?: any[] }>;
     rowSelectionMode: SelectionMode;
     onClick?(...args: any[]): void;
@@ -21,7 +19,7 @@ interface TableExpandedRowSignature {
     Blocks: {
         default: [
             {
-                api: RowApi;
+                api: any;
                 cellValue: any;
                 cellMeta: any;
                 columnValue: any;

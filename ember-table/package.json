@@ -100,8 +100,23 @@
       "components/table": [
         "dist/components/table/index.d.ts"
       ],
+      "components/ember-table-override": [
+        "dist/components/ember-table-override/index.d.ts"
+      ],
+      "components/ember-tbody-override": [
+        "dist/components/ember-tbody-override/index.d.ts"
+      ],
+      "components/progress-spinner": [
+        "dist/components/progress-spinner/index.d.ts"
+      ],
       "components/row/expandable-row": [
         "dist/components/row/expandable-row/index.d.ts"
+      ],
+      "components/row/loading": [
+        "dist/components/row/loading/index.d.ts"
+      ],
+      "components/row/no-results": [
+        "dist/components/row/no-results/index.d.ts"
       ]
     }
   },
@@ -127,13 +142,6 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "exports": {
-    ".": "./dist/index.js",
-    "./*": {
-      "default": "./dist/*.js"
-    },
-    "./addon-main.js": "./addon-main.js"
   },
   "volta": {
     "extends": "../package.json"

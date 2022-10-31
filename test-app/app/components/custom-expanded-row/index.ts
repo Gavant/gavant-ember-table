@@ -1,4 +1,4 @@
-import ExpandableRow from '@gavant/ember-table/components/row/expandable-row/index';
+import ExpandableRow from '@gavant/ember-table/components/row/expandable-row';
 
 export default class PurchaseOrdersListTableExpandableRow extends ExpandableRow {
     get isEven() {
