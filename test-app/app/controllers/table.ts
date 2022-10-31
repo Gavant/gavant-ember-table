@@ -8,7 +8,7 @@ import { tracked } from '@glimmer/tracking';
 
 import MediaService from 'ember-responsive/services/media';
 
-import { Column } from '@gavant/ember-table/components/table';
+import { makeColumns } from '@gavant/ember-table/components/table';
 
 import rsvp from 'rsvp';
 import TableCellButtonComponent from 'test-app/components/table/cell/button';
@@ -20,14 +20,6 @@ interface TestRow {
     tall: boolean;
     short: boolean;
     id: string;
-}
-type ColumnValueType<T> = T extends Column<infer CV, any, any, any, any, any> ? Readonly<CV> : never;
-
-export function makeColumns<
-    T extends ReadonlyArray<Column<CV extends string ? CV : never, any, unknown, any, unknown, unknown>>,
-    CV = ColumnValueType<T[number]>
->(items: [...T]) {
-    return items;
 }
 
 class TableController extends Controller {

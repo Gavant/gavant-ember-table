@@ -9,9 +9,8 @@ type ArrayElement<ArrayType extends readonly unknown[]> = ArrayType extends read
     ? ElementType
     : never;
 
-type test = TableController['columns'][5];
 interface TableCellButtonComponentSignature {
-    Args: BodyCellArgs<string, test, ArrayElement<TableController['model']>, unknown, any, unknown, unknown>;
+    Args: BodyCellArgs<TableController['columns'][5], ArrayElement<TableController['model']>>;
 }
 export default class TableCellButtonComponent extends Component<TableCellButtonComponentSignature> {
     @action

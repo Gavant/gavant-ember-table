@@ -25,7 +25,7 @@ import type {
 } from '@gavant/glint-template-types/types/ember-table/table';
 
 type FooterCellComponent<
-    VP extends string,
+    VP extends string | undefined,
     CV extends Column<VP, RV, M, CM, RM, TM>,
     RV extends RowValue,
     M,
@@ -34,24 +34,42 @@ type FooterCellComponent<
     TM
 > = BodyCellComponent<CV, RV, M, CM, RM, TM>;
 
-export type BodyCellArgs<
-    VP extends string,
-    CV extends Column<VP, RV, M, CM, RM, TM>,
+export interface BodyCellArgs<
+    CV extends Column<string, RV, M, ColumnMeta, RM, TM>,
     RV extends RowValue,
-    M,
-    CM extends ColumnMeta,
-    RM,
-    TM
-> = {
+    RM = void,
+    TM = void,
+    M = void
+> extends CellValue<RV, CV> {
     columnValue: CV;
     rowValue: RV;
     cellMeta: M;
-    columnMeta: CM;
+    columnMeta: ColumnMeta;
     rowMeta: RM;
     tableMeta: TM;
-} & CellValue<RV, CV>;
+}
 
-export interface Column<VP extends string, RV extends RowValue, M, CM extends ColumnMeta, RM, TM>
+type ColumnValueType<T> = T extends Column<infer CV, any, any, any, any, any> ? Readonly<CV> : never;
+
+/**
+ * Turns the columns into the correct types for the table, so that we can have cell components automatically get the correct types.
+ * We convert whats sent in from an array to a tuple, so that the values can be accessed by index and we can have the correct types and specifically a hardcoded value id
+ *
+ *
+ * @export
+ * @template T
+ * @template CV
+ * @param {[...T]} items
+ * @return {*}
+ */
+export function makeColumns<
+    T extends ReadonlyArray<Column<CV extends string ? CV : never, any, unknown, any, unknown, unknown>>,
+    CV = ColumnValueType<T[number]>
+>(items: [...T]) {
+    return items;
+}
+
+export interface Column<VP extends string | undefined, RV extends RowValue, M, CM extends ColumnMeta, RM, TM>
     extends Omit<EmberTableColumn<RV, M, CM, RM, TM>, 'valuePath'> {
     id?: string;
     isFixedLeft?: boolean;
@@ -60,7 +78,7 @@ export interface Column<VP extends string, RV extends RowValue, M, CM extends Co
     cellClassNames?: string;
     footerClassNames?: string;
     footerComponent?: FooterCellComponent<VP, Column<VP, RV, M, CM, RM, TM>, RV, M, CM, RM, TM>;
-    readonly valuePath: VP;
+    readonly valuePath?: VP;
 }
 
 export function declareColumns<T extends ReadonlyArray<Column<string, any, unknown, any, unknown, unknown>>>(
@@ -107,23 +125,16 @@ export interface RowClickEvent<R, TM> {
 }
 
 export type BodyArgs<
-    T extends string,
-    CV extends Column<T, RV, M, CM, RM, TM>,
+    CV extends Column<ColumnValueType<CV>, RV, M, CM, RM, TM>,
     RV extends RowValue,
     M,
     CM extends ColumnMeta,
     RM,
     TM
 > = Omit<EmberTableBodySignature<CV, RV, M, CM, RM, TM>['Args'], 'api'>;
-//     & {
-//     rows: R[];
-//     selection?: R[] | R | null;
-//     tableMeta?: TableMeta<TM>;
-// };
 
 export type HeadArgs<
-    T extends string,
-    CV extends Column<T, RV, M, CM, RM, TM>,
+    CV extends Column<ColumnValueType<CV>, RV, M, CM, RM, TM>,
     RV extends RowValue,
     M,
     CM extends ColumnMeta,
@@ -131,21 +142,16 @@ export type HeadArgs<
     TM
 > = Omit<EmberTableHeaderSignature<CV, RV, M, CM, RM, TM>['Args'], 'api'>;
 
-//     & {
-//     tableMeta?: TableMeta<TM>;
-// };
-
 export interface TableArgs<
-    T extends string,
-    CV extends Column<T, RV, M, CM, RM, TM>,
+    CV extends Column<ColumnValueType<CV>, RV, M, CM, RM, TM>,
     RV extends RowValue,
     FRV extends RowValue,
     M,
     CM extends ColumnMeta,
     RM,
     TM
-> extends BodyArgs<T, CV, RV, M, CM, RM, TM>,
-        HeadArgs<T, CV, RV, M, CM, RM, TM> {
+> extends BodyArgs<CV, RV, M, CM, RM, TM>,
+        HeadArgs<CV, RV, M, CM, RM, TM> {
     /**
      * Manually change the panning of the table
      *
@@ -391,8 +397,7 @@ export interface TableArgs<
 }
 
 interface TableSignature<
-    T extends string,
-    CV extends Column<T, RV, M, CM, RM, TM>,
+    CV extends Column<ColumnValueType<CV>, RV, M, CM, RM, TM>,
     RV extends RowValue,
     FRV extends RowValue,
     M,
@@ -400,20 +405,19 @@ interface TableSignature<
     RM,
     TM
 > {
-    Args: TableArgs<T, CV, RV, FRV, M, CM, RM, TM>;
+    Args: TableArgs<CV, RV, FRV, M, CM, RM, TM>;
     Element: HTMLDivElement;
 }
 
 export default class TableComponent<
-    T extends string,
-    CV extends Column<T, RV, M, CM, RM, TM>,
+    CV extends Column<ColumnValueType<CV>, RV, M, CM, RM, TM>,
     RV extends RowValue,
     FRV extends RowValue,
     M,
     CM extends ColumnMeta,
     RM,
     TM
-> extends Component<TableSignature<T, CV, RV, FRV, M, CM, RM, TM>> {
+> extends Component<TableSignature<CV, RV, FRV, M, CM, RM, TM>> {
     //ember-table's resizing must be enabled in order for fill-mode auto column
     //resizing to work, even if you don't want to allow user-invoked resizing
     readonly enableResize: boolean = true;
@@ -708,7 +712,7 @@ export default class TableComponent<
      *
      * @memberof TableComponent
      */
-    constructor(owner: unknown, args: TableArgs<T, CV, RV, FRV, M, CM, RM, TM>) {
+    constructor(owner: unknown, args: TableArgs<CV, RV, FRV, M, CM, RM, TM>) {
         super(owner, args);
 
         assert('@rows is not an instanceof Array.', args.rows instanceof Array);
