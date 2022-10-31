@@ -7,22 +7,6 @@ export type AnyFunction = (...params: any) => any;
 export declare const Invoke: unique symbol;
 export type Invokable<T extends AnyFunction = AnyFunction> = { [Invoke]: T };
 export type InvokableConstructor<F extends AnyFunction> = abstract new (...args: any) => Invokable<F>;
-export type WithBoundArgs<
-    T extends InvokableConstructor<AnyFunction>,
-    BoundArgs extends NamedArgNames<T>
-> = T extends InvokableConstructor<(named: infer Named, ...positional: infer Positional) => infer Result>
-    ? InvokableConstructor<
-          (
-              named: GuardEmpty<Omit<Named, BoundArgs> & Partial<Pick<Named, BoundArgs & keyof Named>>>,
-              ...positional: Positional
-          ) => Result
-      >
-    : never;
-type NamedArgNames<T extends InvokableConstructor<AnyFunction>> = T extends InvokableConstructor<
-    (named: infer Named, ...positional: any) => any
->
-    ? keyof Named
-    : never;
 
 export type Class<T> = Constructor<T>;
 export type GetOrElse<Obj, K, Fallback> = K extends keyof Obj ? Obj[K] : Fallback;

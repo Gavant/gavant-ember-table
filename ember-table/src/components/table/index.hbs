@@ -1,3 +1,4 @@
+{{! @glint-nocheck }}
 <div
     class="data-table
         {{if this.hasHiddenColumns ' has-hidden-columns'}}
@@ -9,7 +10,7 @@
     {{did-insert this.didInsertTable}}
 >
     <div {{on-resize this.debouncedRender debounce=this.resizeDebounce}}></div>
-    {{!-- <EmberTableOverride
+    <EmberTableOverride
         style={{this.height}}
         @tableId={{this.tableId}}
         @tableClasses={{this.tableClassNames}}
@@ -197,28 +198,5 @@
                 </Foot.row>
             </T.foot>
         {{/if}}
-    </EmberTableOverride> --}}
+    </EmberTableOverride>
 </div>
-
-<EmberTable as |t|>
-    <t.head @columns={{this.columns}} as |h|>
-        <h.row as |r|>
-            <r.cell class="{{if r.columnMeta.selected 'is-column-selected'}}" as |cell column|>
-                {{column.testName}}
-            </r.cell>
-        </h.row>
-    </t.head>
-
-    {{!-- <t.body @rows={{this.rows}} as |b|>
-        <b.row class="{{if b.rowMeta.selected 'is-row-selected'}}" as |r|>
-            <r.cell
-                class="{{if r.cellMeta.selected 'is-cell-selected'}} {{if r.columnMeta.selected 'is-column-selected'}}"
-                as |cellValue column row cellMeta columnMeta rowMeta|
-            >
-                <div onclick={{action "setSelected" cellMeta columnMeta rowMeta}} class="cell-content">
-                    {{cellValue}}
-                </div>
-            </r.cell>
-        </b.row>
-    </t.body> --}}
-</EmberTable>

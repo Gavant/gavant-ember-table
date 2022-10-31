@@ -3,9 +3,8 @@ declare module 'ember-table/components/ember-table/component' {
 import Component from '@ember/component';
 
 import EmberTableLoadingMore from 'ember-table/components/ember-table-loading-more/component';
-// import { Column } from 'ember-table/components/ember-table/component';
 import EmberTableBody from 'ember-table/components/ember-tbody/component';
-// import EmberTableFooter from 'ember-table/components/ember-tfoot/component';
+import EmberTableFooter from 'ember-table/components/ember-tfoot/component';
 import EmberTableHeader from 'ember-table/components/ember-thead/component';
 
 import { GetOrElse } from 'types/private';
@@ -20,9 +19,6 @@ import { ComponentLike, WithBoundArgs } from '@glint/template';
 
     type HeaderCellComponent<CV, CM, TM> = ComponentLike<{
         Args: CellChildArgs<CV, CM, TM>;
-        Blocks: {
-            default: [];
-        };
     }>;
 
     type BodyCellComponent<
@@ -42,53 +38,22 @@ import { ComponentLike, WithBoundArgs } from '@glint/template';
             rowMeta: RM;
             tableMeta: TM;
         };
-        Blocks: {
-            default: [];
-        };
     }>;
-
-    type FooterCellComponent<
-        CV extends Column<RV, M, CM, RM, TM>,
-        RV extends RowValue,
-        M,
-        CM extends ColumnMeta,
-        RM,
-        TM
-    > = BodyCellComponent<CV, RV, M, CM, RM, TM>;
 
     export interface Column<RV extends RowValue, M, CM extends ColumnMeta, RM, TM> {
         [key: string]: any;
         valuePath?: string;
-        name: string;
+        name?: string;
         width?: number;
         minWidth?: number;
         maxWidth?: number;
         textAlign?: string;
         isSortable?: boolean;
-        // headerComponent?: HeaderCellComponent<Column<RV, M, CM, RM, TM>, CM, TM>;
-        // cellComponent?: BodyCellComponent<Column<RV, M, CM, RM, TM>, RV, M, CM, RM, TM>;
-        // footerComponent?: FooterCellComponent<Column<RV, M, CM, RM, TM>, RV, M, CM, RM, TM>;
+        headerComponent?: HeaderCellComponent<Column<RV, M, CM, RM, TM>, CM, TM>;
+        cellComponent?: BodyCellComponent<Column<RV, M, CM, RM, TM>, RV, M, CM, RM, TM>;
         subcolumns?: Column<RV, M, CM, RM, TM>[];
         footerValuePath?: string;
     }
-
-    // type ColumnType<T, RV, M, CM extends ColumnMeta, RM, TM> = T extends Column<RV, M, CM, RM, TM> ? T : never;
-
-    // export interface Column<CV, RV, M, CM extends ColumnMeta, RM, TM> {
-    //     [key: string]: unknown;
-    //     valuePath?: string;
-    //     name?: string;
-    //     width?: number;
-    //     minWidth?: number;
-    //     maxWidth?: number;
-    //     textAlign?: string;
-    //     isSortable?: boolean;
-    //     headerComponent?: HeaderCellComponent<CV, CM, TM>;
-    //     cellComponent?: BodyCellComponent<CV, RV, M, CM, RM, TM>;
-    //     footerComponent?: FooterCellComponent<CV, RV, M, CM, RM, TM>;
-    //     subcolumns?: Column<CV, RV, M, CM, RM, TM>[];
-    //     footerValuePath: string;
-    // }
 
     export interface ColumnMeta {
         readonly isLeaf: boolean;
@@ -139,7 +104,7 @@ import { ComponentLike, WithBoundArgs } from '@glint/template';
                     api: TableApi<CV, RV, M, CM, RM, TM>;
                     head: WithBoundArgs<typeof EmberTableHeader<CV, RV, M, CM, RM, TM>, 'api'>;
                     body: WithBoundArgs<typeof EmberTableBody<CV, RV, M, CM, RM, TM>, 'api'>;
-                    // foot: WithBoundArgs<typeof EmberTableFooter<CV, RV, M, CM, RM, TM>, 'api'>;
+                    foot: WithBoundArgs<typeof EmberTableFooter<CV, RV, M, CM, RM, TM>, 'api'>;
                     loadingMore: WithBoundArgs<typeof EmberTableLoadingMore, 'api'>;
                 }
             ];

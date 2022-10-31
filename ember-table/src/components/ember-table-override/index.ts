@@ -1,6 +1,8 @@
 // import EmberTbodyComponent from 'components/ember-tbody-override';
+import EmberTable from 'ember-table/components/ember-table/component';
+
 // import EmberTableLoadingMore from 'ember-table/components/ember-table-loading-more/component';
-import EmberTable, { Column, ColumnMeta } from 'ember-table/components/ember-table/component';
+import { Column, ColumnMeta, RowValue } from '@gavant/glint-template-types/types/ember-table/table';
 
 // // import EmberTableCell from 'ember-table/components/ember-td/component';
 // // import EmberTableFooter, { EmberTableFooterSignature } from 'ember-table/components/ember-tfoot/component';
@@ -53,7 +55,7 @@ import { setupTableStickyPolyfill, teardownTableStickyPolyfill } from '../../-pr
 
 export default class EmberTableOverrideComponent<
     CV extends Column<RV, M, CM, RM, TM>,
-    RV,
+    RV extends RowValue,
     M,
     CM extends ColumnMeta,
     RM,

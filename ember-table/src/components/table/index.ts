@@ -10,41 +10,45 @@ import { isEmpty } from '@ember/utils';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
-import { ComponentLike } from '@glint/template';
+import { EmberTableBodySignature } from '@gavant/glint-template-types/types/ember-table/body';
+import { EmberTableHeaderSignature } from '@gavant/glint-template-types/types/ember-table/header';
 
 import { FillMode, ResizeMode, SelectionMode, WidthConstraint } from '../../constants/table';
 import { argDefault } from '../../decorators/table';
 
-import type { EmberTableBodySignature } from '@gavant/glint-template-types/types/ember-table/body';
-import type { EmberTableHeaderSignature } from '@gavant/glint-template-types/types/ember-table/header';
+import type {
+    BodyCellComponent,
+    Column as EmberTableColumn,
+    ColumnMeta,
+    RowValue
+} from '@gavant/glint-template-types/types/ember-table/table';
 
-import type { Column as EmberTableColumn } from '@gavant/glint-template-types/types/ember-table/table';
-import type { Column as ETColumn } from 'ember-table/components/ember-table/component';
+type FooterCellComponent<
+    VP extends string,
+    CV extends Column<VP, RV, M, CM, RM, TM>,
+    RV extends RowValue,
+    M,
+    CM extends ColumnMeta,
+    RM,
+    TM
+> = BodyCellComponent<CV, RV, M, CM, RM, TM>;
 
-type FooterCellComponent = ComponentLike<{
-    Args: {
-        cellValue: any;
-        columnValue: any;
-        rowValue: any;
-        cellMeta: any;
-        columnMeta: any;
-        rowMeta: any;
-        tableMeta: any;
-    };
-    Blocks: {
-        default: [];
-    };
-}>;
-
-export interface Column extends EmberTableColumn {
+export interface Column<VP extends string, RV extends RowValue, M, CM extends ColumnMeta, RM, TM>
+    extends Omit<EmberTableColumn<RV, M, CM, RM, TM>, 'valuePath'> {
     id?: string;
     isFixedLeft?: boolean;
     staticWidth: number;
     headerClassNames?: string;
     cellClassNames?: string;
     footerClassNames?: string;
-    subcolumns?: Column[];
-    footerComponent?: FooterCellComponent;
+    footerComponent?: FooterCellComponent<VP, Column<VP, RV, M, CM, RM, TM>, RV, M, CM, RM, TM>;
+    readonly valuePath: VP;
+}
+
+export function declareColumns<T extends ReadonlyArray<Column<string, any, unknown, any, unknown, unknown>>>(
+    items: [...T]
+) {
+    return items;
 }
 
 export interface TableSort {
@@ -84,18 +88,46 @@ export interface RowClickEvent<R, TM> {
     tableMeta?: TableMeta<TM>;
 }
 
-export type BodyArgs<R, TM> = Omit<EmberTableBodySignature['Args'], 'api'> & {
-    rows: R[];
-    selection?: R[] | R | null;
-    tableMeta?: TableMeta<TM>;
-};
+export type BodyArgs<
+    T extends string,
+    CV extends Column<T, RV, M, CM, RM, TM>,
+    RV extends RowValue,
+    M,
+    CM extends ColumnMeta,
+    RM,
+    TM
+> = Omit<EmberTableBodySignature<CV, RV, M, CM, RM, TM>['Args'], 'api'>;
+//     & {
+//     rows: R[];
+//     selection?: R[] | R | null;
+//     tableMeta?: TableMeta<TM>;
+// };
 
-export type HeadArgs<TM> = Omit<EmberTableHeaderSignature['Args'], 'api'> & {
-    tableMeta?: TableMeta<TM>;
-};
+export type HeadArgs<
+    T extends string,
+    CV extends Column<T, RV, M, CM, RM, TM>,
+    RV extends RowValue,
+    M,
+    CM extends ColumnMeta,
+    RM,
+    TM
+> = Omit<EmberTableHeaderSignature<CV, RV, M, CM, RM, TM>['Args'], 'api'>;
 
-export interface TableArgs<R, F, TM> extends BodyArgs<R, TM>, HeadArgs<TM> {
-    columns: Column[];
+//     & {
+//     tableMeta?: TableMeta<TM>;
+// };
+
+export interface TableArgs<
+    T extends string,
+    CV extends Column<T, RV, M, CM, RM, TM>,
+    RV extends RowValue,
+    FRV extends RowValue,
+    M,
+    CM extends ColumnMeta,
+    RM,
+    TM
+> extends BodyArgs<T, CV, RV, M, CM, RM, TM>,
+        HeadArgs<T, CV, RV, M, CM, RM, TM> {
     /**
      * Manually change the panning of the table
      *
@@ -109,42 +141,42 @@ export interface TableArgs<R, F, TM> extends BodyArgs<R, TM>, HeadArgs<TM> {
      *
      * @memberof TableArgs
      */
-    onVisibleColumnsChange?: (columns: Column[]) => void;
+    onVisibleColumnsChange?: (columns: CV[]) => void;
 
     /**
      * Load previous rows of items
      *
      * @memberof TableArgs
      */
-    loadPreviousRows?: () => Promise<R[]>;
+    loadPreviousRows?: () => Promise<RV[]>;
 
     /**
      * Load more rows of items
      *
      * @memberof TableArgs
      */
-    loadMoreRows?: () => Promise<R[]>;
+    loadMoreRows?: () => Promise<RV[]>;
 
     /**
      * On click of cell
      *
      * @memberof TableArgs
      */
-    onCellClick?: ((rowClickEvent: RowClickEvent<R, TM>) => void) | undefined;
+    onCellClick?: ((rowClickEvent: RowClickEvent<RV, TM>) => void) | undefined;
 
     /**
      * On double click of cell
      *
      * @memberof TableArgs
      */
-    onCellDoubleClick?: ((rowClickEvent: RowClickEvent<R, TM>) => void) | undefined;
+    onCellDoubleClick?: ((rowClickEvent: RowClickEvent<RV, TM>) => void) | undefined;
 
     /**
      * Event to handle click on row
      *
      * @memberof TableArgs
      */
-    onRowClick?: (rowClickEvent: RowClickEvent<R, TM>) => void;
+    onRowClick?: (rowClickEvent: RowClickEvent<RV, TM>) => void;
 
     /**
      * Event to handle double click on row
@@ -239,16 +271,16 @@ export interface TableArgs<R, F, TM> extends BodyArgs<R, TM>, HeadArgs<TM> {
      * @type {TableMeta<TM>}
      * @memberof TableArgs
      */
-    tableMeta?: TableMeta<TM>;
+    tableMeta?: TM;
 
     /**
      * The footer rows to be displayed. i.e. for a table with a 'subtotal' column:
         `[{ subtotal:500 }]`
      *
-     * @type {NativeArray<F>}
+     * @type {NativeArray<FR>}
      * @memberof TableArgs
      */
-    footerRows?: NativeArray<F> | F[];
+    footerRows?: NativeArray<FRV> | FRV[];
 
     /**
      * Displayed when there are no rows
@@ -340,12 +372,30 @@ export interface TableArgs<R, F, TM> extends BodyArgs<R, TM>, HeadArgs<TM> {
     renderAll?: boolean;
 }
 
-interface TableSignature<R, F, TM> {
-    Args: TableArgs<R, F, TM>;
+interface TableSignature<
+    T extends string,
+    CV extends Column<T, RV, M, CM, RM, TM>,
+    RV extends RowValue,
+    FRV extends RowValue,
+    M,
+    CM extends ColumnMeta,
+    RM,
+    TM
+> {
+    Args: TableArgs<T, CV, RV, FRV, M, CM, RM, TM>;
     Element: HTMLDivElement;
 }
 
-export default class TableComponent<R, F, TM> extends Component<TableSignature<R, F, TM>> {
+export default class TableComponent<
+    T extends string,
+    CV extends Column<T, RV, M, CM, RM, TM>,
+    RV extends RowValue,
+    FRV extends RowValue,
+    M,
+    CM extends ColumnMeta,
+    RM,
+    TM
+> extends Component<TableSignature<T, CV, RV, FRV, M, CM, RM, TM>> {
     //ember-table's resizing must be enabled in order for fill-mode auto column
     //resizing to work, even if you don't want to allow user-invoked resizing
     readonly enableResize: boolean = true;
@@ -388,7 +438,7 @@ export default class TableComponent<R, F, TM> extends Component<TableSignature<R
     @argDefault estimateRowHeight: number = 30;
     @argDefault fillColumnIndex: number | null = null;
     @argDefault fillMode: FillMode = FillMode.FIRST;
-    @argDefault footerRows: Array<F> = [];
+    @argDefault footerRows: Array<FRV> = [];
     @argDefault hasMoreRows: boolean = false;
     @argDefault hoverableRows: boolean = true;
     @argDefault isLoading: boolean = false;
@@ -416,7 +466,7 @@ export default class TableComponent<R, F, TM> extends Component<TableSignature<R
     //component state
     @tracked columnPanPosition: number = this.args.columnPanPosition ?? 0;
     @tracked containerWidth: number | null = null;
-    @tracked visibleColumns: Column[] = [];
+    @tracked visibleColumns: CV[] = [];
     @tracked containerElement: HTMLElement | null = null;
 
     get noRows(): boolean {
@@ -504,7 +554,7 @@ export default class TableComponent<R, F, TM> extends Component<TableSignature<R
      * @readonly
      * @type {(ColumnValue | undefined)}
      */
-    get firstVisibleNonFixedColumn(): Column | undefined {
+    get firstVisibleNonFixedColumn(): CV | undefined {
         return this.visibleColumns && this.visibleColumns.find((col) => !col.isFixedLeft);
     }
 
@@ -640,7 +690,7 @@ export default class TableComponent<R, F, TM> extends Component<TableSignature<R
      *
      * @memberof TableComponent
      */
-    constructor(owner: unknown, args: TableArgs<R, F, TM>) {
+    constructor(owner: unknown, args: TableArgs<T, CV, RV, FRV, M, CM, RM, TM>) {
         super(owner, args);
 
         assert('@rows is not an instanceof Array.', args.rows instanceof Array);
@@ -692,7 +742,7 @@ export default class TableComponent<R, F, TM> extends Component<TableSignature<R
      */
     updateColumnVisibility() {
         const columns = this.args.columns || A();
-        const visibleColumns = A<Column>([]);
+        const visibleColumns = A<CV>([]);
         const containerWidth = this.getElementWidth(this.containerElement);
         const allowFixedCols = containerWidth >= this.minFixedColTableWidth;
         const panPosition = this.columnPanPosition;
@@ -773,7 +823,7 @@ export default class TableComponent<R, F, TM> extends Component<TableSignature<R
      * @returns {(string | undefined)}
      * @memberof TableComponent
      */
-    getColumnId(col?: Column): string | undefined {
+    getColumnId(col?: CV): string | undefined {
         return col && (col.id || col.valuePath);
     }
 
@@ -842,34 +892,4 @@ export default class TableComponent<R, F, TM> extends Component<TableSignature<R
             this.args.onUpdateSorts(sorts);
         }
     }
-
-    get columns() {
-        return [
-            { name: 'A', valuePath: 'A', testName: 'wow' },
-            { name: 'B', valuePath: 'B', testName: 'wow' },
-            { name: 'C', valuePath: 'C', testName: 'wow' },
-            { name: 'D', valuePath: 'D', testName: 'wow' },
-            { name: 'E', valuePath: 'E', testName: 'wow' },
-            { name: 'F', valuePath: 'F', testName: 'wow' },
-            { name: 'G', valuePath: 'G', testName: 'wow' }
-        ];
-    }
-
-    get rows() {
-        return [
-            { A: 'A', B: 'B', C: 'C', D: 'D' },
-            { A: 'A', B: 'B', C: 'C', D: 'D' },
-            { A: 'A', B: 'B', C: 'C', D: 'D' },
-            { A: 'A', B: 'B', C: 'C', D: 'D' },
-            { A: 'A', B: 'B', C: 'C', D: 'D' },
-            { A: 'A', B: 'B', C: 'C', D: 'D' },
-            { A: 'A', B: 'B', C: 'C', D: 'D' },
-            { A: 'A', B: 'B', C: 'C', D: 'D' },
-            { A: 'A', B: 'B', C: 'C', D: 'D' },
-            { A: 'A', B: 'B', C: 'C', D: 'D' },
-            { A: 'A', B: 'B', C: 'C', D: 'D' }
-        ];
-    }
 }
-
-type TestRow = { A: string; B: string; C: string; D: string };

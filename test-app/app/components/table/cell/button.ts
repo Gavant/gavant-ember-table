@@ -1,25 +1,29 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 
-type BodyCellComponent = {
-    Args: {
-        cellValue: any;
-        columnValue: any;
-        rowValue: any;
-        cellMeta: any;
-        columnMeta: any;
-        rowMeta: any;
-        tableMeta: any;
-    };
-    Blocks: {
-        default: [];
-    };
-};
+import { BodyCellArgs } from '@gavant/glint-template-types/types/ember-table/table';
 
-export default class TableCellButtonComponent extends Component<BodyCellComponent> {
+import TableController from 'test-app/controllers/table';
+
+type ArrayElement<ArrayType extends readonly unknown[]> = ArrayType extends readonly (infer ElementType)[]
+    ? ElementType
+    : never;
+
+interface TableCellButtonComponentSignature {
+    Args: BodyCellArgs<
+        TableController['columns'][5],
+        ArrayElement<TableController['model']>,
+        unknown,
+        any,
+        unknown,
+        unknown
+    >;
+}
+export default class TableCellButtonComponent extends Component<TableCellButtonComponentSignature> {
     @action
     onClick(event: Event) {
         event.stopPropagation();
-        this.args.columnValue.toggleRow({ event: this.args.rowValue });
+        this.args.cellValue;
+        this.args.columnValue.toggleRow?.({ event: this.args.rowValue });
     }
 }

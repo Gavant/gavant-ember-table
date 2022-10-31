@@ -14,6 +14,31 @@ import rsvp from 'rsvp';
 import TableCellButtonComponent from 'test-app/components/table/cell/button';
 import TableCellTableMetaComponent from 'test-app/components/table/cell/table-meta';
 
+interface TestRow {
+    name: string;
+    age: number;
+    tall: boolean;
+    short: boolean;
+    id: string;
+}
+type ColumnValueType<T> = T extends Column<infer CV, any, any, any, any, any> ? Readonly<CV> : never;
+
+export function makeColumns<
+    T extends ReadonlyArray<Column<CV extends string ? CV : never, any, unknown, any, unknown, unknown>>,
+    CV = ColumnValueType<T[number]>
+>(items: [...T]) {
+    // const updatedColumns = items.map((item) => {
+    //     const valuePath = item.valuePath as CV;
+    //     return {
+    //         ...item,
+    //         valuePath: valuePath
+    //     };
+    // });
+    // const test = declareColumns(updatedColumns);
+    // return test;
+    return items;
+}
+
 class TableController extends Controller {
     @service declare media: MediaService;
 
@@ -23,7 +48,8 @@ class TableController extends Controller {
     @tracked isLoading = false;
     @tracked sorts = [{ valuePath: 'date', isAscending: false }];
     @tracked panPosition = 0;
-    @tracked columns: Column[] = [
+
+    columns = makeColumns([
         {
             valuePath: 'date',
             name: 'Date',
@@ -76,11 +102,11 @@ class TableController extends Controller {
             minWidth: 225,
             toggleRow: this.toggleRow
         }
-    ];
+    ]);
 
     @tracked otherColumns = false;
 
-    @tracked model: NativeArray<any> = A([]);
+    @tracked model: NativeArray<TestRow> = A([]);
 
     footerData = [{ age: 295 }];
 
@@ -95,7 +121,7 @@ class TableController extends Controller {
     }
 
     @action
-    loadMoreModels() {
+    loadMoreModels(): Promise<TestRow[]> {
         this.isLoading = true;
         return new rsvp.Promise((resolve) => {
             later(() => {

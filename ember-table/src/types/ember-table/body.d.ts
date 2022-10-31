@@ -243,15 +243,15 @@ declare module 'ember-table/components/ember-tbody/component' {
     > = EmberTableBodySignature<CV, RV, M, CM, RM, TM>['Args'];
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    // export default interface EmberTableBody<
-    //     CV extends Column<RV, M, CM, RM, TM>,
-    //     RV extends RowValue,
-    //     M,
-    //     CM extends ColumnMeta,
-    //     RM,
-    //     TM
-    //     // T extends EmberTableBodySignature<CV, RV, M, CM, RM, TM>
-    // > extends Args<CV, RV, M, CM, RM, TM> {}
+    export default interface EmberTableBody<
+        CV extends Column<RV, M, CM, RM, TM>,
+        RV extends RowValue,
+        M,
+        CM extends ColumnMeta,
+        RM,
+        TM
+        // T extends EmberTableBodySignature<CV, RV, M, CM, RM, TM>
+    > extends Args<CV, RV, M, CM, RM, TM> {}
 
     // eslint-disable-next-line ember/require-tagless-components
     export default class EmberTableBody<

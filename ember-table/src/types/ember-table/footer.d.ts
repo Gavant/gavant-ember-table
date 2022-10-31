@@ -41,8 +41,8 @@ declare module 'ember-table/components/ember-tfoot/component' {
         M,
         CM extends ColumnMeta,
         RM,
-        TM,
-        T extends EmberTableFooterSignature<CV, RV, M, CM, RM, TM>
+        TM
+
         // eslint-disable-next-line ember/require-tagless-components
-    > extends Component<T> {}
+    > extends Component<EmberTableFooterSignature<CV, RV, M, CM, RM, TM>> {}
 }

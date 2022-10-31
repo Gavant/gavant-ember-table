@@ -11,9 +11,6 @@ type BodyCellComponent = {
         rowMeta: any;
         tableMeta: any;
     };
-    Blocks: {
-        default: [];
-    };
 };
 
 // eslint-disable-next-line ember/no-empty-glimmer-component-classes
