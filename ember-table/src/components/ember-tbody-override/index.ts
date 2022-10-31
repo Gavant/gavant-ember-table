@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-ignore
 import EmberTbody from 'ember-table/components/ember-tbody/component';
 
 import { Column, ColumnMeta, RowValue } from '@gavant/glint-template-types/types/ember-table/table';

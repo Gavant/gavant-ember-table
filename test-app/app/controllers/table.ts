@@ -77,7 +77,7 @@ class TableController extends Controller {
             minWidth: 100
         },
         {
-            valuePath: 'tall',
+            valuePath: 'id',
             cellComponent: TableCellButtonComponent,
             width: 225,
             staticWidth: 225,

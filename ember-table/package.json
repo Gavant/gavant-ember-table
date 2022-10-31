@@ -140,6 +140,10 @@
       "./components/table/index.js": "./dist/_app_/components/table/index.js"
     }
   },
+  "exports": {
+    "./*": "./dist/*",
+    "./addon-main.js": "./addon-main.js"
+  },
   "publishConfig": {
     "access": "public"
   },

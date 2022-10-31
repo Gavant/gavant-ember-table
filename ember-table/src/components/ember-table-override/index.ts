@@ -1,4 +1,6 @@
 // import EmberTbodyComponent from 'components/ember-tbody-override';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-ignore
 import EmberTable from 'ember-table/components/ember-table/component';
 
 // import EmberTableLoadingMore from 'ember-table/components/ember-table-loading-more/component';
@@ -63,6 +65,7 @@ export default class EmberTableOverrideComponent<
 > extends EmberTable<CV, RV, M, CM, RM, TM> {
     headerStickyOffset = 0;
     footerStickyOffset = 0;
+    declare element: HTMLElement;
 
     /**
      * Reimplements base didInsertElement() w/sticky offset params
