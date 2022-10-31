@@ -27,15 +27,6 @@ export function makeColumns<
     T extends ReadonlyArray<Column<CV extends string ? CV : never, any, unknown, any, unknown, unknown>>,
     CV = ColumnValueType<T[number]>
 >(items: [...T]) {
-    // const updatedColumns = items.map((item) => {
-    //     const valuePath = item.valuePath as CV;
-    //     return {
-    //         ...item,
-    //         valuePath: valuePath
-    //     };
-    // });
-    // const test = declareColumns(updatedColumns);
-    // return test;
     return items;
 }
 
@@ -94,7 +85,7 @@ class TableController extends Controller {
             minWidth: 100
         },
         {
-            valuePath: 'id',
+            valuePath: 'tall',
             cellComponent: TableCellButtonComponent,
             width: 225,
             staticWidth: 225,

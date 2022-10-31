@@ -1,7 +1,7 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 
-import { BodyCellArgs } from '@gavant/glint-template-types/types/ember-table/table';
+import { BodyCellArgs } from '@gavant/ember-table/components/table';
 
 import TableController from 'test-app/controllers/table';
 
@@ -9,15 +9,9 @@ type ArrayElement<ArrayType extends readonly unknown[]> = ArrayType extends read
     ? ElementType
     : never;
 
+type test = TableController['columns'][5];
 interface TableCellButtonComponentSignature {
-    Args: BodyCellArgs<
-        TableController['columns'][5],
-        ArrayElement<TableController['model']>,
-        unknown,
-        any,
-        unknown,
-        unknown
-    >;
+    Args: BodyCellArgs<string, test, ArrayElement<TableController['model']>, unknown, any, unknown, unknown>;
 }
 export default class TableCellButtonComponent extends Component<TableCellButtonComponentSignature> {
     @action

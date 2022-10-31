@@ -18,6 +18,7 @@ import { argDefault } from '../../decorators/table';
 
 import type {
     BodyCellComponent,
+    CellValue,
     Column as EmberTableColumn,
     ColumnMeta,
     RowValue
@@ -32,6 +33,23 @@ type FooterCellComponent<
     RM,
     TM
 > = BodyCellComponent<CV, RV, M, CM, RM, TM>;
+
+export type BodyCellArgs<
+    VP extends string,
+    CV extends Column<VP, RV, M, CM, RM, TM>,
+    RV extends RowValue,
+    M,
+    CM extends ColumnMeta,
+    RM,
+    TM
+> = {
+    columnValue: CV;
+    rowValue: RV;
+    cellMeta: M;
+    columnMeta: CM;
+    rowMeta: RM;
+    tableMeta: TM;
+} & CellValue<RV, CV>;
 
 export interface Column<VP extends string, RV extends RowValue, M, CM extends ColumnMeta, RM, TM>
     extends Omit<EmberTableColumn<RV, M, CM, RM, TM>, 'valuePath'> {
