@@ -11,7 +11,6 @@ import MediaService from 'ember-responsive/services/media';
 import { makeColumns } from '@gavant/ember-table/components/table';
 
 import rsvp from 'rsvp';
-import TableCellButtonComponent from 'test-app/components/table/cell/button';
 import TableCellTableMetaComponent from 'test-app/components/table/cell/table-meta';
 
 interface TestRow {
@@ -78,7 +77,7 @@ class TableController extends Controller {
         },
         {
             valuePath: 'id',
-            cellComponent: TableCellButtonComponent,
+            cellComponent: 'table/cell/button',
             width: 225,
             staticWidth: 225,
             maxWidth: 225,
