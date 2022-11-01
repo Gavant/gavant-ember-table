@@ -1479,10 +1479,10 @@
   resolved "https://registry.yarnpkg.com/@faker-js/faker/-/faker-7.3.0.tgz#a508df35ded585c4e071cb5d9d7c89623c837fae"
   integrity sha512-1W0PZezq2rxlAssoWemi9gFRD8IQxvf0FPL5Km3TOmGHFG7ib0TbFBJ0yC7D/1NsxunjNTK6WjUXV8ao/mKZ5w==
 
-"@gavant/glint-template-types@^0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@gavant/glint-template-types/-/glint-template-types-0.2.3.tgz#b7433f83c5d50466c71cb97b0cfefe84f7f80519"
-  integrity sha512-sjNrgXXl5Eiw4T9NHWcxBU+HvyZFpS47UrTaQhh9OwaOqvoj7/9CePfpLdXhsE4SbhPlpN7dle7VPHf+VcWmbQ==
+"@gavant/glint-template-types@^0.2.4":
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/@gavant/glint-template-types/-/glint-template-types-0.2.4.tgz#2616648ff6d4e3ba2d047a4260fd94fd77e37120"
+  integrity sha512-qrS2t3sfhjNmjIUImDDGwOu7VjVqU5Zjur94KJJF+ItIy98OPOmswcHdNUm+hrG+J4f4AMUCg4vZ5QEUrb5qjQ==
 
 "@glimmer/component@^1.0.4", "@glimmer/component@^1.1.2":
   version "1.1.2"

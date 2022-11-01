@@ -17,12 +17,12 @@ module('Integration | Component | table', function (hooks) {
     hooks.beforeEach(function (this: any) {
         this.set('rows', [{ id: 1, name: 'One' }]);
         const columns = makeColumns([
-            { valuePath: 'id', name: 'ID', width: 300, staticWidth: 300 },
-            { valuePath: 'name', name: 'Name', width: 300, staticWidth: 300 },
-            { valuePath: 'date', name: 'Date', width: 300, staticWidth: 300 },
-            { valuePath: 'test', name: 'Test', width: 300, staticWidth: 300 },
-            { valuePath: 'test1', name: 'Test1', width: 300, staticWidth: 300 },
-            { valuePath: 'test2', name: 'Test2', width: 300, staticWidth: 300 }
+            { valuePath: 'id', name: 'ID', width: 300 },
+            { valuePath: 'name', name: 'Name', width: 300 },
+            { valuePath: 'date', name: 'Date', width: 300 },
+            { valuePath: 'test', name: 'Test', width: 300 },
+            { valuePath: 'test1', name: 'Test1', width: 300 },
+            { valuePath: 'test2', name: 'Test2', width: 300 }
         ]);
         this.set('columns', columns);
     });

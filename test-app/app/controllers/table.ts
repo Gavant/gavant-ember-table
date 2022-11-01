@@ -11,7 +11,6 @@ import MediaService from 'ember-responsive/services/media';
 import { makeColumns } from '@gavant/ember-table/components/table';
 
 import rsvp from 'rsvp';
-import TableCellTableMetaComponent from 'test-app/components/table/cell/table-meta';
 
 interface TestRow {
     name: string;
@@ -35,10 +34,9 @@ class TableController extends Controller {
         {
             valuePath: 'date',
             name: 'Date',
-            cellComponent: TableCellTableMetaComponent,
+            // cellComponent: TableCellTableMetaComponent,
             isFixedLeft: true,
             width: 200,
-            staticWidth: 200,
             isSortable: true
         },
         {
@@ -46,7 +44,6 @@ class TableController extends Controller {
             name: 'Name',
             isFixedLeft: false,
             width: 100,
-            staticWidth: 100,
             isSortable: true
         },
         {
@@ -54,15 +51,13 @@ class TableController extends Controller {
             name: 'Age',
             isFixedLeft: false,
             textAlign: 'right',
-            width: 100,
-            staticWidth: 100
+            width: 100
         },
         {
             valuePath: 'tall',
             name: 'Tall',
             isFixedLeft: false,
             width: 100,
-            staticWidth: 100,
             maxWidth: 100,
             minWidth: 100
         },
@@ -71,7 +66,6 @@ class TableController extends Controller {
             name: 'Short',
             isFixedLeft: false,
             width: 100,
-            staticWidth: 200,
             maxWidth: 100,
             minWidth: 100
         },
@@ -79,7 +73,6 @@ class TableController extends Controller {
             valuePath: 'id',
             cellComponent: 'table/cell/button',
             width: 225,
-            staticWidth: 225,
             maxWidth: 225,
             minWidth: 225,
             toggleRow: this.toggleRow

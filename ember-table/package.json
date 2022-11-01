@@ -30,7 +30,7 @@
   "dependencies": {
     "@embroider/addon-shim": "^1.0.0",
     "@embroider/util": "^1.0.0",
-    "@gavant/glint-template-types": "^0.2.3"
+    "@gavant/glint-template-types": "^0.2.4"
   },
   "peerDependencies": {
     "@ember/render-modifiers": "^2.0.4",

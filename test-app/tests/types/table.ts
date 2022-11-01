@@ -10,8 +10,7 @@ interface Row {
 const columns = [
     {
         valuePath: 'name',
-        name: 'Name',
-        staticWidth: 200
+        name: 'Name'
     }
 ] as const;
 declare const component: Table<typeof columns[0], Row, any, unknown, any, unknown, unknown>;

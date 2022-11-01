@@ -46,16 +46,15 @@ columns = [
         name: 'Date',
         isFixedLeft: true,
         width: 200,
-        staticWidth: 200
+
     },
     {
         valuePath: 'name',
         name: 'Name',
         isFixedLeft: false,
         width: 100,
-        staticWidth: 100,
-        maxWidth: 100,
-        minWidth: 100
+        maxWidth: 200,
+        minWidth: 50
     }
 ]
 
@@ -70,8 +69,6 @@ rows = [
     }
 ];
 ```
-
-It is important to note that `staticWidth` is a property that is used to calculate column visibility at different breakpoints and is **required** on each column object.
 
 A `footerRows` array can be used as an argument as well, often containing table metadata.
 
@@ -157,14 +154,12 @@ export default class FooController extends Controller {
                 valuePath: 'name',
                 name: 'Name',
                 isFixedLeft: false,
-                width: 100,
-                staticWidth: 100
+                width: 100
             },
             {
                 valuePath: 'id',
                 cellComponent: 'table/cell/button',
                 width: 100,
-                staticWidth: 100,
                 maxWidth: 100,
                 minWidth: 100,
                 toggleRow: this.toggleRow

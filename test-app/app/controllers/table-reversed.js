@@ -17,30 +17,27 @@ class TableReversedController extends Controller {
             name: 'Date',
             cellComponent: 'table/cell/table-meta',
             isFixedLeft: true,
-            width: 200,
-            staticWidth: 200
+            width: 200
         },
         {
             valuePath: 'name',
             name: 'Name',
             isFixedLeft: false,
-            width: 100,
-            staticWidth: 100
+            width: 100
         },
         {
             valuePath: 'age',
             name: 'Age',
             isFixedLeft: false,
             textAlign: 'right',
-            width: 100,
-            staticWidth: 100
+            width: 100
         },
         {
             valuePath: 'tall',
             name: 'Tall',
             isFixedLeft: false,
             width: 100,
-            staticWidth: 100,
+
             maxWidth: 100,
             minWidth: 100
         },
@@ -49,7 +46,7 @@ class TableReversedController extends Controller {
             name: 'Short',
             isFixedLeft: false,
             width: 100,
-            staticWidth: 200,
+
             maxWidth: 100,
             minWidth: 100
         },
@@ -57,7 +54,7 @@ class TableReversedController extends Controller {
             valuePath: 'id',
             cellComponent: 'table/cell/button',
             width: 225,
-            staticWidth: 225,
+
             maxWidth: 225,
             minWidth: 225,
             toggleRow: this.toggleRow

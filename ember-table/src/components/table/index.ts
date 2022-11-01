@@ -17,25 +17,15 @@ import { FillMode, ResizeMode, SelectionMode, WidthConstraint } from '../../cons
 import { argDefault } from '../../decorators/table';
 
 import type {
-    BodyCellComponent,
+    // BodyCellComponent,
     CellValue,
     Column as EmberTableColumn,
     ColumnMeta,
     RowValue
 } from '@gavant/glint-template-types/types/ember-table/table';
 
-type FooterCellComponent<
-    VP extends string | undefined,
-    CV extends Column<VP, RV, M, CM, RM, TM>,
-    RV extends RowValue,
-    M,
-    CM extends ColumnMeta,
-    RM,
-    TM
-> = BodyCellComponent<CV, RV, M, CM, RM, TM>;
-
 export interface BodyCellArgs<
-    CV extends Column<string, RV, M, ColumnMeta, RM, TM>,
+    CV extends Column<string | undefined, RV, M, ColumnMeta, RM, TM>,
     RV extends RowValue,
     RM = void, // void makes it optional
     TM = void, // void makes it optional
@@ -48,6 +38,18 @@ export interface BodyCellArgs<
     rowMeta: RM;
     tableMeta: TM;
 }
+
+export type HeaderCellArgs<
+    CV extends Column<string | undefined, RV, M, ColumnMeta, RM, TM>,
+    RV extends RowValue,
+    RM = void, // void makes it optional
+    TM = void, // void makes it optional
+    M = void // void makes it optional
+> = {
+    columnValue: CV;
+    columnMeta: M;
+    tableMeta: TM;
+};
 
 type ColumnValueType<T> = T extends Column<infer CV, any, any, any, any, any> ? Readonly<CV> : never;
 
@@ -69,15 +71,21 @@ export function makeColumns<
     return items;
 }
 
-export interface Column<VP extends string | undefined, RV extends RowValue, M, CM extends ColumnMeta, RM, TM>
-    extends Omit<EmberTableColumn<RV, M, CM, RM, TM>, 'valuePath'> {
+export interface Column<
+    VP extends string | undefined,
+    RV extends RowValue,
+    M,
+    CM extends ColumnMeta,
+    RM = void,
+    TM = void
+> extends EmberTableColumn<RV, M, CM, RM, TM> {
     id?: string;
     isFixedLeft?: boolean;
-    staticWidth: number;
     headerClassNames?: string;
     cellClassNames?: string;
     footerClassNames?: string;
-    footerComponent?: FooterCellComponent<VP, Column<VP, RV, M, CM, RM, TM>, RV, M, CM, RM, TM>;
+    footerComponent?: string;
+    subcolumns?: Column<VP, RV, M, CM, RM, TM>[];
     readonly valuePath?: VP;
 }
 
@@ -606,10 +614,10 @@ export default class TableComponent<
         //fixed columns are disabled if the widest non-fixed column cannot
         //fit in the container at the same time as the fixed column(s)
         if (!isEmpty(this.fixedColumns)) {
-            const sortedColumns = this.nonFixedColumns.sortBy('staticWidth');
+            const sortedColumns = this.nonFixedColumns.sortBy('minWidth');
             const widestColumn = sortedColumns[sortedColumns.length - 1];
-            const widestColumnWidth = widestColumn ? widestColumn.staticWidth : 0;
-            const fixedWidth = this.fixedColumns.reduce((prev, col) => prev + col.staticWidth, 0);
+            const widestColumnWidth = widestColumn?.minWidth ?? 0;
+            const fixedWidth = this.fixedColumns.reduce((prev, col) => prev + (col.minWidth ?? 0), 0);
             return widestColumnWidth + fixedWidth;
         } else {
             return 0;
@@ -767,7 +775,7 @@ export default class TableComponent<
         for (const [i, col] of columns.entries()) {
             const colIndex = allowFixedCols ? this.nonFixedColumns.indexOf(col) : i;
             if ((col && col.isFixedLeft && allowFixedCols) || colIndex >= panPosition) {
-                const colWidth = col.staticWidth || 0;
+                const colWidth = col.minWidth || 0;
                 const isVisible = (col.isFixedLeft && allowFixedCols) || newTableWidth + colWidth <= containerWidth;
                 if (isVisible) {
                     newTableWidth += colWidth;
