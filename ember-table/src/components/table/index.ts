@@ -17,7 +17,6 @@ import { FillMode, ResizeMode, SelectionMode, WidthConstraint } from '../../cons
 import { argDefault } from '../../decorators/table';
 
 import type {
-    // BodyCellComponent,
     CellValue,
     Column as EmberTableColumn,
     ColumnMeta,
@@ -51,7 +50,7 @@ export type HeaderCellArgs<
     tableMeta: TM;
 };
 
-type ColumnValueType<T> = T extends Column<infer CV, any, any, any, any, any> ? Readonly<CV> : never;
+type ColumnValueType<C> = C extends Column<infer ValuePath, any, any, any, any, any> ? Readonly<ValuePath> : never;
 
 /**
  * Turns the columns into the correct types for the table, so that we can have cell components automatically get the correct types.
@@ -65,20 +64,14 @@ type ColumnValueType<T> = T extends Column<infer CV, any, any, any, any, any> ? 
  * @return {*}
  */
 export function makeColumns<
-    T extends ReadonlyArray<Column<CV extends string ? CV : never, any, unknown, any, unknown, unknown>>,
-    CV = ColumnValueType<T[number]>
+    T extends ReadonlyArray<Column<ValuePath extends string ? ValuePath : never, any, unknown, any, unknown, unknown>>,
+    ValuePath = ColumnValueType<T[number]>
 >(items: [...T]) {
     return items;
 }
 
-export interface Column<
-    VP extends string | undefined,
-    RV extends RowValue,
-    M,
-    CM extends ColumnMeta,
-    RM = void,
-    TM = void
-> extends EmberTableColumn<RV, M, CM, RM, TM> {
+export interface Column<VP extends string | undefined, RV extends RowValue, M, CM extends ColumnMeta, RM, TM>
+    extends EmberTableColumn<RV, M, CM, RM, TM> {
     id?: string;
     isFixedLeft?: boolean;
     headerClassNames?: string;
