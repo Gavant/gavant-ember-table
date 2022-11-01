@@ -4,19 +4,6 @@ import { BodyCellArgs } from '@gavant/ember-table/components/table';
 
 import TableController from 'test-app/controllers/table';
 
-// eslint-disable-next-line ember/no-empty-glimmer-component-classes
-type BodyCellComponent = {
-    Args: {
-        cellValue: any;
-        columnValue: any;
-        rowValue: any;
-        cellMeta: any;
-        columnMeta: any;
-        rowMeta: any;
-        tableMeta: any;
-    };
-};
-
 type ArrayElement<ArrayType extends readonly unknown[]> = ArrayType extends readonly (infer ElementType)[]
     ? ElementType
     : never;

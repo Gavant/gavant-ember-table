@@ -448,7 +448,6 @@ export default class TableComponent<
 
     @argDefault bufferSize: number = 0;
     @argDefault containerSelector: string = 'body';
-    @argDefault constrainColumnsToFit: boolean = true;
     @argDefault enableReorder: boolean = false;
     @argDefault enableSort: boolean = false;
     @argDefault enableUserResize: boolean = false;
@@ -698,6 +697,10 @@ export default class TableComponent<
         } else {
             return 0;
         }
+    }
+
+    get constrainColumnsToFit() {
+        return this.args.columns.every((col) => col.minWidth);
     }
 
     //methods

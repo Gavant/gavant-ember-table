@@ -18,6 +18,7 @@ interface TestRow {
     tall: boolean;
     short: boolean;
     id: string;
+    date: Date;
 }
 
 class TableController extends Controller {
@@ -36,46 +37,36 @@ class TableController extends Controller {
             name: 'Date',
             // cellComponent: TableCellTableMetaComponent,
             isFixedLeft: true,
-            width: 200,
+            minWidth: 200,
             isSortable: true
         },
         {
             valuePath: 'name',
             name: 'Name',
-            isFixedLeft: false,
-            width: 100,
-            isSortable: true
+            isSortable: true,
+            minWidth: 200
         },
         {
             valuePath: 'age',
             name: 'Age',
-            isFixedLeft: false,
-            textAlign: 'right',
-            width: 100
+            minWidth: 200,
+            textAlign: 'right'
         },
         {
             valuePath: 'tall',
             name: 'Tall',
-            isFixedLeft: false,
-            width: 100,
-            maxWidth: 100,
-            minWidth: 100
+            minWidth: 200
         },
         {
             valuePath: 'short',
             name: 'Short',
-            isFixedLeft: false,
-            width: 100,
-            maxWidth: 100,
-            minWidth: 100
+            minWidth: 200
         },
         {
             valuePath: 'id',
             cellComponent: 'table/cell/button',
-            width: 225,
-            maxWidth: 225,
-            minWidth: 225,
-            toggleRow: this.toggleRow
+            toggleRow: this.toggleRow,
+            minWidth: 200
         }
     ]);
 
