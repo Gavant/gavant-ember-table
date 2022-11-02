@@ -8,11 +8,18 @@ import { tracked } from '@glimmer/tracking';
 
 import MediaService from 'ember-responsive/services/media';
 
-import { Column } from '@gavant/ember-table/components/table';
+import { makeColumns } from '@gavant/ember-table/components/table';
 
 import rsvp from 'rsvp';
-import TableCellButtonComponent from 'test-app/components/table/cell/button';
-import TableCellTableMetaComponent from 'test-app/components/table/cell/table-meta';
+
+interface TestRow {
+    name: string;
+    age: number;
+    tall: boolean;
+    short: boolean;
+    id: string;
+    date: Date;
+}
 
 class TableController extends Controller {
     @service declare media: MediaService;
@@ -23,64 +30,49 @@ class TableController extends Controller {
     @tracked isLoading = false;
     @tracked sorts = [{ valuePath: 'date', isAscending: false }];
     @tracked panPosition = 0;
-    @tracked columns: Column[] = [
+
+    columns = makeColumns([
         {
             valuePath: 'date',
             name: 'Date',
-            cellComponent: TableCellTableMetaComponent,
+            // cellComponent: TableCellTableMetaComponent,
             isFixedLeft: true,
-            width: 200,
-            staticWidth: 200,
+            minWidth: 200,
             isSortable: true
         },
         {
             valuePath: 'name',
             name: 'Name',
-            isFixedLeft: false,
-            width: 100,
-            staticWidth: 100,
-            isSortable: true
+            isSortable: true,
+            minWidth: 200
         },
         {
             valuePath: 'age',
             name: 'Age',
-            isFixedLeft: false,
-            textAlign: 'right',
-            width: 100,
-            staticWidth: 100
+            minWidth: 200,
+            textAlign: 'right'
         },
         {
             valuePath: 'tall',
             name: 'Tall',
-            isFixedLeft: false,
-            width: 100,
-            staticWidth: 100,
-            maxWidth: 100,
-            minWidth: 100
+            minWidth: 200
         },
         {
             valuePath: 'short',
             name: 'Short',
-            isFixedLeft: false,
-            width: 100,
-            staticWidth: 200,
-            maxWidth: 100,
-            minWidth: 100
+            minWidth: 200
         },
         {
             valuePath: 'id',
-            cellComponent: TableCellButtonComponent,
-            width: 225,
-            staticWidth: 225,
-            maxWidth: 225,
-            minWidth: 225,
-            toggleRow: this.toggleRow
+            cellComponent: 'table/cell/button',
+            toggleRow: this.toggleRow,
+            minWidth: 200
         }
-    ];
+    ]);
 
     @tracked otherColumns = false;
 
-    @tracked model: NativeArray<any> = A([]);
+    @tracked model: NativeArray<TestRow> = A([]);
 
     footerData = [{ age: 295 }];
 
@@ -95,7 +87,7 @@ class TableController extends Controller {
     }
 
     @action
-    loadMoreModels() {
+    loadMoreModels(): Promise<TestRow[]> {
         this.isLoading = true;
         return new rsvp.Promise((resolve) => {
             later(() => {

@@ -1,12 +1,17 @@
-import NativeArray from '@ember/array/-private/native-array';
-
-import Table, { Column } from '@gavant/ember-table/components/table';
+import Table from '@gavant/ember-table/components/table';
 
 import { expectTypeOf } from 'expect-type';
 
-interface items {
+interface Row {
     id: string;
     name: string;
 }
-declare const component: Table<items, unknown, unknown>;
-expectTypeOf(component.visibleColumns).toMatchTypeOf<NativeArray<Column>>();
+
+const columns = [
+    {
+        valuePath: 'name',
+        name: 'Name'
+    }
+] as const;
+declare const component: Table<typeof columns[0], Row, any, unknown, any, unknown, unknown>;
+expectTypeOf(component.visibleColumns[0]).toMatchTypeOf<typeof columns[0]>();

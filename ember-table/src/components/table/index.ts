@@ -10,40 +10,76 @@ import { isEmpty } from '@ember/utils';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
-import { ComponentLike } from '@glint/template';
+import { EmberTableBodySignature } from '@gavant/glint-template-types/types/ember-table/body';
+import { EmberTableHeaderSignature } from '@gavant/glint-template-types/types/ember-table/header';
 
 import { FillMode, ResizeMode, SelectionMode, WidthConstraint } from '../../constants/table';
 import { argDefault } from '../../decorators/table';
 
-import type { EmberTableBodySignature } from '@gavant/glint-template-types/types/ember-table/body';
-import type { EmberTableHeaderSignature } from '@gavant/glint-template-types/types/ember-table/header';
+import type {
+    CellValue,
+    Column as EmberTableColumn,
+    ColumnMeta,
+    RowValue
+} from '@gavant/glint-template-types/types/ember-table/table';
 
-import type { Column as EmberTableColumn } from '@gavant/glint-template-types/types/ember-table/table';
+export interface BodyCellArgs<
+    CV extends Column<string | undefined, RV, M, ColumnMeta, RM, TM>,
+    RV extends RowValue,
+    RM = void, // void makes it optional
+    TM = void, // void makes it optional
+    M = void // void makes it optional
+> extends CellValue<RV, CV> {
+    columnValue: CV;
+    rowValue: RV;
+    cellMeta: M;
+    columnMeta: ColumnMeta;
+    rowMeta: RM;
+    tableMeta: TM;
+}
 
-type FooterCellComponent = ComponentLike<{
-    Args: {
-        cellValue: any;
-        columnValue: any;
-        rowValue: any;
-        cellMeta: any;
-        columnMeta: any;
-        rowMeta: any;
-        tableMeta: any;
-    };
-    Blocks: {
-        default: [];
-    };
-}>;
+export type HeaderCellArgs<
+    CV extends Column<string | undefined, RV, M, ColumnMeta, RM, TM>,
+    RV extends RowValue,
+    RM = void, // void makes it optional
+    TM = void, // void makes it optional
+    M = void // void makes it optional
+> = {
+    columnValue: CV;
+    columnMeta: M;
+    tableMeta: TM;
+};
 
-export interface Column extends EmberTableColumn {
+type ColumnValueType<C> = C extends Column<infer ValuePath, any, any, any, any, any> ? Readonly<ValuePath> : never;
+
+/**
+ * Turns the columns into the correct types for the table, so that we can have cell components automatically get the correct types.
+ * We convert whats sent in from an array to a tuple, so that the values can be accessed by index and we can have the correct types and specifically a hardcoded value id
+ *
+ *
+ * @export
+ * @template T
+ * @template CV
+ * @param {[...T]} items
+ * @return {*}
+ */
+export function makeColumns<
+    T extends ReadonlyArray<Column<ValuePath extends string ? ValuePath : never, any, unknown, any, unknown, unknown>>,
+    ValuePath = ColumnValueType<T[number]>
+>(items: [...T]) {
+    return items;
+}
+
+export interface Column<VP extends string | undefined, RV extends RowValue, M, CM extends ColumnMeta, RM, TM>
+    extends EmberTableColumn<RV, M, CM, RM, TM> {
     id?: string;
     isFixedLeft?: boolean;
-    staticWidth: number;
     headerClassNames?: string;
     cellClassNames?: string;
     footerClassNames?: string;
-    subcolumns?: Column[];
-    footerComponent?: FooterCellComponent;
+    footerComponent?: string;
+    subcolumns?: Column<VP, RV, M, CM, RM, TM>[];
+    readonly valuePath?: VP;
 }
 
 export interface TableSort {
@@ -83,18 +119,34 @@ export interface RowClickEvent<R, TM> {
     tableMeta?: TableMeta<TM>;
 }
 
-export type BodyArgs<R, TM> = Omit<EmberTableBodySignature['Args'], 'api'> & {
-    rows: R[];
-    selection?: R[] | R | null;
-    tableMeta?: TableMeta<TM>;
-};
+export type BodyArgs<
+    CV extends Column<ColumnValueType<CV>, RV, M, CM, RM, TM>,
+    RV extends RowValue,
+    M,
+    CM extends ColumnMeta,
+    RM,
+    TM
+> = Omit<EmberTableBodySignature<CV, RV, M, CM, RM, TM>['Args'], 'api'>;
 
-export type HeadArgs<TM> = Omit<EmberTableHeaderSignature['Args'], 'api'> & {
-    tableMeta?: TableMeta<TM>;
-};
+export type HeadArgs<
+    CV extends Column<ColumnValueType<CV>, RV, M, CM, RM, TM>,
+    RV extends RowValue,
+    M,
+    CM extends ColumnMeta,
+    RM,
+    TM
+> = Omit<EmberTableHeaderSignature<CV, RV, M, CM, RM, TM>['Args'], 'api'>;
 
-export interface TableArgs<R, F, TM> extends BodyArgs<R, TM>, HeadArgs<TM> {
-    columns: Column[];
+export interface TableArgs<
+    CV extends Column<ColumnValueType<CV>, RV, M, CM, RM, TM>,
+    RV extends RowValue,
+    FRV extends RowValue,
+    M,
+    CM extends ColumnMeta,
+    RM,
+    TM
+> extends BodyArgs<CV, RV, M, CM, RM, TM>,
+        HeadArgs<CV, RV, M, CM, RM, TM> {
     /**
      * Manually change the panning of the table
      *
@@ -108,42 +160,42 @@ export interface TableArgs<R, F, TM> extends BodyArgs<R, TM>, HeadArgs<TM> {
      *
      * @memberof TableArgs
      */
-    onVisibleColumnsChange?: (columns: Column[]) => void;
+    onVisibleColumnsChange?: (columns: CV[]) => void;
 
     /**
      * Load previous rows of items
      *
      * @memberof TableArgs
      */
-    loadPreviousRows?: () => Promise<R[]>;
+    loadPreviousRows?: () => Promise<RV[]>;
 
     /**
      * Load more rows of items
      *
      * @memberof TableArgs
      */
-    loadMoreRows?: () => Promise<R[]>;
+    loadMoreRows?: () => Promise<RV[]>;
 
     /**
      * On click of cell
      *
      * @memberof TableArgs
      */
-    onCellClick?: ((rowClickEvent: RowClickEvent<R, TM>) => void) | undefined;
+    onCellClick?: ((rowClickEvent: RowClickEvent<RV, TM>) => void) | undefined;
 
     /**
      * On double click of cell
      *
      * @memberof TableArgs
      */
-    onCellDoubleClick?: ((rowClickEvent: RowClickEvent<R, TM>) => void) | undefined;
+    onCellDoubleClick?: ((rowClickEvent: RowClickEvent<RV, TM>) => void) | undefined;
 
     /**
      * Event to handle click on row
      *
      * @memberof TableArgs
      */
-    onRowClick?: (rowClickEvent: RowClickEvent<R, TM>) => void;
+    onRowClick?: (rowClickEvent: RowClickEvent<RV, TM>) => void;
 
     /**
      * Event to handle double click on row
@@ -238,16 +290,16 @@ export interface TableArgs<R, F, TM> extends BodyArgs<R, TM>, HeadArgs<TM> {
      * @type {TableMeta<TM>}
      * @memberof TableArgs
      */
-    tableMeta?: TableMeta<TM>;
+    tableMeta?: TM;
 
     /**
      * The footer rows to be displayed. i.e. for a table with a 'subtotal' column:
         `[{ subtotal:500 }]`
      *
-     * @type {NativeArray<F>}
+     * @type {NativeArray<FR>}
      * @memberof TableArgs
      */
-    footerRows?: NativeArray<F> | F[];
+    footerRows?: NativeArray<FRV> | FRV[];
 
     /**
      * Displayed when there are no rows
@@ -339,12 +391,28 @@ export interface TableArgs<R, F, TM> extends BodyArgs<R, TM>, HeadArgs<TM> {
     renderAll?: boolean;
 }
 
-interface TableSignature<R, F, TM> {
-    Args: TableArgs<R, F, TM>;
+interface TableSignature<
+    CV extends Column<ColumnValueType<CV>, RV, M, CM, RM, TM>,
+    RV extends RowValue,
+    FRV extends RowValue,
+    M,
+    CM extends ColumnMeta,
+    RM,
+    TM
+> {
+    Args: TableArgs<CV, RV, FRV, M, CM, RM, TM>;
     Element: HTMLDivElement;
 }
 
-export default class TableComponent<R, F, TM> extends Component<TableSignature<R, F, TM>> {
+export default class TableComponent<
+    CV extends Column<ColumnValueType<CV>, RV, M, CM, RM, TM>,
+    RV extends RowValue,
+    FRV extends RowValue,
+    M,
+    CM extends ColumnMeta,
+    RM,
+    TM
+> extends Component<TableSignature<CV, RV, FRV, M, CM, RM, TM>> {
     //ember-table's resizing must be enabled in order for fill-mode auto column
     //resizing to work, even if you don't want to allow user-invoked resizing
     readonly enableResize: boolean = true;
@@ -380,14 +448,13 @@ export default class TableComponent<R, F, TM> extends Component<TableSignature<R
 
     @argDefault bufferSize: number = 0;
     @argDefault containerSelector: string = 'body';
-    @argDefault constrainColumnsToFit: boolean = true;
     @argDefault enableReorder: boolean = false;
     @argDefault enableSort: boolean = false;
     @argDefault enableUserResize: boolean = false;
     @argDefault estimateRowHeight: number = 30;
     @argDefault fillColumnIndex: number | null = null;
     @argDefault fillMode: FillMode = FillMode.FIRST;
-    @argDefault footerRows: Array<F> = [];
+    @argDefault footerRows: Array<FRV> = [];
     @argDefault hasMoreRows: boolean = false;
     @argDefault hoverableRows: boolean = true;
     @argDefault isLoading: boolean = false;
@@ -415,7 +482,7 @@ export default class TableComponent<R, F, TM> extends Component<TableSignature<R
     //component state
     @tracked columnPanPosition: number = this.args.columnPanPosition ?? 0;
     @tracked containerWidth: number | null = null;
-    @tracked visibleColumns: NativeArray<Column> = A([]);
+    @tracked visibleColumns: CV[] = [];
     @tracked containerElement: HTMLElement | null = null;
 
     get noRows(): boolean {
@@ -503,7 +570,7 @@ export default class TableComponent<R, F, TM> extends Component<TableSignature<R
      * @readonly
      * @type {(ColumnValue | undefined)}
      */
-    get firstVisibleNonFixedColumn(): Column | undefined {
+    get firstVisibleNonFixedColumn(): CV | undefined {
         return this.visibleColumns && this.visibleColumns.find((col) => !col.isFixedLeft);
     }
 
@@ -539,10 +606,10 @@ export default class TableComponent<R, F, TM> extends Component<TableSignature<R
         //fixed columns are disabled if the widest non-fixed column cannot
         //fit in the container at the same time as the fixed column(s)
         if (!isEmpty(this.fixedColumns)) {
-            const sortedColumns = this.nonFixedColumns.sortBy('staticWidth');
+            const sortedColumns = this.nonFixedColumns.sortBy('minWidth');
             const widestColumn = sortedColumns[sortedColumns.length - 1];
-            const widestColumnWidth = widestColumn ? widestColumn.staticWidth : 0;
-            const fixedWidth = this.fixedColumns.reduce((prev, col) => prev + col.staticWidth, 0);
+            const widestColumnWidth = widestColumn?.minWidth ?? 0;
+            const fixedWidth = this.fixedColumns.reduce((prev, col) => prev + (col.minWidth ?? 0), 0);
             return widestColumnWidth + fixedWidth;
         } else {
             return 0;
@@ -632,6 +699,10 @@ export default class TableComponent<R, F, TM> extends Component<TableSignature<R
         }
     }
 
+    get constrainColumnsToFit() {
+        return this.args.columns.every((col) => col.minWidth);
+    }
+
     //methods
 
     /**
@@ -639,7 +710,7 @@ export default class TableComponent<R, F, TM> extends Component<TableSignature<R
      *
      * @memberof TableComponent
      */
-    constructor(owner: unknown, args: TableArgs<R, F, TM>) {
+    constructor(owner: unknown, args: TableArgs<CV, RV, FRV, M, CM, RM, TM>) {
         super(owner, args);
 
         assert('@rows is not an instanceof Array.', args.rows instanceof Array);
@@ -691,7 +762,7 @@ export default class TableComponent<R, F, TM> extends Component<TableSignature<R
      */
     updateColumnVisibility() {
         const columns = this.args.columns || A();
-        const visibleColumns = A<Column>([]);
+        const visibleColumns = A<CV>([]);
         const containerWidth = this.getElementWidth(this.containerElement);
         const allowFixedCols = containerWidth >= this.minFixedColTableWidth;
         const panPosition = this.columnPanPosition;
@@ -700,7 +771,7 @@ export default class TableComponent<R, F, TM> extends Component<TableSignature<R
         for (const [i, col] of columns.entries()) {
             const colIndex = allowFixedCols ? this.nonFixedColumns.indexOf(col) : i;
             if ((col && col.isFixedLeft && allowFixedCols) || colIndex >= panPosition) {
-                const colWidth = col.staticWidth || 0;
+                const colWidth = col.minWidth || 0;
                 const isVisible = (col.isFixedLeft && allowFixedCols) || newTableWidth + colWidth <= containerWidth;
                 if (isVisible) {
                     newTableWidth += colWidth;
@@ -772,7 +843,7 @@ export default class TableComponent<R, F, TM> extends Component<TableSignature<R
      * @returns {(string | undefined)}
      * @memberof TableComponent
      */
-    getColumnId(col?: Column): string | undefined {
+    getColumnId(col?: CV): string | undefined {
         return col && (col.id || col.valuePath);
     }
 

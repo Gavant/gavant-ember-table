@@ -30,7 +30,7 @@
   "dependencies": {
     "@embroider/addon-shim": "^1.0.0",
     "@embroider/util": "^1.0.0",
-    "@gavant/glint-template-types": "^0.1.8"
+    "@gavant/glint-template-types": "^0.2.4"
   },
   "peerDependencies": {
     "@ember/render-modifiers": "^2.0.4",
@@ -84,6 +84,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-qunit": "^7.2.0",
+    "expect-type": "^0.14.2",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.6.1",
     "release-it": "^14.14.0",
@@ -99,8 +100,23 @@
       "components/table": [
         "dist/components/table/index.d.ts"
       ],
+      "components/ember-table-override": [
+        "dist/components/ember-table-override/index.d.ts"
+      ],
+      "components/ember-tbody-override": [
+        "dist/components/ember-tbody-override/index.d.ts"
+      ],
+      "components/progress-spinner": [
+        "dist/components/progress-spinner/index.d.ts"
+      ],
       "components/row/expandable-row": [
         "dist/components/row/expandable-row/index.d.ts"
+      ],
+      "components/row/loading": [
+        "dist/components/row/loading/index.d.ts"
+      ],
+      "components/row/no-results": [
+        "dist/components/row/no-results/index.d.ts"
       ]
     }
   },
@@ -124,15 +140,12 @@
       "./components/table/index.js": "./dist/_app_/components/table/index.js"
     }
   },
+  "exports": {
+    "./*": "./dist/*",
+    "./addon-main.js": "./addon-main.js"
+  },
   "publishConfig": {
     "access": "public"
-  },
-  "exports": {
-    ".": "./dist/index.js",
-    "./*": {
-      "default": "./dist/*.js"
-    },
-    "./addon-main.js": "./addon-main.js"
   },
   "volta": {
     "extends": "../package.json"
