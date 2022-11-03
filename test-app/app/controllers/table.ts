@@ -8,7 +8,7 @@ import { tracked } from '@glimmer/tracking';
 
 import MediaService from 'ember-responsive/services/media';
 
-import { makeColumns } from '@gavant/ember-table/components/table';
+import makeColumns from '@gavant/ember-table/utils/make-columns';
 
 import rsvp from 'rsvp';
 

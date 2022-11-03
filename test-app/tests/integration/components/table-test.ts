@@ -3,7 +3,7 @@ import { click, render, scrollTo, settled } from '@ember/test-helpers';
 import { setupRenderingTest } from 'ember-qunit';
 import { TablePage } from 'ember-table/test-support';
 
-import { makeColumns } from '@gavant/ember-table/components/table';
+import makeColumns from '@gavant/ember-table/utils/make-columns';
 
 import 'qunit-dom';
 

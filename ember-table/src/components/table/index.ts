@@ -50,7 +50,9 @@ export type HeaderCellArgs<
     tableMeta: TM;
 };
 
-type ColumnValueType<C> = C extends Column<infer ValuePath, any, any, any, any, any> ? Readonly<ValuePath> : never;
+export type ColumnValueType<C> = C extends Column<infer ValuePath, any, any, any, any, any>
+    ? Readonly<ValuePath>
+    : never;
 
 export interface Column<VP extends string | undefined, RV extends RowValue, M, CM extends ColumnMeta, RM, TM>
     extends EmberTableColumn<RV, M, CM, RM, TM> {
@@ -62,24 +64,6 @@ export interface Column<VP extends string | undefined, RV extends RowValue, M, C
     footerComponent?: string;
     subcolumns?: Column<VP, RV, M, CM, RM, TM>[];
     readonly valuePath?: VP;
-}
-
-/**
- * Turns the columns into the correct types for the table, so that we can have cell components automatically get the correct types.
- * We convert whats sent in from an array to a tuple, so that the values can be accessed by index and we can have the correct types and specifically a hardcoded value id
- *
- *
- * @export
- * @template T
- * @template CV
- * @param {[...T]} items
- * @return {*}
- */
-export function makeColumns<
-    T extends ReadonlyArray<Column<ValuePath extends string ? ValuePath : never, any, unknown, any, unknown, unknown>>,
-    ValuePath = ColumnValueType<T[number]>
->(items: [...T]) {
-    return items;
 }
 
 export interface TableSort {
