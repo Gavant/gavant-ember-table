@@ -117,6 +117,9 @@
       ],
       "components/row/no-results": [
         "dist/components/row/no-results/index.d.ts"
+      ],
+      "utils/make-columns": [
+        "dist/utils/make-columns/index.d.ts"
       ]
     }
   },
