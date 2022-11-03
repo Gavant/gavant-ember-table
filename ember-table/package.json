@@ -148,6 +148,6 @@
     "access": "public"
   },
   "volta": {
-    "extends": "../package.json"
+    "extends": "14.20.0"
   }
 }
