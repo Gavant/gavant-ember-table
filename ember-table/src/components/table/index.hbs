@@ -56,7 +56,8 @@
                                     @rowMeta={{rowMeta}}
                                     @tableMeta={{@tableMeta}}
                                 >
-                                    {{columnValue.name}}
+                                    {{! template-lint-disable no-triple-curlies }}
+                                    {{{columnValue.name}}}
                                     <EmberTh::SortIndicator @columnMeta={{columnMeta}} />
                                     {{#if this.enableUserResize}}
                                         <EmberTh::ResizeHandle @columnMeta={{columnMeta}} />
@@ -85,7 +86,8 @@
                                 </HeaderCell>
                             {{/let}}
                         {{else}}
-                            {{or columnValue.name this.nonBreakingSpace}}
+                            {{! template-lint-disable no-triple-curlies }}
+                            {{{or columnValue.name this.nonBreakingSpace}}}
                             <EmberTh::SortIndicator @columnMeta={{columnMeta}} />
                             {{#if this.enableUserResize}}
                                 <EmberTh::ResizeHandle @columnMeta={{columnMeta}} />
