@@ -34,7 +34,7 @@ class TableController extends Controller {
     columns = makeColumns([
         {
             valuePath: 'date',
-            name: 'Date',
+            name: 'Date<br>Something Else',
             // cellComponent: TableCellTableMetaComponent,
             isFixedLeft: true,
             minWidth: 200,
@@ -42,7 +42,7 @@ class TableController extends Controller {
         },
         {
             valuePath: 'name',
-            name: 'Name',
+            name: 'Name<br>Title',
             isSortable: true,
             minWidth: 200
         },
