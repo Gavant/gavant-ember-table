@@ -373,6 +373,13 @@ export interface TableArgs<
      * @memberof TableArgs
      */
     renderAll?: boolean;
+
+    /**
+     * Enable tree mode
+     *
+     * @memberof TableArgs
+     */
+    enableTree?: boolean;
 }
 
 interface TableSignature<
@@ -462,6 +469,7 @@ export default class TableComponent<
     @argDefault sorts: TableSort[] = [];
     @argDefault key: string = '@identity';
     @argDefault isMobile: boolean = false;
+    @argDefault enableTree: boolean = false;
 
     //component state
     @tracked columnPanPosition: number = this.args.columnPanPosition ?? 0;
